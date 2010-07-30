@@ -2,7 +2,7 @@
 
 """
 
-__author__ = "Matt Freer"
+__author__ = "mfreer"
 __date__ = "$Date: 2009-10-13 14:51:27 +0200 (Tue, 13 Oct 2009) $"
 __version__ = "$Revision: 15 $"
 
@@ -17,7 +17,7 @@ class ToolboxData(object):
     def __init__(self, value=None, units=None, long_name=None, standard_name=None,
                 name=None, fill_value=None, valid_range=None, sampled_rate=None,
                 category=None, calibration_coeff=None, dependencies=None,
-                processor=None):
+                processor=None, **attrs):
         """Initialize Toolbox class"""
         self.value = value
         self.units = units
@@ -32,7 +32,9 @@ class ToolboxData(object):
         self.dependencies = dependencies
         self.processor = processor
 
-
+        for key, val in attrs:
+            setattr(self, key, val)
+        
         self._user_attrubute_dict = {}
 
 
