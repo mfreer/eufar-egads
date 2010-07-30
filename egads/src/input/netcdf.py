@@ -1,4 +1,4 @@
-__author__ = "Matt Freer"
+__author__ = "mfreer"
 __date__ = "$Date: 2009-10-13 14:51:27 +0200 (Tue, 13 Oct 2009) $"
 __version__ = "$Revision: 15 $"
 

@@ -1,9 +1,10 @@
 __author__ = ""
-__date__ = "$Date: 2009-11-26 15:34:16 +0100 (Thu, 26 Nov 2009) $"
-__version__ = "$Revision: 20 $"
+__date__ = "$Date:  $"
+__version__ = "$Revision: 1$"
 
 
 import egads
+import inspect
 
 def algorithm_template(inputs):
     """
@@ -29,24 +30,23 @@ def algorithm_template(inputs):
 
     """
 
-    name = 'algorithm_template'
 
     ## Do processing here:
 
 
     result = egads.ToolboxData(value = output,
                                units = '%',
-                               long_name = 'relative humidity',
-                               standard_name = 'relative humidity',
+                               long_name = 'template',
+                               standard_name = 'template',
+                               fill_value = None,
+                               valid_range = None,
+                               sampled_rate = None,
+                               category = None,
+                               calibration_coeff = None,
+                               dependencies = None,
+                               processor = inspect.stack()[0][3],
                                processor_version = __version__,
                                processor_date = __date__)
-
-
-    result.units = '%'
-    result.long_name = 'relative humidity'
-    result.processor = name
-    result.processor_version = __version__
-    result.processor_date = __date__
 
 
 
