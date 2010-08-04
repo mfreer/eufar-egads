@@ -1,6 +1,6 @@
 __author__ = ""
-__date__ = "$Date:  $"
-__version__ = "$Revision: 1$"
+__date__ = "$Date"
+__version__ = "$Revision$"
 
 
 import egads
@@ -12,7 +12,7 @@ def algorithm_template(inputs):
 
     FILE        algorithm_template.py
 
-    VERSION     $Revision: 20 $
+    VERSION     $Revision$
 
     CATEGORY    None
 
