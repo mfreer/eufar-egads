@@ -29,6 +29,7 @@ def temp_virtual_cnrm(T_s, r):
     REFERENCES  Triplet-Roche, page 56.
 
     """
+    
     RvRa = 1.608
 
     T_v = T_s.value * (1 + RvRa * r.value) / (1 + r.value)
