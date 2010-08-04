@@ -1,7 +1,7 @@
 
 __author__ = "mfreer"
-__date__ = "$Date: 2009-11-26 15:34:16 +0100 (Thu, 26 Nov 2009) $"
-__version__ = "$Revision: 20 $"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 
 from numpy import multiply, power
@@ -15,7 +15,7 @@ def hum_rel_capacitve_cnrm(Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
 
     FILE        hum_rel_capacitive_cnrm.py
 
-    VERSION     $Revision: 20 $
+    VERSION     $Revision$
 
     CATEGORY    Thermodynamics
 

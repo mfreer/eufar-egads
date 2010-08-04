@@ -1,7 +1,7 @@
 
 __author__ = "mfreer"
-__date__ = "$Date: 2009-11-26 15:34:16 +0100 (Thu, 26 Nov 2009) $"
-__version__ = "$Revision: 20 $"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 
 from netcdf import NetCdf

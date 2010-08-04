@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:  $"
-__version__ = "$Revision: 1$"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 
 import egads
@@ -11,7 +11,7 @@ def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha
 
     FILE        pressure_angle_incidence_cnrm.py
 
-    VERSION     $Revision: 20 $
+    VERSION     $Revision$
 
     CATEGORY    Thermodynamic
 

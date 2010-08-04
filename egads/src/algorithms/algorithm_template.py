@@ -1,5 +1,5 @@
 __author__ = ""
-__date__ = "$Date"
+__date__ = "$Date$"
 __version__ = "$Revision$"
 
 

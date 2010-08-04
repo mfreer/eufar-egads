@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:  $"
-__version__ = "$Revision: 1$"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 from math import log
 
@@ -12,7 +12,7 @@ def altitude_pressure_cnrm(T_v, P_s, P_surface, R_a_g):
 
     FILE        altitude_pressure_cnrm.py
 
-    VERSION     $Revision: 20 $
+    VERSION     $Revision$
 
     CATEGORY    Thermodymics
 
