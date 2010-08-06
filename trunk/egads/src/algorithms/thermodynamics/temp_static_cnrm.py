@@ -1,5 +1,5 @@
 __author__ = "mfreer"
-__date__ = "$Date:  $"
+__date__ = "$Date$"
 __version__ = "$Revision: 1$"
 
 
@@ -11,7 +11,7 @@ def temp_static_cnrm(Tt, dP, P_s, r_f, Racpa):
 
     FILE        temp_static_cnrm.py
 
-    VERSION     $Revision: 20 $
+    VERSION     $Revision$
 
     CATEGORY    Thermodynamic
 

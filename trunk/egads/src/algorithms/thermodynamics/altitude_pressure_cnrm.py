@@ -37,7 +37,7 @@ def altitude_pressure_cnrm(T_v, P_s, P_surface, R_a_g):
 
     result = egads.ToolboxData(value = alt_p,
                                units = 'm',
-                               long_name = 'pressure_altitude',
+                               long_name = 'pressure altitude',
                                standard_name = '',
                                fill_value = None,
                                valid_range = None,
