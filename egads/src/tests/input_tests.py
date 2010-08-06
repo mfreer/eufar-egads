@@ -12,8 +12,8 @@ from numpy.random.mtrand import uniform
 from numpy.testing import assert_array_equal
 
 __author__ = "Matt Freer"
-__date__ = "$Date: 2009-10-13 14:51:27 +0200 (Tue, 13 Oct 2009) $"
-__version__ = "$Revision: 15 $"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 FILE_NAME = tempfile.mktemp('.nc')
 FILE_NAME_ALT = tempfile.mktemp('.nc')

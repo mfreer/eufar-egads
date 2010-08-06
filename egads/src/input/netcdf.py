@@ -49,10 +49,13 @@ class NetCdf(object):
             self.f.close()
 
 
+
     def read(self, varname, filename = None, input_range=None, attrs=None, data=None):
-        """ Returns a ToolboxData object after reading data from a NetCDF file
-            given a filename and variable name. Input range and additional attributes
-            can be provided by the user."""
+        """
+        Returns a ToolboxData object after reading data from a NetCDF file
+        given a filename and variable name. Input range and additional attributes
+        can be provided by the user.
+        """
 
         if data is None:
             data = egads.ToolboxData()
@@ -119,6 +122,7 @@ class NetCdf(object):
         varout[:] = data.value
         self._set_attribute(varout,data)
 
+        self._get_variables()
 
 
     def create_file(self, filename, attrs=None, dims=None):
@@ -183,6 +187,8 @@ class NetCdf(object):
             self.f = netCDF4.Dataset(filename, perms)
             self.filename = filename
             self._get_attribute(self, self.f, self._std_file_attributes)
+            self._get_dimensions()
+            self._get_variables()
         except RuntimeError:
             print "ERROR: File %s doesnt exist" % (filename)
             raise RuntimeError
@@ -220,4 +226,22 @@ class NetCdf(object):
 
         for key, val in dims.iteritems():
             self.f.createDimension(key,val)
+
+        self._get_dimensions()
+
+    def _get_variables(self):
+        """
+        Sets instance variable to list all variables in current NetCDF file
+        """
+        if self.f is not None:
+            self.variables = self.f.variables.keys()
+    
+    def _get_dimensions(self):
+        """
+        Sets instance variable to list all dimensions in current NetCDF file
+        """
+
+        if self.f is not None:
+            self.dimensions = self.f.dimensions.keys()
+
 

@@ -18,7 +18,10 @@ class ToolboxData(object):
                 name=None, fill_value=None, valid_range=None, sampled_rate=None,
                 category=None, calibration_coeff=None, dependencies=None,
                 processor=None, **attrs):
-        """Initialize Toolbox class"""
+        """Initializes instance with standard and user-provided attributes
+
+
+        """
         self.value = value
         self.units = units
         self.long_name = long_name
@@ -39,7 +42,7 @@ class ToolboxData(object):
 
 
     def print_data(self):
-        """ Print out data and metadata contained in ToolboxData object."""
+        """ Print out data and metadata contained in ToolboxData object"""
         print self.value, self.units
 
     def unit_check(self, desired_units):
