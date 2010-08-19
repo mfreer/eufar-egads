@@ -1,15 +1,21 @@
-""" :TODO: fill in docstring
+"""
+Test suite for NetCDF input and output library.
+
+Uses NetCDF4 Python library to test know inputs and outputs against the EGADS
+NetCDF library (based on NetCDF4).
 
 """
 
-import input
-import egads
-import netCDF4
-import unittest
-import tempfile
 import os
 from numpy.random.mtrand import uniform
 from numpy.testing import assert_array_equal
+
+import netCDF4
+import unittest
+import tempfile
+
+import egads
+import egads.input as input
 
 __author__ = "Matt Freer"
 __date__ = "$Date$"
