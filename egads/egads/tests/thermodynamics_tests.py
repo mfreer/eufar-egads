@@ -1,9 +1,10 @@
 __author__ = "Matt Freer"
-__date__ = "$Date: 2009-10-13 14:51:27 +0200 (Tue, 13 Oct 2009) $"
-__version__ = "$Revision: 15 $"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 import unittest
 import egads
+from egads import *
 from egads.algorithms import thermodynamics
 
 Ucapf = egads.ToolboxData(value = [],
@@ -55,20 +56,29 @@ class  Thermodynamics_testsTestCase(unittest.TestCase):
         pass
 
     def test_hum_rel_capacitive_cnrm(self):
-
+        H_u = thermodynamics.hum_rel_capacitive_cnrm(Ucapf, T_s, P_s, dP, C_t,
+                                                     Fmin, C_0, C_1, C_2)
 
         pass
 
     def test_pressure_angle_incidence_cnrm(self):
+        P_s, dP, alpha, beta = thermodynamics.pressure_angle_incidence_cnrm(
+                                             P_sr, delta_P_r, delta_P_h,
+                                             delta_P_v, C_alpha, C_beta,
+                                             C_errstat)
         pass
 
     def test_temp_potential_cnrm(self):
+        theta = thermodynamics.temp_potential_cnrm(T_s, P_s, Racpa)
+
         pass
 
     def test_temp_potential_equiv_cnrm(self):
         pass
 
     def test_temp_virtual_cnrm(self):
+        T_v = thermodynamics.temp_virtual_cnrm(T_s, r)
+
         pass
 
     def test_velocity_tas_cnrm(self):
