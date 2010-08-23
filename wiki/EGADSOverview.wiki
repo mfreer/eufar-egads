@@ -8,9 +8,4 @@ The EGADS (EUFAR General Airborne Data-processing Software) package is a Python-
 = Details =
 
 *Structure*
-The EGADS main module contains eee
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+The EGADS core framework contains a data class that permits data and metadata to be easily passed between functions in a consistent manner. EGADS algorithms accept the data class as inputs, and return populated instances of the EGADS data class.
