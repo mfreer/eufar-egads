@@ -5,243 +5,378 @@ __version__ = "$Revision$"
 import egads
 import netCDF4
 
+TYPE_DICT = {'char':'s1',
+    'byte':'b',
+    'short':'i2',
+    'int':'i4',
+    'float':'f4',
+    'double':'f8'}
 
 class NetCdf(object):
     """
     EGADS I/O module for reading and writing to NetCDF files.
 
-    This module allows users to read and write from NetCDF files following the
-    EUFAR N6SP file conventions.
+    This module adapts the Python NetCDF4 0.8.2 library to the file access
+    methods used in EGADS.
+
     """
 
-    def __init__(self,filename = None, perms = None):
+    def __init__(self, filename=None, perms='r'):
         """
-        :TODO: fill in docstring
+        Initializes NetCDF instance.
+
+        Parameters
+        -----------
+        filename : string, optional
+            Name of NetCDF file to open.
+        perms : char, optional
+            Permissions used to open file. Options are 'w' for write (overwrites data in file),
+            'a' and 'r+' for append, and 'r' for read. 'r' is the default value
         """
-        if filename is not None:
+
+
+        if self.filename is not None:
             self.f = self._open_file(filename, perms)
         else:
             self.f = None
-            self.filename = None
+            self.filename = filename
+            self.perms = perms
 
-        self._std_file_attributes = {'title':'title',
-                                     'source':'source',
-                                     'instutition':'institution',
-                                     'project':'project',
-                                     'history':'history'}
-
-        self._std_var_attributes = {'units': 'units',
-                                    'long_name': 'long_name',
-                                    'standard_name': 'standard_name',
-                                    'fill_value': '_FillValue',
-                                    'valid_range':'',
-                                    'sampled_rate': 'SampledRate',
-                                    'category':'Category',
-                                    'calibration_coeff':'CalibrationCoefficient',
-                                    'dependencies':'Dependencies',
-                                    'processor':'Processor'}
 
     def __del__(self):
         """
-        If NetCDF file is open, close it.
+        If NetCDF file is still open on deletion of object, close it.
         """
+
         if self.f is not None:
             self.f.close()
 
-
-
-    def read(self, varname, filename = None, input_range=None, attrs=None, data=None):
+    def open(self, filename, perms=self.perms):
         """
-        Returns a ToolboxData object after reading data from a NetCDF file
-        given a filename and variable name. Input range and additional attributes
-        can be provided by the user.
+        Opens NetCDF file given filename.
+
+        Parameters
+        -----------
+        filename : string
+            Name of NetCDF file to open.
+        perms : char, optional
+            Permissions used to open file. Options are 'w' for write (overwrites data in file),
+            'a' and 'r+' for append, and 'r' for read. 'r' is the default value
         """
 
-        if data is None:
-            data = egads.ToolboxData()
+        self.f = self._open_file(filename, perms)
 
-        if filename is not None:
-            self._open_file(filename,'r')
+    def get_attributes(self, varname=None):
+        """
+        Returns a list of attributes found either in current NetCDF file, or attached
+        to a given variable.
 
-        # read in given variable and give an error and halt if it doesnt exist
+        Parameters
+        -----------
+        varname : string, optional
+            Name of variable to get list of attributes from. If no variable name is
+            provided, the function returns top-level NetCDF attributes.
+
+        """
+
+        return self._get_attributes(varname)
+
+    def get_attribute_value(self, attrname, varname=None):
+        """
+        Returns value of an attribute given its name. If a variable name is provided,
+        the attribute is returned from the variable specified, otherwise the global
+        attribute is examined.
+
+        Parameters
+        -----------
+        name : string
+            Name of attribute to examine
+        varname : string, optional
+            Name of variable attribute is attached to. If none specified, global
+            attributes are examined.
+
+        Returns
+        -------
+        attr_value : string
+            Value of attribute examined
+
+        """
+
+        attrs = self._get_attributes(varname)
+
+        return attrs[attrname]
+
+    def get_dimensions(self, varname=None):
+        """
+        Returns a dictionary of dimensions and their sizes found in the current
+        NetCDF file. If a variable name is provided, the dimension names and
+        lengths associated with that variable are returned.
+
+        Parameters
+        -----------
+        varname : string, optional
+            Name of variable to get list of associated dimensions for. If no variable
+            name is provided, the function returns all dimensions in the NetCDF file.
+
+        """
+
+        return self._get_dimensions(varname)
+
+    def get_variables(self):
+        """
+        Returns a list of variables found in the current NetCDF file.
+
+        Parameters
+        -----------
+        None
+
+        """
+        
+        return self._get_variables()
+
+    def get_filename(self):
+        """
+        If file is open, returns the filename.
+
+        Parameters
+        -----------
+        None
+
+        """
+
+        return self.filename
+
+    def get_perms(self):
+        """
+        Returns the current permissions on the file that is open. Returns None if
+        no file is currently open. Options are 'w' for write (overwrites
+        data in file),'a' and 'r+' for append, and 'r' for read.
+
+        Parameters
+        -----------
+        None
+
+        """
+
+        if self.f is not None:
+            return self.perms
+        else:
+            return 
+
+
+
+    def read_variable(self, varname, input_range=None):
+        """
+        Reads a variable from currently opened NetCDF file.
+        
+        Parameters
+        -----------
+        varname : string
+            Name of NetCDF variable name to read in.
+        filename : string, optional
+            Name of NetCDF file to open.
+        perms : char, optional
+            Permissions used to open file. Options are 'w' for write (overwrites
+            data in file),'a' and 'r+' for append, and 'r' for read.
+            'r' is the default value
+        input_range : vector, optional
+            Range of values in each dimension to input. TODO add example
+
+        Returns
+        -------
+        value : array
+            Values from specified variable read in from NetCDF file.
+        """
+
         try:
             varin = self.f.variables[varname]
         except KeyError:
-            print "ERROR: Variable %s does not exist in %s" % (varname, filename)
+            print "ERROR: Variable %s does not exist in %s" % (varname, self.filename)
             raise KeyError
         except Exception:
-            print "ERROR: Unexpected error"
+            print "Error: Unexpected error"
             raise
 
-        # read in data from variable, or data subset given a valid input_range
         if input_range is None:
-            data.value = varin[:]
+            value = varin[:]
         else:
-            obj = 'slice(input_range[0],input_range[1])'
+            obj = 'slice(input_range[0], input_range[1])'
             for i in xrange(2, len(input_range), 2):
-                obj = obj + ',slice(input_range[%i],input_range[%i])' % (i, i + 1)
-                        
-            data.value = varin[eval(obj)]
-            
-        data.dimensions = varin.shape
-        data.name = varname
+                obj = obj + ', slice(input_range[%i], range[%i])' % (i, i + 1)
 
-        # read in standard variable attributes from file
-        self._get_attribute(data, varin, self._std_var_attributes)
+            value = varin[eval(obj)]
 
-        # :TODO: add inputs from other attributes
+        return value
 
-
-        return data
-
-    def write(self, data, varname, dimnames, filename = None, type='f8',
-              overwrite='yes', create='no'):
+    def write_variable(self, varname, dims=None, type='double', fill_value=None):
         """
-        Writes given variable and its attribues to NetCDF file.
+        Writes/creates variable in currently opened NetCDF file.
 
+        Parameters
+        -----------
+        varname : string
+            Name of variable to create/write to.
+        dims : tuple of strings, optional
+            Name(s) of dimensions to assign to variable. If variable already exists
+            in NetCDF file, this parameter is optional. For scalar variables,
+            pass an empty tuple.
+        type : string, optional
+            Data type of variable to write. Defaults to 'double'. If variable exists,
+            data type remains unchanged. Options for type are 'double', 'float',
+            'int', 'short', 'char', and 'byte'
+        fill_value : value, optional
+            Overrides default NetCDF _FillValue, if provided.
 
         """
 
-        if filename is not None:
-            if create.lower() == 'no':
-                self._open_file(filename,'r+')
-            else:
-                dims = dict(zip(dimnames,data.value.shape))
-                self.create_file(filename,dims = dims)
-
-
-        if overwrite == 'yes':
+        if self.f is not None:
             try:
                 varout = self.f.variables[varname]
             except KeyError:
-                varout = self.f.createVariable(varname, type, (dimnames))
+                varout = self.f.createVariable(varname, TYPE_DICT[type.lower()], dims)
+
+
+
+    def add_dim(self, name, size):
+        """
+        Adds dimension(s) to currently open file. Will add multiple dimensions if
+        multiple names and sizes are specified.
+
+        Parameters
+        -----------
+        name : string
+            Name(s) of dimension(s) to add
+        size : integer
+            Integer size(s) of dimension(s) to add.
+
+        """
+
+        if self.f is not None:
+            dims = dict(zip(name, size))
+            for key, val in dims.iteritems():
+                self.f.createDimension(key, val)
         else:
-            if varname not in self.f.variables:
-                varout = self.f.createVariable(varname, type, (dimnames))
+            raise # TODO add file execption
 
-        varout[:] = data.value
-        self._set_attribute(varout,data)
-
-        self._get_variables()
-
-
-    def create_file(self, filename, attrs=None, dims=None):
+    def add_attribute(self, attrname, value, varname=None):
         """
-        Method for creating new NetCDF file. must provide filename. Optional arguments
-        include dictionaries for file attribues and dimensions.
-        """
+        Adds attribute to currently open file. If varname is included, attribute
+        is added to specified variable, otherwise it is added to global file
+        attributes.
 
-        self._open_file(filename,'w')
-        if attrs is not None:
-            self._set_attribute(self.f, attrs)
-
-        if dims is not None:
-            self._set_dim(dims)
-
-
-
-
-    def add_dim(self, dimname, dimlength,filename = None):
-        """
-        Add dimension to NetCDF file.
-
-        Adds a user defined dimension with dimname and dimlength to filename
-        NetCDF file. Uses NetCDF4 library methods.
-
+        Parameters
+        -----------
+        name : string
+            Attribute name.
+        value : string
+            Value to assign to attribute name.
+        varname : string, optional
+            If varname is provided, attribute name and value are added to specified
+            variable in the NetCDF file.
         """
 
-        if filename is not None:
-            self._open_file(filename, 'r+')
+        if self.f is not None:
+            if varname is not None:
+                varin = self.f.variables[varname]
+                setattr(varin, attrname, value)
+            else:
+                setattr(self.f, attrname, value)
+        else:
+            print 'ERROR: No file open'
 
-        dims = dict(zip(dimname,dimlength))
 
-        self._set_dim(dims)
-        
 
-        
-    def add_variable(self, filename, varname, dimnames, type='double'):
-        pass
-
-    def add_attribute(self, filename, attrname, attrvalue, variable=None):
+    def _open_file(self, filename, perms):
         """
-        TODO add docstring
+        Private method for opening NetCDF file.
+
+        Parameters
+        -----------
+        filename: string
+            Name of NetCDF file to open.
+        perms : char
+            Permissions used to open file. Options are 'w' for write (overwrites data in file),
+            'a' and 'r+' for append, and 'r' for read.
         """
-        pass
 
+        self._close_file()
 
-
-
-    def read_attribute(self, filename, attribute, variable=None):
-        pass
-
-    def check_file(self, filename):
-        pass
-
-
-    def _open_file(self,filename,perms,log_error = 'no'):
-        """
-        Method for opening NetCDF file, with error handling. Displays message
-        to user and returns RuntimeError if given file doesn't exist.
-        """
         try:
             self.f = netCDF4.Dataset(filename, perms)
             self.filename = filename
-            self._get_attribute(self, self.f, self._std_file_attributes)
-            self._get_dimensions()
-            self._get_variables()
+            self.perms = perms
         except RuntimeError:
-            print "ERROR: File %s doesnt exist" % (filename)
+            print "ERROR: File %s doesn't exist" % (filename)
             raise RuntimeError
         except Exception:
             print "ERROR: Unexpected error"
             raise
 
-    def _set_attribute(self,obj,data,attrs = None):
+    def _close_file(self):
         """
-        TODO Add docstring
-        """
-        if attrs is None:
-            attrs = self._std_var_attributes
-        for key, val in attrs.iteritems():
-            dataattr = getattr(data, key, None)
-            if dataattr is not None:
-                setattr(obj, val, dataattr)
-
-    def _get_attribute(self,data, obj,attrs):
-        """
-        TODO Add doctstring
-        """
-        for key, val in attrs.iteritems():
-            if val != '':
-                setattr(data, key, getattr(obj, val,None))
-
-
-
-
-    def _set_dim(self, dims):
-        """
-        Create dimensions in NetCDF file given a dictionary of dimension names
-        and their values.
+        Private method for closing NetCDF file.
         """
 
-        for key, val in dims.iteritems():
-            self.f.createDimension(key,val)
+        if self.f is not None:
+            self.f.close()
+            self.f = None
+            self.filename = None
 
-        self._get_dimensions()
+    def _get_attributes(self, var=None):
+        """
+        Private method for getting attributes from a NetCDF file. Gets global
+        attributes if no variable name is provided, otherwise gets attributes
+        attached to specified variable. Function returns dictionary of values.
+        """
+
+        if self.f is not None:
+            if var is not None:
+                varin = self.f.variables[var]
+                return varin.__dict__
+            else:
+                return self.f.__dict__
+        else:
+            raise # TODO add specific file exception
+
+    def _get_dimensions(self, var=None):
+        """
+        Private method for getting list of dimension names and lengths. If
+        variable name is provided, method returns list of dimension names
+        attached to specified variable, if none, returns all dimensions in the file.
+        """
+
+        dimdict = {}
+
+        if self.f is not None:
+            file_dims = self.f.dimensions
+
+            if var is not None:
+                varin = self.f.variables[var]
+                dims = varin.dimensions
+
+                for dimname in dims.iteritems():
+                    dimobj = file_dims[dimname]
+                    dimdict[dimname] = len(dimobj)
+            else:
+                dims = file_dims
+
+            for dimname, dimobj in dims.iteritems():
+                dimdict[dimname] = len(dimobj)
+
+            return dimdict
+        else:
+            raise # TODO add specific file exception
+
+        return None
+
 
     def _get_variables(self):
         """
-        Sets instance variable to list all variables in current NetCDF file
-        """
-        if self.f is not None:
-            self.variables = self.f.variables.keys()
-    
-    def _get_dimensions(self):
-        """
-        Sets instance variable to list all dimensions in current NetCDF file
+        Private method for getting list of variable names.
         """
 
         if self.f is not None:
-            self.dimensions = self.f.dimensions.keys()
-
+            return self.f.variables.keys()
+        else:
+            raise # TODO Add specific file execption
 
