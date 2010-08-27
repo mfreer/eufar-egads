@@ -38,7 +38,7 @@ def velocity_tas_longitudinal_cnrm(V_t, alpha, beta):
     V_tx = V_t.value / sqrt(1 + tan(alpha.value) ** 2 + tan(beta.value) ** 2)
 
 
-    result = egads.ToolboxData(value = V_tx,
+    result = egads.EgadsData(value = V_tx,
                                units = 'm/s',
                                long_name = 'longitudinal true air speed',
                                standard_name = '',

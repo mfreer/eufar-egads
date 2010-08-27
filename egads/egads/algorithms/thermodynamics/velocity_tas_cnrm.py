@@ -42,7 +42,7 @@ def velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa):
                         -1)) ** .5
 
 
-    result = egads.ToolboxData(value = V_p,
+    result = egads.EgadsData(value = V_p,
                                units = 'm/s',
                                long_name = 'True Air Speed',
                                standard_name = 'platform_speed_wrt_air',

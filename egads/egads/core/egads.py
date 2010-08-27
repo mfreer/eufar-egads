@@ -8,7 +8,7 @@ __version__ = "$Revision$"
 
 import types
 
-class ToolboxData(object):
+class EgadsData(object):
     """
     This class is designed around the EUFAR N6Sp recommendations
     for data and metadata. It allows a set of data and metadata to be shared
@@ -17,9 +17,9 @@ class ToolboxData(object):
     """
 
     def __init__(self, value=None, units=None, long_name=None, standard_name=None,
-                name=None, fill_value=None, valid_range=None, sampled_rate=None,
-                category=None, calibration_coeff=None, dependencies=None,
-                processor=None, **attrs):
+                 name=None, fill_value=None, valid_range=None, sampled_rate=None,
+                 category=None, calibration_coeff=None, dependencies=None,
+                 processor=None, ** attrs):
         """
         Initializes instance with standard and user-provided attributes. If
         no attributes are provided, all standard attributes are set to None.
@@ -51,7 +51,7 @@ class ToolboxData(object):
 
 
         outstr = ('Current variable is %i with units of %s. \n' % (self.value.shape, self.units) +
-                'Its descriptive name is: %s, and its CF name is: %s\n ' % (self.long_name, self.standard_name))
+                  'Its descriptive name is: %s, and its CF name is: %s\n ' % (self.long_name, self.standard_name))
 
         return outstr
 
@@ -72,7 +72,7 @@ class ToolboxData(object):
 
     def print_data(self):
         """
-        Print out data and metadata contained in ToolboxData object.
+        Print out data and metadata contained in EgadsData object.
 
         """
         print self.value, self.units

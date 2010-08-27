@@ -34,7 +34,7 @@ def algorithm_template(inputs):
     ## Do processing here:
 
 
-    result = egads.ToolboxData(value = output,
+    result = egads.EgadsData(value = output,
                                units = '%',
                                long_name = 'template',
                                standard_name = 'template',
