@@ -38,7 +38,7 @@ def temp_static_cnrm(Tt, dP, P_s, r_f, Racpa):
     T_s = Tt.value / (1 + r_f.value * ((1 + dP.value / P_s.value)
                                    ** Racpa.value - 1))
 
-    result = egads.ToolboxData(value = T_s,
+    result = egads.EgadsData(value = T_s,
                                units = 'K',
                                long_name = 'static temperature',
                                standard_name = 'air_temperature',

@@ -36,7 +36,7 @@ def temp_virtual_cnrm(T_s, r):
 
 
 
-    result = egads.ToolboxData(value = T_v,
+    result = egads.EgadsData(value = T_v,
                                units = 'K',
                                long_name = 'virtual temperature',
                                standard_name = 'virtual_temperature',

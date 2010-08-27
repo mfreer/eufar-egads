@@ -36,7 +36,7 @@ def density_dry_air_cnrm(P_s, T_s):
     rho = (P_s.value * 100) / (R_a * T_s.value)
 
 
-    result = egads.ToolboxData(value = rho,
+    result = egads.EgadsData(value = rho,
                                units = 'kg/m3',
                                long_name = 'density',
                                standard_name = 'air_density',

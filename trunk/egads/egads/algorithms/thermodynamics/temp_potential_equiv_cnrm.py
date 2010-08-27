@@ -42,7 +42,7 @@ def temp_potential_equiv_cnrm(T_s, theta, r, c_pa):
     theta_e = theta.value * (1 + r.value * L / (c_pa.value * T_s.value))
 
 
-    result = egads.ToolboxData(value = theta_e,
+    result = egads.EgadsData(value = theta_e,
                                units = 'K',
                                long_name = 'equivalent potential temperature',
                                standard_name = 'equivalent_potential_temperature',

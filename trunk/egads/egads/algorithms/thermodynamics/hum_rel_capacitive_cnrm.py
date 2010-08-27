@@ -53,7 +53,7 @@ def hum_rel_capacitve_cnrm(Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
 
 
 
-    result = egads.ToolboxData(value = H_u,
+    result = egads.EgadsData(value = H_u,
                                units = '%',
                                long_name = 'relative humidity',
                                standard_name = 'relative_humidity',

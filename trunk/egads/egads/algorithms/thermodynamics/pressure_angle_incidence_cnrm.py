@@ -62,7 +62,7 @@ def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha
     beta_value = C_beta.value[0] + C_beta.value[2] * delta_P_h.value / delta_P_value
 
 
-    P_s = egads.ToolboxData(value = P_s_value,
+    P_s = egads.EgadsData(value = P_s_value,
                                units = 'hPa',
                                long_name = 'static pressure',
                                standard_name = 'air_pressure',
@@ -76,7 +76,7 @@ def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha
                                processor_version = __version__,
                                processor_date = __date__)
 
-    delta_P = egads.ToolboxData(value = delta_P_value,
+    delta_P = egads.EgadsData(value = delta_P_value,
                                units = 'hPa',
                                long_name = 'dynamic pressure',
                                standard_name = '',
@@ -90,7 +90,7 @@ def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha
                                processor_version = __version__,
                                processor_date = __date__)
 
-    alpha = egads.ToolboxData(value = alpha_value,
+    alpha = egads.EgadsData(value = alpha_value,
                                units = 'rad',
                                long_name = 'angle of attack',
                                standard_name = '',
@@ -103,7 +103,7 @@ def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha
                                processor = inspect.stack()[0][3],
                                processor_version = __version__,
                                processor_date = __date__)
-    beta = egads.ToolboxData(value = beta_value,
+    beta = egads.EgadsData(value = beta_value,
                                units = 'rad',
                                long_name = 'sideslip angle',
                                standard_name = '',

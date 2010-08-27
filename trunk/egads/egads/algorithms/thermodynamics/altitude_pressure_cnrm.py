@@ -30,12 +30,11 @@ def altitude_pressure_cnrm(T_v, P_s, P_surface, R_a_g):
     SOURCE      CNRM/GMEI/TRAMM
 
     REFERENCES
-
     """
 
     alt_p = R_a_g.value * T_v.value * log(P_surface.value/P_s.value)
 
-    result = egads.ToolboxData(value = alt_p,
+    result = egads.EgadsData(value = alt_p,
                                units = 'm',
                                long_name = 'pressure altitude',
                                standard_name = '',

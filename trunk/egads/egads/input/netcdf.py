@@ -34,13 +34,13 @@ class NetCdf(object):
             'a' and 'r+' for append, and 'r' for read. 'r' is the default value
         """
 
+        self.f = None
+        self.filename = filename
+        self.perms = perms
+        
+        if filename is not None:
+            self._open_file(filename, perms)
 
-        if self.filename is not None:
-            self.f = self._open_file(filename, perms)
-        else:
-            self.f = None
-            self.filename = filename
-            self.perms = perms
 
 
     def __del__(self):
@@ -51,7 +51,7 @@ class NetCdf(object):
         if self.f is not None:
             self.f.close()
 
-    def open(self, filename, perms=self.perms):
+    def open(self, filename, perms=None):
         """
         Opens NetCDF file given filename.
 
@@ -64,7 +64,20 @@ class NetCdf(object):
             'a' and 'r+' for append, and 'r' for read. 'r' is the default value
         """
 
-        self.f = self._open_file(filename, perms)
+        if perms is not None:
+            self.perms = perms
+        else:
+            perms = self.perms
+
+        self._open_file(filename, perms)
+
+    def close(self):
+        """
+        Closes currently open NetCDF file
+
+        """
+
+        self._close_file()
 
     def get_attributes(self, varname=None):
         """
@@ -202,13 +215,13 @@ class NetCdf(object):
         else:
             obj = 'slice(input_range[0], input_range[1])'
             for i in xrange(2, len(input_range), 2):
-                obj = obj + ', slice(input_range[%i], range[%i])' % (i, i + 1)
+                obj = obj + ', slice(input_range[%i], input_range[%i])' % (i, i + 1)
 
             value = varin[eval(obj)]
 
         return value
 
-    def write_variable(self, varname, dims=None, type='double', fill_value=None):
+    def write_variable(self, varname, value, dims=None, type='double', fill_value=None):
         """
         Writes/creates variable in currently opened NetCDF file.
 
@@ -216,6 +229,8 @@ class NetCdf(object):
         -----------
         varname : string
             Name of variable to create/write to.
+        value : arraylike
+            Array of values to output to NetCDF file.
         dims : tuple of strings, optional
             Name(s) of dimensions to assign to variable. If variable already exists
             in NetCDF file, this parameter is optional. For scalar variables,
@@ -235,26 +250,24 @@ class NetCdf(object):
             except KeyError:
                 varout = self.f.createVariable(varname, TYPE_DICT[type.lower()], dims)
 
+            varout[:] = value
 
 
     def add_dim(self, name, size):
         """
-        Adds dimension(s) to currently open file. Will add multiple dimensions if
-        multiple names and sizes are specified.
+        Adds dimension to currently open file.
 
         Parameters
         -----------
         name : string
-            Name(s) of dimension(s) to add
+            Name of dimension to add
         size : integer
-            Integer size(s) of dimension(s) to add.
+            Integer size of dimension to add.
 
         """
 
         if self.f is not None:
-            dims = dict(zip(name, size))
-            for key, val in dims.iteritems():
-                self.f.createDimension(key, val)
+            self.f.createDimension(name, size)
         else:
             raise # TODO add file execption
 

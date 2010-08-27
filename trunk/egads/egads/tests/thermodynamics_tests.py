@@ -7,32 +7,32 @@ import egads
 from egads import *
 from egads.algorithms import thermodynamics
 
-Ucapf = egads.ToolboxData(value = [],
+Ucapf = egads.EgadsData(value = [],
                           units = 'Hz',
                           long_name = 'output frequency of capacitive probe')
 
-P_s = egads.ToolboxData(value = [],
+P_s = egads.EgadsData(value = [],
                         units = 'hPa',
                         long_name = 'static pressure')
 
-dP = egads.ToolboxData(value = [],
+dP = egads.EgadsData(value = [],
                        units = 'hPa',
                        long_name = 'dynamic pressure')
 
 
 
-T_s = egads.ToolboxData(value = [],
+T_s = egads.EgadsData(value = [],
                         units = 'K',
                         long_name = 'static temperature')
 
-T_v = egads.ToolboxData(value = [],
+T_v = egads.EgadsData(value = [],
                         units = 'K',
                         long_name = 'virtual temperature')
-P_surface = egads.ToolboxData(value = [1013.25],
+P_surface = egads.EgadsData(value = [1013.25],
                               units = 'hPa',
                               long_name = 'surface pressure')
 
-R_a_g = egads.ToolboxData(value = [287.058/9.8],
+R_a_g = egads.EgadsData(value = [287.058/9.8],
                           units = 'm/K',
                           long_name = 'air gas constant divided by gravity')
 
