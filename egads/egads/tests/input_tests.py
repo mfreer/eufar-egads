@@ -6,15 +6,14 @@ NetCDF library (based on NetCDF4).
 
 """
 
-from numpy.testing import assert_array_equal
 import os
 import tempfile
 import unittest
 
-import egads
 import egads.input as input
 import netCDF4
 from numpy.random.mtrand import uniform
+from numpy.testing import assert_array_equal
 
 __author__ = "Matt Freer"
 __date__ = "$Date$"
@@ -24,11 +23,20 @@ FILE_NAME = tempfile.mktemp('.nc')
 FILE_NAME_ALT = tempfile.mktemp('.nc')
 VAR_NAME = 'test_var'
 VAR_UNITS = 's'
+VAR_LONG_NAME = 'test variable'
+VAR_STD_NAME = ''
+CATEGORY = 'TEST'
 
 VAR_MULT_NAME = 'test_mult_var'
 VAR_MULT_UNITS = 'm'
 
 GLOBAL_ATTRIBUTE = 'test_file'
+CONVENTIONS = 'EUFAR-N6SP'
+TITLE = 'Test file'
+SOURCE = 'Generated for testing purposes'
+INSTITUTION = 'EUFAR'
+PROJECT = 'N6SP'
+
 
 DIM1_NAME = 'x'
 DIM1_LEN = 10
@@ -45,12 +53,21 @@ class NetCdfFileInputTestCase(unittest.TestCase):
         self.file = FILE_NAME
         f = netCDF4.Dataset(self.file, 'w')
         f.attribute = GLOBAL_ATTRIBUTE
+        f.Conventions = CONVENTIONS
+        f.title = TITLE
+        f.source = SOURCE
+        f.institution = INSTITUTION
+        f.project = PROJECT
+
         f.createDimension(DIM1_NAME, DIM1_LEN)
         f.createDimension(DIM2_NAME, DIM2_LEN)
         v1 = f.createVariable(VAR_NAME, 'f8', (DIM1_NAME))
         v2 = f.createVariable(VAR_MULT_NAME, 'f8', (DIM1_NAME, DIM2_NAME))
         v1.units = VAR_UNITS
         v2.units = VAR_MULT_UNITS
+        v1.long_name = VAR_LONG_NAME
+        v1.standard_name = VAR_STD_NAME
+        v1.Category = CATEGORY
         v1[:] = random_data
         v2[:] = random_mult_data
         
@@ -151,10 +168,26 @@ class NetCdfFileInputTestCase(unittest.TestCase):
         """ test reading subset of data in 2d"""
 
         data = input.NetCdf(self.file).read_variable(VAR_MULT_NAME, input_range=(0, DIM1_LEN-2))
-        assert_array_equal(data, random_mult_data[:DIM1_LEN-2, :])
+        assert_array_equal(data, random_mult_data[:DIM1_LEN-2, :],)
     
         data = input.NetCdf(self.file).read_variable(VAR_MULT_NAME, input_range=(None, None, 0, DIM1_LEN-2))
         assert_array_equal(data, random_mult_data[:, :DIM1_LEN-2])
+
+    def test_read_n6sp_data(self):
+        """ test reading in data using N6SP formatted NetCDF """
+
+        infile = input.EgadsNetCdf(self.file)
+
+        self.assertEqual(infile.history, None, 'NetCDF history attribute doesnt match')
+        self.assertEqual(infile.title, TITLE, 'NetCDF title attribute doesnt match')
+
+        data = infile.read_variable(VAR_NAME)
+
+        assert_array_equal(data.value, random_data)
+        self.assertEqual(data.units, VAR_UNITS, 'EgadsData units attribute doesnt match')
+        self.assertEqual(data.long_name, VAR_LONG_NAME, 'EgadsData long name attribute doesnt match')
+        self.assertEqual(data.standard_name, VAR_STD_NAME,'EgadsData standard name attribute doesnt match')
+
 
 
 
@@ -169,8 +202,8 @@ class NetCdfFileOutputTestCase(unittest.TestCase):
         f.add_dim(DIM1_NAME, DIM1_LEN)
         f.add_dim(DIM2_NAME, DIM2_LEN)
 
-        f.write_variable(VAR_NAME,random_data,(DIM1_NAME,),'double')
-        f.write_variable(VAR_MULT_NAME, random_mult_data, (DIM1_NAME, DIM2_NAME,),
+        f.write_variable(random_data, VAR_NAME,(DIM1_NAME,),'double')
+        f.write_variable(random_mult_data, VAR_MULT_NAME, (DIM1_NAME, DIM2_NAME,),
                         'double')
 
         f.add_attribute('units', VAR_UNITS, VAR_NAME)

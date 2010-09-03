@@ -5,4 +5,4 @@ __version__ = "$Revision$"
 
 
 from netcdf import NetCdf
-
+from egads_netcdf import EgadsNetCdf

@@ -2,24 +2,25 @@ __author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision$"
 
-import egads
+import numpy
 import netCDF4
 
-TYPE_DICT = {'char':'s1',
-    'byte':'b',
-    'short':'i2',
-    'int':'i4',
-    'float':'f4',
-    'double':'f8'}
 
 class NetCdf(object):
     """
-    EGADS I/O module for reading and writing to NetCDF files.
+    EGADS I/O module for reading and writing to generic NetCDF files.
 
     This module adapts the Python NetCDF4 0.8.2 library to the file access
     methods used in EGADS.
 
     """
+
+    TYPE_DICT = {'char':'s1',
+        'byte':'b',
+        'short':'i2',
+        'int':'i4',
+        'float':'f4',
+        'double':'f8'}
 
     def __init__(self, filename=None, perms='r'):
         """
@@ -73,7 +74,7 @@ class NetCdf(object):
 
     def close(self):
         """
-        Closes currently open NetCDF file
+        Closes currently open NetCDF file.
 
         """
 
@@ -185,13 +186,7 @@ class NetCdf(object):
         Parameters
         -----------
         varname : string
-            Name of NetCDF variable name to read in.
-        filename : string, optional
-            Name of NetCDF file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data in file),'a' and 'r+' for append, and 'r' for read.
-            'r' is the default value
+            Name of NetCDF variable to read in.
         input_range : vector, optional
             Range of values in each dimension to input. TODO add example
 
@@ -221,16 +216,16 @@ class NetCdf(object):
 
         return value
 
-    def write_variable(self, varname, value, dims=None, type='double', fill_value=None):
+    def write_variable(self, value, varname, dims=None, type='double', fill_value=None):
         """
         Writes/creates variable in currently opened NetCDF file.
 
         Parameters
         -----------
-        varname : string
-            Name of variable to create/write to.
         value : arraylike
             Array of values to output to NetCDF file.
+        varname : string
+            Name of variable to create/write to.
         dims : tuple of strings, optional
             Name(s) of dimensions to assign to variable. If variable already exists
             in NetCDF file, this parameter is optional. For scalar variables,
@@ -248,7 +243,7 @@ class NetCdf(object):
             try:
                 varout = self.f.variables[varname]
             except KeyError:
-                varout = self.f.createVariable(varname, TYPE_DICT[type.lower()], dims)
+                varout = self.f.createVariable(varname, self.TYPE_DICT[type.lower()], dims)
 
             varout[:] = value
 
@@ -312,7 +307,7 @@ class NetCdf(object):
             'a' and 'r+' for append, and 'r' for read.
         """
 
-        self._close_file()
+        self.close()
 
         try:
             self.f = netCDF4.Dataset(filename, perms)
