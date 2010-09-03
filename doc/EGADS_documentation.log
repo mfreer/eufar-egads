@@ -1,0 +1,512 @@
+This is pdfTeX, Version 3.141592-1.40.5 (Web2C 7.5.5) (format=pdflatex 2008.3.4)  23 AUG 2010 10:32
+entering extended mode
+**EGADS_documentation.tex
+(./EGADS_documentation.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for american, french, german, ngerman, b
+ahasa, basque, bulgarian, catalan, croatian, czech, danish, dutch, esperanto, e
+stonian, finnish, greek, icelandic, irish, italian, latin, magyar, norsk, polis
+h, portuges, romanian, russian, serbian, slovak, slovene, spanish, swedish, tur
+kish, ukrainian, nohyphenation, loaded.
+(/usr/share/texmf/tex/latex/base/report.cls
+Document Class: report 2005/09/16 v1.4f Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/size11.clo
+File: size11.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texmf/tex/latex/graphics/graphics.cfg
+File: graphics.cfg 2005/08/28 v1.4 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 90.
+
+(/usr/share/texmf/tex/latex/graphics/pdftex.def
+File: pdftex.def 2007/12/04 v0.04i Graphics/color for pdfTeX
+\Gread@gobject=\count88
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+(/usr/share/texmf/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2008/01/09 v6.77i Hypertext links for LaTeX
+
+(/usr/share/texmf/tex/latex/oberdiek/hycolor.sty
+Package: hycolor 2007/04/11 v1.1 Code for color options of hyperref/bookmark (H
+O)
+)
+\@linkdim=\dimen105
+\Hy@linkcounter=\count89
+\Hy@pagecounter=\count90
+
+(/usr/share/texmf/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2008/01/09 v6.77i Hyperref: PDFDocEncoding definition (HO)
+)
+(/usr/share/texmf/tex/latex/oberdiek/etexcmds.sty
+Package: etexcmds 2007/12/12 v1.2 Prefix for e-TeX command names (HO)
+
+(/usr/share/texmf/tex/latex/oberdiek/infwarerr.sty
+Package: infwarerr 2007/09/09 v1.2 Providing info/warning/message (HO)
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)
+(/usr/share/texmf/tex/latex/hyperref/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive and teTeX
+)
+(/usr/share/texmf/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2007/10/18 v3.0 Keyval support for LaTeX options (HO)
+)
+Package hyperref Info: Hyper figures OFF on input line 2722.
+Package hyperref Info: Link nesting OFF on input line 2727.
+Package hyperref Info: Hyper index ON on input line 2730.
+Package hyperref Info: Plain pages OFF on input line 2737.
+Package hyperref Info: Backreferencing OFF on input line 2742.
+
+Implicit mode ON; LaTeX internals redefined
+Package hyperref Info: Bookmarks ON on input line 2898.
+(/usr/share/texmf/tex/latex/url/url.sty
+\Urlmuskip=\muskip10
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 3068.
+
+(/usr/share/texmf/tex/latex/oberdiek/bitset.sty
+Package: bitset 2007/09/28 v1.0 Data type bit set (HO)
+
+(/usr/share/texmf/tex/latex/oberdiek/intcalc.sty
+Package: intcalc 2007/09/27 v1.1 Expandable integer calculations (HO)
+)
+(/usr/share/texmf/tex/latex/oberdiek/bigintcalc.sty
+Package: bigintcalc 2007/11/11 v1.1 Expandable big integer calculations (HO)
+
+(/usr/share/texmf/tex/latex/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2007/12/12 v0.3 LuaTeX support for pdfTeX utility functions
+ (HO)
+Package pdftexcmds Info: LuaTeX not detected on input line 139.
+)))
+(/usr/share/texmf/tex/latex/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2007/09/29 v1.3 Key value parser with default handler suppor
+t (HO)
+)
+\Fld@menulength=\count91
+\Field@Width=\dimen106
+\Fld@charsize=\dimen107
+\Field@toks=\toks15
+Package hyperref Info: Hyper figures OFF on input line 3949.
+Package hyperref Info: Link nesting OFF on input line 3954.
+Package hyperref Info: Hyper index ON on input line 3957.
+Package hyperref Info: backreferencing OFF on input line 3964.
+Package hyperref Info: Link coloring OFF on input line 3969.
+
+(/usr/share/texmf/tex/latex/oberdiek/atbegshi.sty
+Package: atbegshi 2007/09/09 v1.6 At begin shipout hook (HO)
+
+(/usr/share/texmf/tex/latex/oberdiek/ifpdf.sty
+Package: ifpdf 2007/12/12 v1.6 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in pdf mode detected.
+))
+\Hy@abspage=\count92
+\c@Item=\count93
+\c@Hfootnote=\count94
+)
+*hyperref using default driver hpdftex*
+(/usr/share/texmf/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2008/01/09 v6.77i Hyperref driver for pdfTeX
+\Fld@listcount=\count95
+)
+(/usr/share/texmf/tex/latex/fancyvrb/fancyvrb.sty
+Package: fancyvrb 1998/07/17
+
+Style option: `fancyvrb' v2.6, with DG/SPQR fixes <1998/07/17> (tvz)
+\FV@CodeLineNo=\count96
+\FV@InFile=\read1
+\FV@TabBox=\box26
+\c@FancyVerbLine=\count97
+\FV@StepNumber=\count98
+\FV@OutFile=\write3
+
+(./fancyvrb.cfg)) (/usr/share/texmf/tex/latex/paralist/paralist.sty
+Package: paralist 2002/03/18 v2.3b Extended list environments (BS)
+\pltopsep=\skip43
+\plpartopsep=\skip44
+\plitemsep=\skip45
+\plparsep=\skip46
+\pl@lab=\toks16
+)
+(/usr/share/texmf/tex/latex/base/makeidx.sty
+Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
+)
+(/usr/share/texmf/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+
+(/usr/share/texmf/tex/latex/graphics/color.cfg
+File: color.cfg 2005/08/28 v1.4 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+(/usr/share/texmf/tex/latex/tools/calc.sty
+Package: calc 2005/08/06 v4.2 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count99
+\calc@Bcount=\count100
+\calc@Adimen=\dimen108
+\calc@Bdimen=\dimen109
+\calc@Askip=\skip47
+\calc@Bskip=\skip48
+LaTeX Info: Redefining \setlength on input line 75.
+LaTeX Info: Redefining \addtolength on input line 76.
+\calc@Ccount=\count101
+\calc@Cskip=\skip49
+)
+\c@actioncounter=\count102
+ (./pagesetup.cfg
+(/usr/share/texmf/tex/latex/fancyhdr/fancyhdr.sty
+\fancy@headwidth=\skip50
+\f@ncyO@elh=\skip51
+\f@ncyO@erh=\skip52
+\f@ncyO@olh=\skip53
+\f@ncyO@orh=\skip54
+\f@ncyO@elf=\skip55
+\f@ncyO@erf=\skip56
+\f@ncyO@olf=\skip57
+\f@ncyO@orf=\skip58
+))
+\@indexfile=\write4
+\openout4 = `EGADS_documentation.idx'.
+
+
+Writing index file EGADS_documentation.idx
+(./EGADS_documentation.aux (./cover/cover.aux)
+(./algorithms/thermodynamics/altitude_pressure_cnrm.aux)
+(./algorithms/thermodynamics/density_dry_air_cnrm.aux)
+(./algorithms/thermodynamics/hum_rel_capacitive_cnrm.aux)
+(./algorithms/thermodynamics/pressure_angle_incidence_cnrm.aux)
+(./algorithms/thermodynamics/temp_potential_cnrm.aux)
+(./algorithms/thermodynamics/temp_potential_equiv_cnrm.aux)
+(./algorithms/thermodynamics/temp_static_cnrm.aux)
+(./algorithms/thermodynamics/temp_virtual_cnrm.aux)
+(./algorithms/thermodynamics/velocity_tas_cnrm.aux)
+(./algorithms/thermodynamics/velocity_tas_longitudinal_cnrm.aux))
+\openout1 = `EGADS_documentation.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+Package hyperref Info: Link coloring OFF on input line 69.
+
+(/usr/share/texmf/tex/latex/hyperref/nameref.sty
+Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
+
+(/usr/share/texmf/tex/latex/oberdiek/refcount.sty
+Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
+)
+\c@section@level=\count103
+)
+LaTeX Info: Redefining \ref on input line 69.
+LaTeX Info: Redefining \pageref on input line 69.
+ (./EGADS_documentation.out) (./EGADS_documentation.out)
+\@outlinefile=\write5
+\openout5 = `EGADS_documentation.out'.
+
+\AtBeginShipoutBox=\box27
+\openout2 = `cover/cover.aux'.
+
+ (./cover/cover.tex
+<cover/eufar_a_sm.pdf, id=63, 2509.375pt x 1505.625pt>
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+
+<use cover/eufar_a_sm.pdf>) [1
+
+
+{/usr/share/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./cover/eufar_a_sm.p
+df
+
+pdfTeX warning: pdflatex (file ./cover/eufar_a_sm.pdf): PDF inclusion: Page Gro
+up detected which pdfTeX can't handle. Ignoring it.
+>] (./EGADS_documentation.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 4.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 4.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 4.
+)
+\tf@toc=\write6
+\openout6 = `EGADS_documentation.toc'.
+
+ [2
+
+
+]
+Chapter 1.
+[1
+
+]
+Chapter 2.
+[2
+
+]
+Chapter 3.
+[3
+
+]
+\openout2 = `algorithms/thermodynamics/altitude_pressure_cnrm.aux'.
+
+ (./algorithms/thermodynamics/altitude_pressure_cnrm.tex
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[4
+
+])
+\openout2 = `algorithms/thermodynamics/density_dry_air_cnrm.aux'.
+
+ (./algorithms/thermodynamics/density_dry_air_cnrm.tex
+
+LaTeX Warning: Citation `Triplet' on page 5 undefined on input line 32.
+
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[5
+
+
+])
+\openout2 = `algorithms/thermodynamics/hum_rel_capacitive_cnrm.aux'.
+
+ (./algorithms/thermodynamics/hum_rel_capacitive_cnrm.tex
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[6
+
+
+])
+\openout2 = `algorithms/thermodynamics/pressure_angle_incidence_cnrm.aux'.
+
+ (./algorithms/thermodynamics/pressure_angle_incidence_cnrm.tex
+Overfull \hbox (123.11057pt too wide) detected at line 46
+\OML/cmm/m/it/10.95 Errstat \OT1/cmr/m/n/10.95 = []\OML/cmm/m/it/10.95 Errstat\
+OT1/cmr/m/n/10.95 @25\OML/cmm/m/it/10.95 hPa[] P[] \OT1/cmr/m/n/10.95 = \OML/cm
+m/m/it/10.95 P[] \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 Errstat[] \OT1/cmr
+/m/n/10.95 ^^A\OML/cmm/m/it/10.95 P \OT1/cmr/m/n/10.95 = ^^A\OML/cmm/m/it/10.95
+ P[] \OT1/cmr/m/n/10.95 + \OML/cmm/m/it/10.95 Errstat[]  \OT1/cmr/m/n/10.95 = 
+\OML/cmm/m/it/10.95 C[]\OT1/cmr/m/n/10.95 [0] + \OML/cmm/m/it/10.95 C[]\OT1/cmr
+/m/n/10.95 [1][]\OML/cmm/m/it/10.95 ^^L \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.9
+5 C[]\OT1/cmr/m/n/10.95 [0] + \OML/cmm/m/it/10.95 C[]\OT1/cmr/m/n/10.95 [1][]
+ []
+
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[7
+
+
+])
+\openout2 = `algorithms/thermodynamics/temp_potential_cnrm.aux'.
+
+ (./algorithms/thermodynamics/temp_potential_cnrm.tex
+
+LaTeX Warning: Citation `Triplet' on page 8 undefined on input line 30.
+
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[8
+
+
+])
+\openout2 = `algorithms/thermodynamics/temp_potential_equiv_cnrm.aux'.
+
+ (./algorithms/thermodynamics/temp_potential_equiv_cnrm.tex
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[9
+
+
+])
+\openout2 = `algorithms/thermodynamics/temp_static_cnrm.aux'.
+
+ (./algorithms/thermodynamics/temp_static_cnrm.tex
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[10
+
+
+])
+\openout2 = `algorithms/thermodynamics/temp_virtual_cnrm.aux'.
+
+ (./algorithms/thermodynamics/temp_virtual_cnrm.tex
+
+LaTeX Warning: Citation `Triplet' on page 11 undefined on input line 30.
+
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[11
+
+
+])
+\openout2 = `algorithms/thermodynamics/velocity_tas_cnrm.aux'.
+
+ (./algorithms/thermodynamics/velocity_tas_cnrm.tex
+
+LaTeX Warning: Citation `NCAR25' on page 12 undefined on input line 31.
+
+
+LaTeX Warning: Citation `Candel' on page 12 undefined on input line 31.
+
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[12
+
+
+])
+\openout2 = `algorithms/thermodynamics/velocity_tas_longitudinal_cnrm.aux'.
+
+ (./algorithms/thermodynamics/velocity_tas_longitudinal_cnrm.tex
+
+LaTeX Warning: Citation `NCAR25' on page 13 undefined on input line 29.
+
+File: cover/eufar_a_sm.pdf Graphic file (type pdf)
+<use cover/eufar_a_sm.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (28.90755pt): 
+ Make it at least 46.74266pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[13
+
+
+])
+Chapter 4.
+[14
+
+
+] (./EGADS_documentation.aux (./cover/cover.aux)
+(./algorithms/thermodynamics/altitude_pressure_cnrm.aux)
+(./algorithms/thermodynamics/density_dry_air_cnrm.aux)
+(./algorithms/thermodynamics/hum_rel_capacitive_cnrm.aux)
+(./algorithms/thermodynamics/pressure_angle_incidence_cnrm.aux)
+(./algorithms/thermodynamics/temp_potential_cnrm.aux)
+(./algorithms/thermodynamics/temp_potential_equiv_cnrm.aux)
+(./algorithms/thermodynamics/temp_static_cnrm.aux)
+(./algorithms/thermodynamics/temp_virtual_cnrm.aux)
+(./algorithms/thermodynamics/velocity_tas_cnrm.aux)
+(./algorithms/thermodynamics/velocity_tas_longitudinal_cnrm.aux))
+
+LaTeX Warning: There were undefined references.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 4533 strings out of 94296
+ 67826 string characters out of 1164264
+ 134461 words of memory out of 4000000
+ 7633 multiletter control sequences out of 10000+50000
+ 10122 words of font info for 35 fonts, out of 500000 for 2000
+ 580 hyphenation exceptions out of 8191
+ 36i,15n,46p,298b,312s stack positions out of 3000i,1500n,5000p,200000b,15000s
+</usr/share/texmf/fonts/type1/bluesky/cm/cmbx10.pfb></usr/share/texmf/fonts/t
+ype1/bluesky/cm/cmbx12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmex10.pfb>
+</usr/share/texmf/fonts/type1/bluesky/cm/cmmi10.pfb></usr/share/texmf/fonts/typ
+e1/bluesky/cm/cmmi6.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi8.pfb></us
+r/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/texmf/fonts/type1/bl
+uesky/cm/cmr8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsl10.pfb></usr/sha
+re/texmf/fonts/type1/bluesky/cm/cmss10.pfb></usr/share/texmf/fonts/type1/bluesk
+y/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy8.pfb></usr/share/
+texmf/fonts/type1/bluesky/cm/cmti10.pfb>
+Output written on EGADS_documentation.pdf (16 pages, 418397 bytes).
+PDF statistics:
+ 238 PDF objects out of 1000 (max. 8388607)
+ 32 named destinations out of 1000 (max. 131072)
+ 134 words of extra memory for PDF output out of 10000 (max. 10000000)
+

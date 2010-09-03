@@ -1,0 +1,11 @@
+*.log
+*.sh
+*.so
+*.pdf
+*.aux
+*.idx
+*.idg
+*.out
+*.backup
+*.tex~
+

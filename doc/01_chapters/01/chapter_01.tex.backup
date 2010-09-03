@@ -1,0 +1,19 @@
+\section{Introduction}\label{intro}
+
+
+Real-time data exchange and data links are becoming increasingly important in airborne atmospheric research.  As missions become more complex, situational awareness provided by real-time exchange of data is crucial for pilots and instrument operators onboard the aircraft.  Real-time satellite data links further enhance situational awareness by providing the aircraft with up-to-date radar and satellite imagery, while providing ground-based scientists with the current aircraft status.  Unmanned Aerial Systems (UAS) also rely heavily on real-time data exchange.  However, airborne science is just beginning to adopt real-time data exchange systems, satellite communication systems and UASs.  As such, it is important to define standards and protocols for real-time data exchange and data links so as facilities begin to install such systems, these standards can be adopted at the same time, facilitating interoperability between users, facilities and aircraft.  
+
+Although EUFAR's focus is on the European airborne research community, it is important to acknowledge existing standards which have been put in place for data exchange and data links by our colleagues in the United States at places such as NCAR, NASA and NOAA.  Knowledge of existing standards and protocols when developing those for EUFAR will allow us to overlap wherever possible, thereby increasing compatibility and facilitating collaboration between European and American operators and users.  Not all operators in the US follow the same standards, however, so this may not be an easy task.  Fortunately, efforts are underway by the Interagency Working Group for Airborne Data and Telemetry Systems (IWGADTS) to improve cooperation among the agencies participating in airborne research.  This report will focus on the standards that currently exist within the US for real-time data exchange and data links.  
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% END OF FILE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

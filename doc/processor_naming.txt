@@ -1,0 +1,20 @@
+N6SP Toolbox Processor Naming conventions
+------------------------------------------
+
+The filename for the toolbox processors should have a format similar to the following:
+
+probe_measurement.instrument.method.version.py
+
+iwc.nevzorov.korolev.V1.1.py
+
+
+
+Within the toolbox, the following parameters must be defined.
+
+algorithm_contributors
+dependencies
+outputs
+version
+
+
+

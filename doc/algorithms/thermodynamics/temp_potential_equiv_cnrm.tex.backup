@@ -1,0 +1,36 @@
+%% $Date$
+%% $Revision$
+
+\algdesc{Equivalent Potential Temperature}
+{ %%%%%% Algorithm name %%%%%%
+temp_potential_equiv_cnrm
+}
+{ %%%%%% Algorithm summary %%%%%%
+Calculates equivalent potential temperature of air. The equivalent potential temperature is the temperature a parcel of air would reach
+if all water vapor in the parcel would condense, and the parcel was brought adiabatially to 1000 hPa.
+}
+{ %%%%%% Inputs %%%%%%
+$T_s$ & Vector & Static temperature [K or \circ C] \\
+$\theta$ & Vector & Potential temperature [K or \circ C] \\
+$r$ & Vector & Vater vapor mixing ratio [g/kg] \\
+$c_{pa}$ & Coeff. & Specific heat of dry air at constant pressure
+}
+{ %%%%%% Outputs %%%%%%
+$\theta_e$ & Vector & Equivalent potential temperature [same units as T_s]
+}
+{ %%%%%% Formula %%%%%%
+\begin{displaymath}
+ \theta_e = \theta \left(1 + r \frac{L}{c_{pa} T_s} \right)
+\end{displaymath}
+
+where $L = 3136.17 - 2.34 T_s$ (for $T_s$ in K)
+
+}
+{ %%%%%% Author %%%%%%
+CNRM/GMEI/TRAMM
+}
+{ %%%%%% References %%%%%% 
+Directly copied from the CAM routine which is identical to the algorithm P.~Durand cited in the formula book created for PYREX.
+}
+
+
