@@ -1,0 +1,5 @@
+import egads
+
+egads.test_all.tester()
+
+
