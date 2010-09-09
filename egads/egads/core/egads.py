@@ -98,7 +98,7 @@ class EgadsData(object):
 
             return self.units
 
-        def get_shape(self):
+        def shape(self):
             """
             Return shape of current EgadsData instance.
 
@@ -106,6 +106,12 @@ class EgadsData(object):
 
             return _get_shape()
 
+        def print_shape(self):
+            """
+            Prints shape of current EgadsData instance
+            """
+
+            print _get_shape()
 
         def _get_description(self):
             """
