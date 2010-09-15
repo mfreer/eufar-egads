@@ -189,22 +189,32 @@ To open a NetCDF file, simply create a \verb|egads.input.NetCdf()| instance and 
     >>> f = egads.input.NetCdf()
     >>> f.open('/pathname/filename','r')
 \end{verbatim}
-
+%
 Valid values for permissions are:
 
-\begin{description}
- \item[r] Read: opens file for reading only. Default value if nothing is provided.
- \item[w] Write: opens file for writing, and overwrites data in file.
- \item[a] Append: opens file for appending data.
- \item[r+] Same as 'a'.
-\end{description}
+\begin{itemize}
+ \item \verb|r| -- Read: opens file for reading only. Default value if nothing is provided.
+ \item \verb|w| -- Write: opens file for writing, and overwrites data in file.
+ \item \verb|a| -- Append: opens file for appending data.
+ \item \verb|r+| -- Same as 'a'.
+\end{itemize}
 
 
 \subsubsection{Getting info}
 
-
+\begin{itemize}
+\item \verb|f.get_dimensions()| -- returns list of all dimensions and their sizes
+\item \verb|f.get_dimensions(var_name)| -- returns list of all dimensions for \verb|var_name|
+\item \verb|f.get_attributes()| -- returns a list of all top-level attributes
+\item \verb|f.get_attributes(var_name)| -- returns list of all attributes attached to \verb|var_name|
+\item \verb|f.get_variables()| -- returns list of all variables
+\item \verb|f.get_filename()| -- returns filename for currently opened file
+\end{itemize}
 
 \subsubsection{Reading data}
+
+
+
 
 \subsubsection{Writing data}
 
