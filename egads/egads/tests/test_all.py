@@ -8,7 +8,7 @@ import thermodynamics_tests
 
 
 
-def tester():
+def test():
     suite = unittest.TestSuite()
     suite.addTest(input_tests.suite())
 #    suite.addTest(thermodynamics_tests.suite())

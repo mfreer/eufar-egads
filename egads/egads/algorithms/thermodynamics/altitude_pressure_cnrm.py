@@ -1,6 +1,7 @@
 __author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision$"
+__all__ = ["altitude_pressure_cnrm"]
 
 from math import log
 
@@ -18,7 +19,7 @@ def altitude_pressure_cnrm(T_v, P_s, P_surface, R_a_g):
 
     PURPOSE     Calculate pressure altitude
 
-    DESCRIPTION Caluclate pressure altitude using virtual temperatue
+    DESCRIPTION Calculate pressure altitude using virtual temperature
 
     INPUT       T_v         vector  K or C  virtual temperature
                 P_s         vector  hPa     static pressure

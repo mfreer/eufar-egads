@@ -133,6 +133,10 @@ class NetCdfFileInputTestCase(unittest.TestCase):
         self.assertEqual(data.get_dimensions(), dimdict,
                         'dimensions dictionary does not match')
 
+        vardimdict = {DIM1_NAME : DIM1_LEN}
+        self.assertEqual(data.get_dimensions(VAR_NAME), vardimdict,
+                         'variable dimensions do not match')
+
     def test_load_data_1d(self):
         """test reading 1D netcdf data"""
 

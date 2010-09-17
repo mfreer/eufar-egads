@@ -1,7 +1,7 @@
 __author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision$"
-
+__all__ = ["temp_potential_cnrm"]
 
 import egads
 import inspect
