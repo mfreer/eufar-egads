@@ -8,6 +8,9 @@ temp\_virtual\_cnrm
 { %%%%%% Algorithm summary %%%%%%
 Calculates the virtual temperature of air.
 }
+{ %%%%%% Category %%%%%%
+Thermodynamics
+}
 { %%%%%% Inputs %%%%%%
 $T_s$ & Vector & Static temperature [K or $\circ$C] \\
 $r$ & Vector & Water vapor mixing ratio [g/kg]
@@ -19,7 +22,7 @@ $T_v$ & Vector & Virtual temperature [same units as $T_s$]
 \begin{displaymath}
  T_v = T_s \frac{1 + (R_v/R_a) r }{1 + r}
 \end{displaymath}
-
+%
 where $R_v/R_a = 1.608$ 
 }
 { %%%%%% Author %%%%%%

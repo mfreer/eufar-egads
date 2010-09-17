@@ -23,36 +23,40 @@
 
 \newcommand{\mf}{M\'et\'eoFrance}
 
-\newcommand{\algdesc}[8]{
+\renewcommand{\deg}{$^{\circ}$}
+
+\newcommand{\algdesc}[9]{
 \section{#1}\bigskip
 
-\textbf{Algorithm name:} #2 \bigskip
+\noindent \textbf{Algorithm name:} #2 \bigskip
 
-\textbf{Summary:} #3 \bigskip
+\noindent \hangindent=2.0cm \textbf{Category:} #4 \bigskip
 
-\begin{tabular}{p{2cm} p{2cm} p{8cm}}
+\noindent \hangindent=2.3cm \textbf{Summary:} #3 \bigskip
+
+\noindent \begin{tabular}{p{2cm} p{2cm} p{8cm}}
 	\multicolumn{3}{l}{\textbf{Inputs:}}\\
 	\hline
-	#4
+	#5
 \end{tabular}
 
 \vspace{0.5cm}
 
 
-\begin{tabular}{p{2cm} p{2cm} p{8cm}}
+\noindent \begin{tabular}{p{2cm} p{2cm} p{8cm}}
 	\multicolumn{3}{l}{\textbf{Outputs:}}\\
 	\hline
-	#5
+	#6
 \end{tabular}
 
 \vspace{1cm}
 
-\textbf{Formula:} #6
+\noindent \textbf{Formula:} #7
 \bigskip
 
-\textbf{Source:} #7 \bigskip
+\noindent \hangindent=1.9cm \textbf{Source:} #8 \bigskip
 
-\textbf{References:}  #8
+\noindent \hangindent=2.5cm \textbf{References:}  #9
 
 \pagebreak
 

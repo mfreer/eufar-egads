@@ -86,9 +86,9 @@
 \pagebreak
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%% Introduction
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% INTRO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand{\thepage}{\arabic{page}}
 \setcounter{page}{1}
 
@@ -99,9 +99,10 @@ The motivation behind \egads (\textsc{Eufar} General Airborne Data-processing So
 The current \egads implementation allows users to interact with data processing algorithms using the Python command-line or via Python scripts. Python was chosen due to its straightforward syntax and flexibility between multiple systems. Central to \egads is a data type that encapsulates data and metadata into one object. This simplifies the housekeeping of such data, and allows it to be easily passed between algorithms and data files.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%% Chapters
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% INSTALLATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Installation}
 
@@ -134,61 +135,64 @@ To install \egads, type \verb|python setup.py install| from the command line. To
 
 To test \egads after it is installed, run the following commands in Python:
 
-\begin{verbatim}
+\begin{command}
    >>> import egads
    >>> egads.test()
-\end{verbatim} 
+\end{command} 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% TUTORIAL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Tutorial}
 
 \section{Command-line usage}
 The simplest way to start working with \egads is to run it from the Python command line. To load egads into the Python namespace, simply import it:
 
-\begin{verbatim}
+\begin{command}
     >>> import egads
-\end{verbatim}
+\end{command}
 You may then begin working with any of the algorithms contained in \egads.
 
 \subsection{Exploring \egads}
 There are several useful methods to explore routines contained in \egads. The first is using the Python built-in \verb|dir()| command:
 
-\begin{verbatim}
+\begin{command}
     >>> dir(egads)
-\end{verbatim}
+\end{command}
 returns all the classes and subpackages contained in \egads. \Egads follows the naming conventions from the Python Style Guide (\href{http://www.python.org/dev/peps/pep-0008}{http://www.python.org/dev/peps/pep-0008}), so classes are always \verb|MixedCase|, functions and modules are generally \verb|lowercase| or \verb|lowercase_with_underscores|. As a further example,
 
-\begin{verbatim}
+\begin{command}
     >>> dir(egads.input)
-\end{verbatim}
+\end{command}
 would returns all the classes and subpackages of the \verb|egads.input| module.
 
 Another way to explore \egads is by using tab completion, if supported by your Python installation. Typing 
 
-\begin{verbatim}
+\begin{command}
     >>> egads.
-\end{verbatim}
+\end{command}
 then hitting \textsc{tab} will return a list of all available options. 
 
 Python has built-in methods to display documentation on any function known as docstrings. The easiest way to access them is using the \verb|help()| function:
 
-\begin{verbatim}
+\begin{command}
    >>> help(egads.input.NetCdf)
-\end{verbatim}
+\end{command}
 will return all methods and their associated documentation for the NetCdf class.
 
 \subsection{Working with NetCDF files}
 
-\Egads provides two classes to work with NetCDF files. The simplest, \verb|egads.input.NetCdf()|, allows simple read/write operations to NetCDF files. The other, \verb|egads.input.EgadsNetCdf()|, is designed to interface with NetCDF files conforming to the N6SP data and metadata regulations. This class directly reads NetCDF data into an \verb|EgadsData| class.
+\Egads provides two classes to work with NetCDF files. The simplest, \verb|egads.input.NetCdf()|, allows simple read/write operations to NetCDF files. The other, \verb|egads.input.EgadsNetCdf()|, is designed to interface with NetCDF files conforming to the N6SP data and metadata regulations. This class directly reads or writes NetCDF data using instances of the \verb|EgadsData| class.
 
 \subsubsection{Opening}
 
 To open a NetCDF file, simply create a \verb|egads.input.NetCdf()| instance and then use the \verb|open(pathname, permissions)| command:
 
-\begin{verbatim}
+\begin{command}
     >>> import egads
     >>> f = egads.input.NetCdf()
     >>> f.open('/pathname/filename','r')
-\end{verbatim}
+\end{command}
 %
 Valid values for permissions are:
 
@@ -213,20 +217,76 @@ Valid values for permissions are:
 
 \subsubsection{Reading data}
 
+To read data from a file, use the \verb|read_variable()| function:
 
+\begin{command}
+    >>> data = f.read_variable(var_name, input_range)
+\end{command}
+where \verb|var_name| is the name of the variable to read in, and \verb|input_range| (optional) is a XXXXX
 
+If using the \verb|egads.input.NetCdf()| class, an array of values contained in \verb|var_name| will be returned. IF using the \verb|egads.input.EgadsNetCdf()| class, an instance of the \verb|EgadsData()| class will be returned containing the values and attributes of \verb|var_name|.
 
 \subsubsection{Writing data}
 
+The following describe how to add dimenisons or attributes to a file.
+\begin{itemize}
+\item \verb|f.add_dim(dim_name, dim_size)| -- add dimension to file
+\item \verb|f.add_attribute(attr_name, attr_value)| -- add attribute to file
+\item \verb|f.add_attribute(attr_name, attr_value, var_name)| -- add attribute to \verb|var_name|
+\end{itemize}
+
+Data can be output to variables using the \verb|write_variable()| function as follows:
+
+\begin{command}
+    >>> f.write_variable(data, var_name, dims, type)
+\end{command}
+
+where \verb|var_name| is a string for the variable name to output, \verb|dims| is a tuple of dimension names (not needed if the variable already exists), and \verb|type| is the data type of the variable. The default value is \textit{double}, other valid options are \textit{float}, \textit{int}, \textit{short}, \textit{char} and \textit{byte}. 
+
+If using \verb|egads.input.NetCdf()|, values for \verb|data| passed into \verb|write_variable| must be scalar or array. Otherwise, if using \verb|egads.input.EgadsNetCdf()|, an instance of \verb|EgadsData()| must be passed into \verb|write_variable|. In this case, any attributes that are contained within the \verb|EgadsData()| instance are applied to the NetCDF variable as well.
+
 \subsubsection{Closing}
 
+To close a file, simply use the \verb|close() command|:
+
+\begin{command}
+    >>> f.close()
+\end{command}
+
+\section{Scripting}
+
+Another option for using \egads is to create script files, which are useful for common or repetitive tasks. This can be done using any available text editor. The example script belows shows the calculation of density for all NetCDF files in a directory.
+
+\begin{code}
+#!/usr/bin/env python
+
+import egads
+import egads.algorithms.thermodynamics as thermo
+
+filenames = egads.get_file_list('data/*.nc')
+
+f = egads.input.EgadsNetCdf()   # create EgadsNetCdf instance
+
+for name in filenames:          # loop through files
+
+    f.open(name, 'a')            # open NetCdf file 
+
+    T_s = f.read_variable('T_t') # read in static temperature
+    P_s = f.read_variable('P_s') # read in static pressure from file
+
+    rho = thermo.density_dry_air_cnrm(P_s, T_s)  # calculate density
+
+    f.write_variable(rho, 'rho', ('Time',))      # output variable
+
+    f.close()                                    # close file
 
 
+\end{code}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%% APPENDIX inclusions
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
 
 \chapter{Class reference}
@@ -256,6 +316,3 @@ Valid values for permissions are:
 
 
 \end{document}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%% END OF FILE
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
