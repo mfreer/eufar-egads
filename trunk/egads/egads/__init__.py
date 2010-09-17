@@ -7,9 +7,7 @@ __version__ = "$Revision$"
 # from tests import test_all
 
 
-import core
-from core import *
+from core.egads import *
 import algorithms
 from algorithms import *
-import tests
-from tests import test_all
+from tests.test_all import test

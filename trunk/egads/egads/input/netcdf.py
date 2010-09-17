@@ -1,6 +1,7 @@
 __author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision$"
+__all__ = ["NetCdf"]
 
 import numpy
 import netCDF4
@@ -362,14 +363,14 @@ class NetCdf(object):
                 varin = self.f.variables[var]
                 dims = varin.dimensions
 
-                for dimname in dims.iteritems():
+                for dimname in dims:
                     dimobj = file_dims[dimname]
                     dimdict[dimname] = len(dimobj)
             else:
                 dims = file_dims
 
-            for dimname, dimobj in dims.iteritems():
-                dimdict[dimname] = len(dimobj)
+                for dimname, dimobj in dims.iteritems():
+                    dimdict[dimname] = len(dimobj)
 
             return dimdict
         else:

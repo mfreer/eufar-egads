@@ -1,8 +1,10 @@
 __author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision$"
+__all__ = ["EgadsData", "get_file_list"]
 
 import types
+import glob
 
 class EgadsData(object):
     """
@@ -131,4 +133,15 @@ class EgadsData(object):
             """
 
             return self.value.shape
+
+
+def get_file_list(path):
+    """
+
+    Given path, returns a list of all files in that path. Wildcards are supported.
+
+    Example: path = 'data/*.nc'
+    """
+
+    return glob.glob(path)
 

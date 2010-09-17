@@ -1,7 +1,7 @@
 __author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision: 1$"
-
+__all__ = ["temp_static_cnrm"]
 
 import egads
 import inspect

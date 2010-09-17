@@ -1,8 +1,7 @@
-
 __author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision$"
-
+__all__ = ["hum_rel_capacitive_cnrm"]
 
 from numpy import multiply, power
 import scipy
@@ -10,7 +9,7 @@ import scipy
 import egads
 import inspect
 
-def hum_rel_capacitve_cnrm(Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
+def hum_rel_capacitive_cnrm(Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
     """
 
     FILE        hum_rel_capacitive_cnrm.py
