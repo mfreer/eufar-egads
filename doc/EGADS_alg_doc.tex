@@ -21,6 +21,10 @@
 \newcounter{actioncounter}
 \addtocounter{actioncounter}{1}
 
+\newcommand{\egads}{\textsc{egads} }
+\newcommand{\Egads}{\textsc{Egads} }
+
+
 \newcommand{\mf}{M\'et\'eoFrance}
 
 \renewcommand{\deg}{$^{\circ}$}
@@ -98,6 +102,24 @@
 %%%%%%%%%%% Chapters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\chapter{Introduction}
+
+This document contains descriptions of algorithms contained in the \egads toolbox. Within each algorithm description is the following:
+
+\begin{itemize}
+\item \textbf{Algorithm Name} -- name of algorithm as implemented in \egads.
+\item \textbf{Category} -- general category of algorithm. Algorithm can be found in this subdirectory in \egads.
+\item \textbf{Summary} -- short description of what the algorithm does.
+\item \textbf{Inputs} -- expected inputs to algorithm. This field includes expected units, and data type of input.
+\item \textbf{Outputs} -- outputs produced by algorithm.
+\item \textbf{Formula} -- description of formulas or methods behind the algorithm.
+\item \textbf{Source} -- person, institution or entity who provided the algorithm.
+\item \textbf{References} -- any references to literature, journals or documents with more information on the current algorithm
+\end{itemize}
+
+To aid in algorithm usage, there is a general naming scheme for \egads algorithms. Generally, algorithm names are composed as follows: |{general calculation}_{specific calculation}_{source}|. So, for example, an algorithm provided by CNRM to calculate the density of dry air would be named |density_dry_air_cnrm|.
+
+
 \chapter{Spatial Transformations}
 
 \chapter{Temporal Transformations}
@@ -128,8 +150,20 @@
 
 \chapter{Microphysics}
 
+\include{algorithms/microphysics/mean_diameter_raf}
+
+\include{algorithms/microphysics/number_conc_total_raf}
+
+\include{algorithms/microphysics/sample_area_oap_all_in_raf}
+
+\include{algorithms/microphysics/sample_area_oap_center_in_raf}
+
+\include{algorithms/microphysics/sample_area_scattering_raf}
+
+\include{algorithms/microphysics/sample_volume_general_raf}
 
 
+\printindex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% APPENDIX inclusions
