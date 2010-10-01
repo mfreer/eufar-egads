@@ -1,7 +1,7 @@
 __author__ = ""
 __date__ = "$Date$"
 __version__ = "$Revision$"
-
+__all__ = ['']
 
 import egads
 import inspect
