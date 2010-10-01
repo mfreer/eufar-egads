@@ -1,5 +1,5 @@
-%% $Date: 2010-09-17 17:53:24 +0200 (Fri, 17 Sep 2010) $
-%% $Revision: 24 $
+%% $Date$
+%% $Revision$
 \index{sample\_area\_oap\_all\_in\_raf}
 \algdesc{Sample area for imaging probes}
 { %%%%%% Algorithm name %%%%%%
@@ -13,10 +13,9 @@ number of shadowed diodes. This routine calculates a sample area per bin.
 Microphysics
 }
 { %%%%%% Inputs %%%%%%
-R & Vector & Particle radius [$\mu$m] \\
-$\lambda$ & Coeff. & Laser wavelength [$\mu$m] \\
+$\lambda$ & Coeff. & Laser wavelength [nm] \\
 $D_{arms}$ & Coeff. & Distance between probe arm tips [mm] \\
-dL & Coeff. & Diode diameter [$\mu$m] \\
+dD & Coeff. & Diode diameter [$\mu$m] \\
 M & Coeff. & Probe magnification factor \\
 N & Coeff. & Number of diodes in array
 }
@@ -24,15 +23,18 @@ N & Coeff. & Number of diodes in array
 SA & Vector & Sample area [m$^2$]
 }
 { %%%%%% Formula %%%%%%
-\begin{displaymath}
-DOF_i = \frac{6 R_i^2}{\lambda}
-\end{displaymath}
-where $DOF$ must be less than $D_{arms}$. The parameter $i$ ranges from 1 to $N$.
+\begin{eqnarray}
+DOF_i = \frac{6 R_i^2}{\lambda} \\ \nonumber
+R_i = i \frac{dD}{2} \\ \nonumber
+X = {1...N} \nonumber
+\end{eqnarray}
+where $DOF$ must be less than $D_{arms}$. The parameter $i$ ranges from 1 to $N$. 
+
 
 \begin{displaymath}
-ESW_i = \frac{dL(N-X_i-1)}{M}
+ESW_i = \frac{dD(N-X_i-1)}{M}
 \end{displaymath}
-A value for $ESW_i$ (effective sample width) is calculated for each $X$, where $X$ ranges from 1 to $N$.
+A value for $ESW_i$ (effective sample width) is calculated for each $X$.
 
 \begin{displaymath}
  SA_i = (DOF_i)(ESW_i) 
