@@ -5,6 +5,7 @@ __all__ = ["EgadsData", "get_file_list"]
 
 import types
 import glob
+import numpy
 
 class EgadsData(object):
     """
@@ -60,7 +61,14 @@ class EgadsData(object):
 
         """
 
-        self.value = value
+        if value is None:
+            self.value = numpy.array([])
+        else:
+            if isinstance(value, numpy.ndarray):
+                self.value = value
+            else:
+                self.value = numpy.array(value)
+                
         self.units = units
         self.long_name = long_name
         self.standard_name = standard_name
@@ -76,63 +84,152 @@ class EgadsData(object):
         for key, val in attrs.iteritems():
             setattr(self, key, val)
 
-        def __len__(self):
+    def __len__(self):
 
-            return _get_shape()
+        return _get_shape()
 
+    def __repr__(self):
 
+        return repr(self.value)
 
-        def print_description(self):
-            """
-            Generate and return a description of current EgadsData instance.
+    def __add__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(self.value + other.value, self.units)
+            return data
+        else:
+            data = EgadsData(self.value + other, self.units)
+            return data
 
-            """
+    def __radd__(self, other):
+        return self.__add__(other)
 
-            outstr = self._get_description()
+    def __sub__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(self.value - other.value, self.units)
+            return data
+        else:
+            data = EgadsData(self.value - other, self.units)
+            return data
 
-            print outstr
+    def __rsub__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(other.value - self.value, self.units)
+            return data
+        else:
+            data = EgadsData(other - self.value, self.units)
+            return data
 
-        def get_units(self):
-            """
-            Return units used in current EgadsData instance.
+    def __mul__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(self.value * other.value)
+            return data
+        else:
+            data = EgadsData(self.value * other)
+            return data
 
-            """
+    def __rmul__(self, other):
+        return self.__mul__(other)
 
-            return self.units
+    def __div__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(self.value / other.value)
+            return data
+        else:
+            data = EgadsData(self.value / other)
+            return data
 
-        def shape(self):
-            """
-            Return shape of current EgadsData instance.
+    def __rdiv__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(other.value / self.value)
+            return data
+        else:
+            data = EgadsData(other / self.value)
+            return data
 
-            """
+    def __pow__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(self.value ** other.value)
+            return data
+        else:
+            data = EgadsData(self.value ** other)
+            return data
 
-            return _get_shape()
+    def __rpow__(self, other):
+        if isinstance(other, EgadsData):
+            data = EgadsData(other.value ** self.value)
+            return data
+        else:
+            data = EgadsData(other ** self.value)
+            return data
 
-        def print_shape(self):
-            """
-            Prints shape of current EgadsData instance
-            """
+    def __neg__(self):
+        data = self
+        data.value = -data.value
+        return data
 
-            print _get_shape()
+    def __eq__(self, other):
+        if isinstance(other, EgadsData):
+            return numpy.array_equal(self.value, other.value)
+        else:
+            return numpy.array_equal(self.value, other)
 
-        def _get_description(self):
-            """
-            Generate description of current EgadsData instance.
+    def __ne__(self, other):
+        if isinstance(other, EgadsData):
+            return self.value != other.value
+        else:
+            return self.value != other
 
-            """
+    def print_description(self):
+        """
+        Generate and return a description of current EgadsData instance.
 
-            outstr = ('Current variable is %i with units of %s. \n' % (self.value.shape, self.units) +
-                      'Its descriptive name is: %s and its CF name is: %s\n' % (self.long_name, self.standard_name))
+        """
 
-            return outstr
+        outstr = self._get_description()
 
-        def _get_shape(self):
-            """
-            Get shape of current EgadsData instance.
+        print outstr
 
-            """
+    def get_units(self):
+        """
+        Return units used in current EgadsData instance.
 
-            return self.value.shape
+        """
+
+        return self.units
+
+    def shape(self):
+        """
+        Return shape of current EgadsData instance.
+
+        """
+
+        return self._get_shape()
+
+    def print_shape(self):
+        """
+        Prints shape of current EgadsData instance
+        """
+
+        print self._get_shape()
+
+    def _get_description(self):
+        """
+        Generate description of current EgadsData instance.
+
+        """
+
+        outstr = ('Current variable is %i with units of %s. \n' % (self.value.shape, self.units) +
+                  'Its descriptive name is: %s and its CF name is: %s\n' % (self.long_name, self.standard_name))
+
+        return outstr
+
+    def _get_shape(self):
+        """
+        Get shape of current EgadsData instance.
+
+        """
+
+        return self.value.shape
 
 
 def get_file_list(path):

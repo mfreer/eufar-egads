@@ -15,11 +15,19 @@ P_s = egads.EgadsData(value = [],
                         units = 'hPa',
                         long_name = 'static pressure')
 
+P_sr = P_s
+
 dP = egads.EgadsData(value = [],
                        units = 'hPa',
                        long_name = 'dynamic pressure')
 
+delta_P_r = dP
 
+delta_P_v = dP
+delta_P_v.value = delta_P_v.value * 0.1
+
+delta_P_h = dP
+delta_P_h.value = delta_P_h.value * 0.15
 
 T_s = egads.EgadsData(value = [],
                         units = 'K',
@@ -35,6 +43,20 @@ P_surface = egads.EgadsData(value = [1013.25],
 R_a_g = egads.EgadsData(value = [287.058/9.8],
                           units = 'm/K',
                           long_name = 'air gas constant divided by gravity')
+
+C_t = egads.EgadsData(value = 1, units = '%/C', long_name = 'temperature correction coeff')
+
+Fmin = egads.EgadsData(value = 2, units = 'Hz', long_name = 'minimum acceptible frequency')
+
+C_0 = egads.EgadsData(value = 0.5, units = '', long_name = '0th calibration coeff')
+
+C_1 = egads.EgadsData(value = 0.6, units = '', long_name = '1st calibration coeff')
+
+C_2 = egads.EgadsData(value = 0.5, units = '', long_name = '2nd calibration coeff')
+
+C_alpha = egads.EgadsData(value = [1,0.9], units = '', long_name = 'angle of attack calibration')
+C_beta = egads.EgadsData(value = [0.8,0.9], units = '', long_name = 'sideslip calibration')
+C_errstat = egads.EgadsData(value = [1,0.9,1,0.8], units = '', long_name = 'static error coeffs')
 
 
 
@@ -74,6 +96,12 @@ class  Thermodynamics_testsTestCase(unittest.TestCase):
         pass
 
     def test_temp_potential_equiv_cnrm(self):
+        theta_e = thermodynamics.temp_potential_equiv_cnrm(T_s, theta,
+                                                           r, c_pa)
+        pass
+
+    def test_temp_static_cnrm(self):
+        T_s = thermodynamics.temp_static_cnrm(Tt, dP, P_s, r_f, Racpa)
         pass
 
     def test_temp_virtual_cnrm(self):
@@ -82,9 +110,11 @@ class  Thermodynamics_testsTestCase(unittest.TestCase):
         pass
 
     def test_velocity_tas_cnrm(self):
+        V_p = thermodynamics.velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa)
         pass
 
     def test_velocity_tas_longitudinal(self):
+        V_tx = thermodynamics.velocity_tas_longitudinal_cnrm(V_t, alpha, beta)
         pass
 
 

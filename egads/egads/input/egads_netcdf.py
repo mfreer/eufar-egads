@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date: 2010-08-27 17:53:04 +0200 (Fri, 27 Aug 2010) $"
-__version__ = "$Revision: 15 $"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 __all__ = ["EgadsNetCdf"]
 
 import egads
