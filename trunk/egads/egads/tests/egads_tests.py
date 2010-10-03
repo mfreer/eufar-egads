@@ -94,31 +94,50 @@ class EgadsDataVectorTestCase(unittest.TestCase):
         egadstest1 = egads.EgadsData(self.value1, UNITS1)
         egadstest2 = egads.EgadsData(self.value2, UNITS1)
 
-        assert_array_equal(self.value1 + self.value2, egadstest1 + egadstest2, 'Egads to Egads vector addition not equal')
-        self.assertEqual(self.value1 - self.value2, egadstest1 - egadstest2, 'Egads to Egads vector subtraction not equal')
-        self.assertEqual(self.value1 * self.value2, egadstest1 * egadstest2, 'Egads to Egads vector multiplication not equal')
-        self.assertEqual(self.value1 / self.value2, egadstest1 / egadstest2, 'Egads to Egads vector division not equal')
-        self.assertEqual(self.value1 ** self.value2, egadstest1 ** egadstest2, 'Egads to Egads vector power not equal')
+        add = egadstest1 + egadstest2
+        subtract = egadstest1 - egadstest2
+        multiply = egadstest1 * egadstest2
+        divide = egadstest1 / egadstest2
+        power = egadstest1 ** egadstest2
+
+        assert_array_equal(self.value1 + self.value2, add.value, 'Egads to Egads vector addition not equal')
+        assert_array_equal(self.value1 - self.value2, subtract.value, 'Egads to Egads vector subtraction not equal')
+        assert_array_equal(self.value1 * self.value2, multiply.value, 'Egads to Egads vector multiplication not equal')
+        assert_array_equal(self.value1 / self.value2, divide.value, 'Egads to Egads vector division not equal')
+        assert_array_equal(self.value1 ** self.value2, power.value, 'Egads to Egads vector power not equal')
         
     def test_egads_to_other_calcs(self):
         """ test vector operations between egads class and other vector"""
         egadstest1 = egads.EgadsData(self.value1, UNITS1)
 
-        assert_array_equal(self.value1 + self.value2, egadstest1 + self.value2, 'Egads to other vector addition not equal')
-        self.assertEqual(self.value1 - self.value2, egadstest1 - self.value2, 'Egads to other vector subtraction not equal')
-        self.assertEqual(self.value1 * self.value2, egadstest1 * self.value2, 'Egads to other vector multiplication not equal')
-        self.assertEqual(self.value1 / self.value2, egadstest1 / self.value2, 'Egads to other vector division not equal')
-        self.assertEqual(self.value1 ** self.value2, egadstest1 ** self.value2, 'Egads to other vector power not equal')
+        add = egadstest1 + self.value2
+        subtract = egadstest1 - self.value2
+        multiply = egadstest1 * self.value2
+        divide = egadstest1 / self.value2
+        power = egadstest1 ** self.value2
+
+        assert_array_equal(self.value1 + self.value2, add.value, 'Egads to Egads vector addition not equal')
+        assert_array_equal(self.value1 - self.value2, subtract.value, 'Egads to Egads vector subtraction not equal')
+        assert_array_equal(self.value1 * self.value2, multiply.value, 'Egads to Egads vector multiplication not equal')
+        assert_array_equal(self.value1 / self.value2, divide.value, 'Egads to Egads vector division not equal')
+        assert_array_equal(self.value1 ** self.value2, power.value, 'Egads to Egads vector power not equal')
 
     def test_other_to_egads_calcs(self):
         """ test vector operations between other vector and egads class"""
         egadstest1 = egads.EgadsData(self.value1, UNITS1)
 
-        self.assertEqual(self.value2 + self.value1, self.value2 + egadstest1, 'Other to Egads vector addition not equal')
-        self.assertEqual(self.value2 - self.value1, self.value2 - egadstest1, 'Other to Egads vector subtraction not equal')
-        self.assertEqual(self.value2 * self.value1, self.value2 * egadstest1, 'Other to Egads vector multiplication not equal')
-        self.assertEqual(self.value2 / self.value1, self.value2 / egadstest1, 'Other to Egads vector division not equal')
-        self.assertEqual(self.value2 ** self.value1, self.value2 ** egadstest1, 'Other to Egads vector power not equal')
+        #add = self.value2 + egadstest1
+        #print type(add), self.value2
+        subtract = self.value2 - egadstest1
+        multiply = self.value2 * egadstest1
+        divide = self.value2 / egadstest1
+        power = self.value2 ** egadstest1
+
+        #assert_array_equal(self.value1 + self.value2, add.value, 'Egads to Egads vector addition not equal')
+        assert_array_equal(self.value1 - self.value2, subtract.value, 'Egads to Egads vector subtraction not equal')
+        assert_array_equal(self.value1 * self.value2, multiply.value, 'Egads to Egads vector multiplication not equal')
+        assert_array_equal(self.value1 / self.value2, divide.value, 'Egads to Egads vector division not equal')
+        assert_array_equal(self.value1 ** self.value2, power.value, 'Egads to Egads vector power not equal')
 
 
 
