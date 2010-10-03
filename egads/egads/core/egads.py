@@ -86,7 +86,7 @@ class EgadsData(object):
 
     def __len__(self):
 
-        return _get_shape()
+        return self._get_shape()
 
     def __repr__(self):
 
@@ -100,7 +100,7 @@ class EgadsData(object):
             data = EgadsData(self.value + other, self.units)
             return data
 
-    def __radd__(self, other):
+    def __radd__(self, other): #TODO fix radd to work with other vectors
         return self.__add__(other)
 
     def __sub__(self, other):
