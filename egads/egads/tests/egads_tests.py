@@ -15,8 +15,8 @@ from numpy.random.mtrand import uniform
 from numpy.testing import assert_array_equal
 
 __author__ = "Matt Freer"
-__date__ = "$Date: 2010-09-17 17:54:22 +0200 (Fri, 17 Sep 2010) $"
-__version__ = "$Revision: 25 $"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 UNITS1 = 'm'
 UNITS2 = 's'
@@ -140,12 +140,60 @@ class EgadsDataVectorTestCase(unittest.TestCase):
         assert_array_equal(self.value1 ** self.value2, power.value, 'Egads to Egads vector power not equal')
 
 
+class EgadsValueAssignmentTestCase(unittest.TestCase):
+    """ Test assignment of EgadsData class"""
+
+    def setUp(self):
+        self.value1 = egads.EgadsData([1,2,3], 'm')
+        
+
+    def test_self_assignment(self):
+        """ Testing assignment of EgadsData class to self """
+
+        value2 = self.value1
+
+        self.assertEqual(self.value1.units, value2.units, 'Units do not match after assignment')
+        assert_array_equal(self.value1.value, value2.value, 'Values do not match after assignment')
+
+        value2.value[1] = 100
+        value2.units = 's'
+
+        self.assertEqual(self.value1.units, 'm', ['Original units have changed to', self.value1.units])
+        assert_array_equal(self.value1.value, numpy.array([1,2,3]), 'Original array has changed')
+
+        self.value1.units = 'cm'
+        self.value1.value[1] = 200
+
+        self.assertEqual(value2.units, 's', 'New units have changed')
+        assert_array_equal(value2.value, numpy.array([1,100,3]), 'New array has changed')
+
+    def test_call_copy(self):
+        """ Testing assignment of EgadsData using call to self """
+
+        value2 = egads.EgadsData(self.value1)
+
+        self.assertEqual(self.value1.units, value2.units, 'Units do not match after assignment')
+        assert_array_equal(self.value1.value, value2.value, 'Values do not match after assignment')
+
+        value2.value[1] = 100
+        value2.units = 's'
+
+        self.assertEqual(self.value1.units, 'm', ['Original units have changed to', self.value1.units])
+        assert_array_equal(self.value1.value, numpy.array([1,2,3]), 'Original array has changed')
+
+        self.value1.units = 'cm'
+        self.value1.value[1] = 200
+
+        self.assertEqual(value2.units, 's', 'New units have changed')
+        assert_array_equal(value2.value, numpy.array([1,100,3]), 'New array has changed')
+
 
 
 def suite():
     egads_scalar_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsDataScalarTestCase)
     egads_vector_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsDataVectorTestCase)
-    return unittest.TestSuite([egads_scalar_suite, egads_vector_suite])
+    egads_assignment_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsValueAssignmentTestCase)
+    return unittest.TestSuite([egads_scalar_suite, egads_vector_suite, egads_assignment_suite])
 
 if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=5).run(suite())

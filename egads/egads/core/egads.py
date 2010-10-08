@@ -60,37 +60,42 @@ class EgadsData(object):
             automatically (derived variables only).
 
         """
-
         if value is None:
             self.value = numpy.array([])
         else:
-            if isinstance(value, numpy.ndarray):
-                self.value = value
+            if isinstance(value, EgadsData):
+                self.__dict__ = value.__dict__.copy()
+                self.value = value.value.copy()
             else:
-                self.value = numpy.array(value)
-                
-        self.units = units
-        self.long_name = long_name
-        self.standard_name = standard_name
-        self.cdf_name = cdf_name
-        self.fill_value = fill_value
-        self.valid_range = valid_range
-        self.sampled_rate = sampled_rate
-        self.category = category
-        self.calibration_coeff = calibration_coeff
-        self.dependencies = dependencies
-        self.processor = processor
+                if isinstance(value, numpy.ndarray):
+                    self.value = value
+                else:
+                    self.value = numpy.array(value)
 
-        for key, val in attrs.iteritems():
-            setattr(self, key, val)
+                self.units = units
+                self.long_name = long_name
+                self.standard_name = standard_name
+                self.cdf_name = cdf_name
+                self.fill_value = fill_value
+                self.valid_range = valid_range
+                self.sampled_rate = sampled_rate
+                self.category = category
+                self.calibration_coeff = calibration_coeff
+                self.dependencies = dependencies
+                self.processor = processor
+
+                for key, val in attrs.iteritems():
+                    setattr(self, key, val)
 
     def __len__(self):
 
         return self._get_shape()
 
     def __repr__(self):
-
-        return repr(self.value)
+        try:
+            return repr(['EgadsData',self.value])
+        except AttributeError:
+            return repr(None)
 
     def __add__(self, other):
         if isinstance(other, EgadsData):
