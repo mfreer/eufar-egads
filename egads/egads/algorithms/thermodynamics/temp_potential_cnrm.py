@@ -34,7 +34,7 @@ def temp_potential_cnrm(T_s, P_s, Racpa):
 
     """
 
-    theta = T_s.value * (1000/P_s.value) ** (Racpa.value)
+    theta = T_s.value * (1000.0/P_s.value) ** (Racpa.value)
 
     result = egads.EgadsData(value = theta,
                                units = 'K',

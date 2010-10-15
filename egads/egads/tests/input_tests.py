@@ -271,12 +271,149 @@ class NetCdfFileOutputTestCase(unittest.TestCase):
         self.assertEqual(varin.units, VAR_MULT_UNITS, 'Variable units dont match')
         assert_array_equal(varin[:], random_mult_data)
 
+class EgadsFileInputTestCase(unittest.TestCase):
+    """ Test input from text file"""
+    def setUp(self):
+        self.filename = tempfile.mktemp('.txt')
+        self.strdata1ln = 'testtesttest\n'
+        self.strdata2ln = 'testtesttest\n testtesttest\n'
+        f = open(self.filename,'w')
+        f.write(self.strdata2ln)
+        f.close()
 
+    def test_open_file(self):
+        """ Test opening of file """
+
+        f = input.EgadsFile(self.filename,'r')
+
+        self.assertEqual(f.filename, self.filename, 'Filenames do not match')
+
+        self.assertRaises(RuntimeError, input.EgadsFile, 'nofile.txt')
+
+        self.assertEqual(f.pos, 0, 'File position is not correct')
+
+        f.close()
+
+
+    def test_read_data(self):
+        """ Test reading data from file """
+
+        f = input.EgadsFile(self.filename,'r')
+
+        data = f.read()
+
+        self.assertEqual(self.strdata2ln, data, 'Data read in does not match')
+        
+        f.reset()
+        
+        data = f.read(4)
+        self.assertEqual(self.strdata2ln[0:4], data, 'Characters read in do not match')
+
+        f.close()
+
+
+
+    def test_read_data_one_line(self):
+        """ Test reading one line of data from file """
+
+        f = input.EgadsFile(self.filename,'r')
+
+        data = f.read_line()
+
+        self.assertEqual(self.strdata1ln, data, 'One line data does not match')
+
+        f.close()
+
+
+    def test_seek_file(self):
+        """ Test file seek function """
+
+        f = input.EgadsFile(self.filename,'r')
+
+        f.seek(3)
+
+        data = f.read(1)
+
+        self.assertEqual(4, f.pos, 'Positions do not match')
+        self.assertEqual(self.strdata2ln[3], data, 'Data from pos 3 does not match')
+
+        f.seek(3,'c')
+
+        data = f.read(1)
+
+        self.assertEqual(8, f.pos, 'Positions do not match')
+        self.assertEqual(self.strdata2ln[7], data, 'Data from pos 7 does not match')
+
+
+        f.seek(4)
+
+        data = f.read(1)
+
+        self.assertEqual(5, f.pos, 'Positions do not match')
+        self.assertEqual(self.strdata2ln[4], data, 'Data from pos 3 does not match')
+
+        f.close()
+
+class EgadsFileOutputTestCase(unittest.TestCase):
+    """ Test output to text file """
+
+    def setUp(self):
+        self.filename = tempfile.mktemp('.txt')
+        self.f = input.EgadsFile(self.filename,'w')
+
+
+        self.strdata1ln = 'testtesttest\n'
+        self.strdata2ln = 'testtesttest\n testtesttest\n'
+        self.intdata = [123,456]
+
+    def tearDown(self):
+
+        self.f.close()
+
+    def test_write_string_oneline(self):
+        """ Test writing one line string to file. """
+
+        self.f.write(self.strdata1ln)
+
+        g = open(self.filename)
+
+        data = g.read()
+
+        self.assertEqual(data, self.strdata1ln, "Written one line string data does not match.")
+
+        g.close()
+
+    def test_write_string_twoline(self):
+        """ Test writing two line string to file. """
+
+        self.f.write(self.strdata2ln)
+
+        g = open(self.filename)
+
+        data = g.read()
+
+        self.assertEqual(data, self.strdata2ln, "Written two line string data does not match.")
+
+        g.close()
+
+    def test_write_int(self):
+        """ Test writing integers to file. """
+
+        self.f.write(str(self.intdata))
+
+        g = open(self.filename)
+
+        data = g.read()
+
+        self.assertEqual(data, str(self.intdata), "Written int data does not match.")
 
 def suite():
-    in_suite = unittest.TestLoader().loadTestsFromTestCase(NetCdfFileInputTestCase)
-    out_suite = unittest.TestLoader().loadTestsFromTestCase(NetCdfFileOutputTestCase)
-    return unittest.TestSuite([in_suite, out_suite])
+    netcdf_in_suite = unittest.TestLoader().loadTestsFromTestCase(NetCdfFileInputTestCase)
+    netcdf_out_suite = unittest.TestLoader().loadTestsFromTestCase(NetCdfFileOutputTestCase)
+    text_in_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsFileInputTestCase)
+    text_out_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsFileOutputTestCase)
+
+    return unittest.TestSuite([netcdf_in_suite, netcdf_out_suite, text_in_suite, text_out_suite])
 
 if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=5).run(suite())

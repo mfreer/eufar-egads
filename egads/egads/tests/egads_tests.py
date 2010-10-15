@@ -30,6 +30,8 @@ class EgadsDataScalarTestCase(unittest.TestCase):
 
 
     def test_egads_scalar_assignment(self):
+        """ Test initialization of EgadsData instance with vector input """
+
         egadstest = egads.EgadsData(self.value1)
         
         self.assertEqual(self.value1, egadstest.value, 'Scalar assignment not equal')
@@ -80,6 +82,7 @@ class EgadsDataVectorTestCase(unittest.TestCase):
 
 
     def test_egads_vector_assignment(self):
+        """ Test initialization of EgadsData instance with vector input """ 
         egadstest = egads.EgadsData(self.value1)
 
         assert_array_equal(self.value1, egadstest.value, 'Vector assignment not equal')
@@ -150,7 +153,7 @@ class EgadsValueAssignmentTestCase(unittest.TestCase):
     def test_self_assignment(self):
         """ Testing assignment of EgadsData class to self """
 
-        value2 = self.value1
+        value2 = self.value1.copy()
 
         self.assertEqual(self.value1.units, value2.units, 'Units do not match after assignment')
         assert_array_equal(self.value1.value, value2.value, 'Values do not match after assignment')
@@ -168,9 +171,10 @@ class EgadsValueAssignmentTestCase(unittest.TestCase):
         assert_array_equal(value2.value, numpy.array([1,100,3]), 'New array has changed')
 
     def test_call_copy(self):
-        """ Testing assignment of EgadsData using call to self """
+        """ Testing copy of EgadsData using call to self """
 
         value2 = egads.EgadsData(self.value1)
+
 
         self.assertEqual(self.value1.units, value2.units, 'Units do not match after assignment')
         assert_array_equal(self.value1.value, value2.value, 'Values do not match after assignment')

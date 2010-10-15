@@ -12,6 +12,6 @@ def test():
     suite = unittest.TestSuite()
     suite.addTest(input_tests.suite())
     suite.addTest(egads_tests.suite())
-#    suite.addTest(thermodynamics_tests.suite())
+    suite.addTest(thermodynamics_tests.suite())
 
     unittest.TextTestRunner(verbosity=5).run(suite)

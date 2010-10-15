@@ -10,7 +10,7 @@ import netcdf
 
 class EgadsNetCdf(netcdf.NetCdf):
     """
-    EGADS I/O module for reading and writing to NetCDF files following EUFAR
+    EGADS class for reading and writing to NetCDF files following EUFAR
     conventions. Inherits from the general EGADS NetCDF module.
 
     """

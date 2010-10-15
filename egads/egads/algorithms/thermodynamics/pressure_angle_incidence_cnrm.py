@@ -5,6 +5,7 @@ __all__ = ["pressure_angle_incidence_cnrm"]
 
 import egads
 import inspect
+from numpy import multiply, power, zeros, logical_and
 
 def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha, C_beta, C_errstat):
     """
@@ -42,24 +43,23 @@ def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha
     errstat25 = (C_errstat.value[0] + C_errstat.value[1] * 25 + C_errstat.value[2] * 25**2 +
                 C_errstat.value[3] * 25 ** 3)
 
-    errstat = []
+    errstat = zeros(P_sr.shape)
 
-    for i in xrange(len(P_sr)):
-        if P_sr.value[i] > 25:
-            errstat[i] = (C_errstat.value[0] + C_errstat.value[1] * P_sr.value[i] +
-            C_errstat.value[2] * P_sr.value**2 + C_errstat.value[3] * P_sr.value ** 3)
-        elif P_sr.value > 0 and P_sr.value <= 25:
-            errstat[i] = delta_P_r.value[i]/25 * errstat25
-        else:
-            errstat[i] = 0
+
+    errstat[delta_P_r.value > 25] = (C_errstat.value[0] + multiply(C_errstat.value[1], delta_P_r.value) +
+                                multiply(C_errstat.value[2], power(delta_P_r.value, 2)) +
+                                multiply(C_errstat.value[3], power(delta_P_r.value, 3)))
+                                
+    errstat[logical_and(delta_P_r.value > 0, delta_P_r.value <= 25)] = delta_P_r.value/25 * errstat25
 
     P_s_value = P_sr.value - errstat
 
+ 
     delta_P_value = delta_P_r.value + errstat
 
     alpha_value = C_alpha.value[0] + C_alpha.value[1] * delta_P_v.value / delta_P_value
 
-    beta_value = C_beta.value[0] + C_beta.value[2] * delta_P_h.value / delta_P_value
+    beta_value = C_beta.value[0] + C_beta.value[1] * delta_P_h.value / delta_P_value
 
 
     P_s = egads.EgadsData(value = P_s_value,
