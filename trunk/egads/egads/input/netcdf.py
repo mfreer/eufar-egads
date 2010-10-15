@@ -9,7 +9,7 @@ import netCDF4
 
 class NetCdf(object):
     """
-    EGADS I/O module for reading and writing to generic NetCDF files.
+    EGADS class for reading and writing to generic NetCDF files.
 
     This module adapts the Python NetCDF4 0.8.2 library to the file access
     methods used in EGADS.

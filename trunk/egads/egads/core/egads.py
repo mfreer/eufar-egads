@@ -3,9 +3,9 @@ __date__ = "$Date$"
 __version__ = "$Revision$"
 __all__ = ["EgadsData", "get_file_list"]
 
-import types
 import glob
 import numpy
+import types
 
 class EgadsData(object):
     """
@@ -68,7 +68,7 @@ class EgadsData(object):
                 self.value = value.value.copy()
             else:
                 if isinstance(value, numpy.ndarray):
-                    self.value = value
+                    self.value = value.copy()
                 else:
                     self.value = numpy.array(value)
 
@@ -89,11 +89,11 @@ class EgadsData(object):
 
     def __len__(self):
 
-        return self._get_shape()
+        return len(self.value)
 
     def __repr__(self):
         try:
-            return repr(['EgadsData',self.value])
+            return repr(['EgadsData', self.value])
         except AttributeError:
             return repr(None)
 
@@ -105,7 +105,7 @@ class EgadsData(object):
             data = EgadsData(self.value + other, self.units)
             return data
 
-    def __radd__(self, other): #TODO fix radd to work with other vectors
+    def __radd__(self, other): #TODO fix radd to work with other classes
         return self.__add__(other)
 
     def __sub__(self, other):
@@ -183,6 +183,35 @@ class EgadsData(object):
             return self.value != other.value
         else:
             return self.value != other
+    
+    def __getattr__(self,name):
+        if name is "shape":
+            return self.value.shape
+
+    def __setattr__(self, name, value):
+        if name is "value":
+            if isinstance(value, EgadsData):
+                self.__dict__ = value.__dict__.copy()
+                self.__dict__[name] = value.value.copy()
+            else:
+                if isinstance(value, numpy.ndarray):
+                    self.__dict__[name] = value.copy()
+                else:
+                    self.__dict__[name] = numpy.array(value)
+        else:
+            self.__dict__[name] = value
+
+
+    def copy(self):
+        """
+        Generate and return a copy of the current EgadsData instance.
+        """
+
+        var_copy = EgadsData()
+        var_copy.__dict__ = self.__dict__.copy()
+        var_copy.value = self.value.copy()
+
+        return var_copy
 
     def print_description(self):
         """
@@ -202,13 +231,6 @@ class EgadsData(object):
 
         return self.units
 
-    def shape(self):
-        """
-        Return shape of current EgadsData instance.
-
-        """
-
-        return self._get_shape()
 
     def print_shape(self):
         """

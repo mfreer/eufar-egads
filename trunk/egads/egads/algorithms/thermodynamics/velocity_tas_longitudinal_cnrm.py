@@ -6,7 +6,7 @@ __all__ = ["velocity_tas_longitudinal_cnrm"]
 import egads
 import inspect
 
-from math import sqrt, tan
+from numpy import sqrt, tan
 
 def velocity_tas_longitudinal_cnrm(V_t, alpha, beta):
     """

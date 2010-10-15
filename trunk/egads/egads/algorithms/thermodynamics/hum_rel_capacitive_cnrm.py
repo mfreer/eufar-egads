@@ -45,10 +45,15 @@ def hum_rel_capacitive_cnrm(Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
     tempUcapf[tempUcapf < Fmin.value] = Fmin.value
     Ucapf.value = tempUcapf.tolist()
 
+    if T_s.units == 'K':
+        temp_factor = 273.15+20
+    else:
+        temp_factor = 20
+
     H_u = P_s.value / (P_s.value + dP.value) * (C_0.value +
                                                          multiply(C_1.value, Ucapf.value) +
                                                          multiply(C_2.value, power(Ucapf.value, 2)) +
-                                                         multiply(C_t.value, (T_s.value - 20.0)))
+                                                         multiply(C_t.value, (T_s.value - temp_factor)))
 
 
 
