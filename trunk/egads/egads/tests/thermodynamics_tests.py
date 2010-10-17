@@ -99,7 +99,7 @@ class  ThermodynamicsTestCase(unittest.TestCase):
                                     units='rad',
                                     long_name='sideslip')
 
-        self.array_test = egads.EgadsData(value=numpy.empty(10))
+        self.array_test = egads.EgadsData(value=numpy.zeros(10)+10)
 
         self.array_shape = self.array_test.shape
 
@@ -128,8 +128,6 @@ class  ThermodynamicsTestCase(unittest.TestCase):
         self.assertAlmostEqual(rho.value, 1.0749, 3, 'Densities dont match')
 
         rho = thermodynamics.density_dry_air_cnrm(self.array_test, self.array_test)
-
-        print rho.shape
 
         self.assertEqual(rho.shape, self.array_shape, 'Density array shapes dont match')
 

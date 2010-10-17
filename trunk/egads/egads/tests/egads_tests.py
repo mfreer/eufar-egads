@@ -128,8 +128,8 @@ class EgadsDataVectorTestCase(unittest.TestCase):
     def test_other_to_egads_calcs(self):
         """ test vector operations between other vector and egads class"""
         egadstest1 = egads.EgadsData(self.value1, UNITS1)
-
-        #add = self.value2 + egadstest1
+        print egadstest1.value, self.value2
+        add = self.value2 + egadstest1
         #print type(add), self.value2
         subtract = self.value2 - egadstest1
         multiply = self.value2 * egadstest1
@@ -174,7 +174,6 @@ class EgadsValueAssignmentTestCase(unittest.TestCase):
         """ Testing copy of EgadsData using call to self """
 
         value2 = egads.EgadsData(self.value1)
-
 
         self.assertEqual(self.value1.units, value2.units, 'Units do not match after assignment')
         assert_array_equal(self.value1.value, value2.value, 'Values do not match after assignment')
