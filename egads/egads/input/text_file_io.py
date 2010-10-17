@@ -338,6 +338,18 @@ class EgadsCsv(EgadsFile):
             parsed_data = parse_string_array(data, format)
             return parsed_data
 
+    def skip_line(self, amount = 1):
+        """
+        Skips over line(s) in file.
+        
+        Parameters
+        -----------
+        amount: int, optional
+            Number of lines to skip over. Default value is 1.
+        
+        """
+        for i in xrange(amount):
+            self.f.readline()
 
     def write(self, data):
         """
@@ -435,7 +447,7 @@ def parse_string_array(data, format):
     """
 
 
-    format_array_dict = {'i': 'i4', 'f': 'f4', 'l':'f8', 's':'a20'}
+    format_array_dict = {'i': 'i4', 'f': 'f8', 'l':'f8', 's':'a20'}
     
 
     parsed_data = list(data)

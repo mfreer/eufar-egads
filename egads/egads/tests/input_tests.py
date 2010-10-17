@@ -9,6 +9,7 @@ NetCDF library (based on NetCDF4).
 import os
 import tempfile
 import unittest
+import csv
 
 import egads.input as input
 import netCDF4
@@ -407,13 +408,116 @@ class EgadsFileOutputTestCase(unittest.TestCase):
 
         self.assertEqual(data, str(self.intdata), "Written int data does not match.")
 
+
+class EgadsCsvInputTestCase(unittest.TestCase):
+    """Test input from CSV file."""
+
+    def setUp(self):
+        self.filename = tempfile.mktemp('.csv')
+        self.titles = ['Time', 'Lat', 'Lon', 'Alt']
+        self.data = [['1', 0, 1, 0.3],
+                     ['2', 1, 0, 1.5],
+                     ['3', 2, -1, 1.7]]
+
+        self.times = ['1','2','3']
+        self.lats = [0,1,2]
+        self.lons = [1,0,-1]
+        self.alts = [0.3, 1.5, 1.7]
+
+        self.data_as_str = [['1','2','3'],
+                            ['0','1','2'],
+                            ['1','0','-1'],
+                            ['0.3','1.5','1.7']]
+
+        self.format = ['s','i','i','f']
+
+        f = open(self.filename,'w')
+        writer = csv.writer(f)
+
+        writer.writerow(self.titles)
+        writer.writerows(self.data)
+
+        f.close()
+
+        self.f = input.EgadsCsv(self.filename)
+
+    def tearDown(self):
+
+        self.f.close()
+
+    def test_open_file(self):
+        """ Test opening of file """
+
+        self.assertEqual(self.f.filename, self.filename, 'Filenames do not match')
+
+        self.assertRaises(RuntimeError, input.EgadsFile, 'nofile.txt')
+
+        self.assertEqual(self.f.pos, 0, 'File position is not correct')
+
+        self.assertEqual(self.f.delimiter, ',', 'Delimiter value not correct')
+
+        self.assertEqual(self.f.quotechar, '"', 'Quote character not correct')
+
+
+    def test_read_data(self):
+        """ Test reading data from csv file."""
+
+        title = self.f.read(1)
+
+        time, lat, lon, alt = self.f.read(format = self.format)
+
+        self.f.reset()
+
+        self.f.skip_line()
+
+        data_str = self.f.read()
+
+        self.assertEqual(title, self.titles, 'Titles do not match')
+    
+        assert_array_equal(time, self.times, 'Values do not match')
+        assert_array_equal(lat, self.lats, 'Values do not match')
+        assert_array_equal(lon, self.lons, 'Values do not match')
+        assert_array_equal(alt, self.alts, 'Values do not match')
+
+        assert_array_equal(data_str, self.data_as_str, 'Non-formatted data does not match')
+
+class EgadsCsvOutputTestCase(unittest.TestCase):
+    """ Test writing of CSV files. """
+
+    def setUp(self):
+        self.filename = tempfile.mktemp('.csv')
+        self.titles = 'Time, Lat, Lon, Alt'
+        self.data = [['1', 0, 1, 0.3],
+                     ['2', 1, 0, 1.5],
+                     ['3', 2, -1, 1.7]]
+
+        self.data_as_str = [['1', '0', '1', '0.3'],
+                     ['2', '1', '0', '1.5'],
+                     ['3', '2', '-1', '1.7']]
+
+        self.format = ['s','i','i','f']
+
+        f = input.EgadsCsv(self.filename,'w')
+
+        f.write(self.titles)
+        f.writerows(self.data)
+
+        f.close()
+
+
+
+
+
 def suite():
     netcdf_in_suite = unittest.TestLoader().loadTestsFromTestCase(NetCdfFileInputTestCase)
     netcdf_out_suite = unittest.TestLoader().loadTestsFromTestCase(NetCdfFileOutputTestCase)
     text_in_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsFileInputTestCase)
     text_out_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsFileOutputTestCase)
+    csv_in_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsCsvInputTestCase)
+    csv_out_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsCsvOutputTestCase)
 
-    return unittest.TestSuite([netcdf_in_suite, netcdf_out_suite, text_in_suite, text_out_suite])
+    return unittest.TestSuite([netcdf_in_suite, netcdf_out_suite, text_in_suite, 
+                               text_out_suite, csv_in_suite, csv_out_suite])
 
 if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=5).run(suite())
