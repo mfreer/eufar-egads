@@ -184,9 +184,11 @@ class EgadsData(object):
         else:
             return self.value != other
     
-    def __getattr__(self,name):
+    def __getattr__(self, name):
         if name is "shape":
             return self.value.shape
+        else:
+            raise AttributeError
 
     def __setattr__(self, name, value):
         if name is "value":
@@ -199,7 +201,11 @@ class EgadsData(object):
                 else:
                     self.__dict__[name] = numpy.array(value)
         else:
-            self.__dict__[name] = value
+            if name is "__dict__":
+                for key, attr in value.iteritems():
+                    self.__dict__[key] = attr
+            else:
+                self.__dict__[name] = value
 
 
     def copy(self):

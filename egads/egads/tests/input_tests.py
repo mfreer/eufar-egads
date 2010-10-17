@@ -1,7 +1,7 @@
 """
-Test suite for NetCDF input and output library.
+Test suite for NetCDF and text file input and output libraries.
 
-Uses NetCDF4 Python library to test know inputs and outputs against the EGADS
+Uses NetCDF4 Python library to test known inputs and outputs against the EGADS
 NetCDF library (based on NetCDF4).
 
 """
