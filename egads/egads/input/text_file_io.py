@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date: 2010-10-01 18:00:01 +0200 (Fri, 01 Oct 2010) $"
-__version__ = "$Revision: 27 $"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 __all__ = ["EgadsFile","EgadsCsv","parse_string_array"]
 
 import sys

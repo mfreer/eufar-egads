@@ -5,6 +5,9 @@ Uses NetCDF4 Python library to test know inputs and outputs against the EGADS
 NetCDF library (based on NetCDF4).
 
 """
+__author__ = "mfreer"
+__date__ = "$Date$"
+__version__ = "$Revision$"
 
 import os
 import unittest
@@ -14,9 +17,7 @@ import numpy
 from numpy.random.mtrand import uniform
 from numpy.testing import assert_array_equal
 
-__author__ = "Matt Freer"
-__date__ = "$Date$"
-__version__ = "$Revision$"
+
 
 UNITS1 = 'm'
 UNITS2 = 's'
