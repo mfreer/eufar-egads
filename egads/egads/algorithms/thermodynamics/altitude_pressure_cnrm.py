@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date$"
-__version__ = "$Revision$"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ["altitude_pressure_cnrm"]
 
 import inspect

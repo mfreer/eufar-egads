@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date$"
-__version__ = "$Revision$"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ["hum_rel_capacitive_cnrm"]
 
 from numpy import multiply, power

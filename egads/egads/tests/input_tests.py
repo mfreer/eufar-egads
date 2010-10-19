@@ -7,8 +7,8 @@ NetCDF library (based on NetCDF4).
 """
 
 __author__ = "mfreer"
-__date__ = "$Date$"
-__version__ = "$Revision$"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 
 import os
 import tempfile
