@@ -6,6 +6,10 @@ NetCDF library (based on NetCDF4).
 
 """
 
+__author__ = "mfreer"
+__date__ = "$Date$"
+__version__ = "$Revision$"
+
 import os
 import tempfile
 import unittest
@@ -16,9 +20,6 @@ import netCDF4
 from numpy.random.mtrand import uniform
 from numpy.testing import assert_array_equal
 
-__author__ = "Matt Freer"
-__date__ = "$Date$"
-__version__ = "$Revision$"
 
 FILE_NAME = tempfile.mktemp('.nc')
 FILE_NAME_ALT = tempfile.mktemp('.nc')

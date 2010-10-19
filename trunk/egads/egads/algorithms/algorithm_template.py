@@ -1,4 +1,4 @@
-__author__ = ""
+__author__ = "mfreer"
 __date__ = "$Date$"
 __version__ = "$Revision$"
 __all__ = ['']
