@@ -1,5 +1,0 @@
-import egads
-
-egads.test()
-
-
