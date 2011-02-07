@@ -28,12 +28,13 @@ class EgadsData(object):
             Scalar or array of values for EgadsData object.
         units : string, optional
             Units of EgadsData object. Best practice is to conform to UDUNITS
-            conventions for unit names (see :TODO: add link for names)
+            conventions for unit names
+            (see http://www.unidata.ucar.edu/software/udunits/udunits-2/udunits2lib.html)
         long_name : string, optional
             Descriptive name for EgadsData object.
         standard_name : string, optional
             Standard name for EgadsData object conforming to CF conventions
-            standard name table (see :TODO: add link for standard name table)
+            standard name table (see http://cf-pcmdi.llnl.gov/documents/cf-standard-names/)
         cdf_name : string, optional
             Name of variable if read in from NetCDF file. This will be populated
             automatically, in most instances.
@@ -105,7 +106,7 @@ class EgadsData(object):
             data = EgadsData(self.value + other, self.units)
             return data
 
-    def __radd__(self, other): #TODO fix radd to work with other classes
+    def __radd__(self, other): #TODO: fix radd to work with other classes
         return self.__add__(other)
 
     def __sub__(self, other):

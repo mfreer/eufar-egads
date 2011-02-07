@@ -7,7 +7,7 @@ import sys
 import csv
 import numpy
 
-class EgadsFile(object): #TODO make EgadsFile more robust.
+class EgadsFile(object): #TODO: make EgadsFile more robust.
     """
     Generic class for interfacing with text files.
     """
@@ -143,7 +143,7 @@ class EgadsFile(object): #TODO make EgadsFile more robust.
         self.pos = self.f.tell()
         
 
-    def write(self, data):  #TODO make write method more robust
+    def write(self, data):  #TODO: make write method more robust
         """
         Writes data to a file. Data must be in the form of a string, with line
         ends signified by '\n'.
