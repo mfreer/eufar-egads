@@ -9,7 +9,7 @@ f = egads.input.EgadsNetCdf()   # create EgadsNetCdf instance
 
 for name in filenames:          # loop through files
 
-    f.open(name, 'a')            # open NetCdf file 
+    f.open(name, 'a')            # open NetCdf file with append permissions
 
     T_s = f.read_variable('T_t') # read in static temperature
     P_s = f.read_variable('P_s') # read in static pressure from file
