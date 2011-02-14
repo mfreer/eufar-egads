@@ -124,7 +124,6 @@ Building \egads requires the following packages:
  \item[numpy] 1.3.0 or newer. Available at \href{http://numpy.scipy.org/}{http://numpy.scipy.org/}.
  \item[scipy] 0.6.0 or newer. Available at \href{http://www.scipy.org/}{http://www.scipy.org/}.
  \item[Python netCDF4 libraries] 0.8.2. Available at \href{http://code.google.com/p/netcdf4-python/}{http://code.google.com/p/netcdf4-python/}.
-These depend on HDF5 and netCDF4.
 
 \end{description}
 
@@ -140,7 +139,7 @@ shell which supports tab-completion, debugging, history, etc.
  \end{description}
 
 \section{Installation}
-To install \egads, type \verb|python setup.py install| from the command line. 
+To install, type \verb|python setup.py install| from the command line. 
 To install to a user-specified location, type \verb|python setup.py install --prefix=$MYDIR|. 
 
 \section{Testing}
@@ -198,19 +197,227 @@ The easiest way to access them is using the \verb|help()| function:
 \end{command}
 will return all methods and their associated documentation for the NetCdf class.
 
-\subsection{Working with text files}
+%------------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------------------------
 
-\Egads provides several options for working with ASCII files. The \verb|egads.input.EgadsFile| 
-class is a simple wrapper for interacting with generic text files. \verb|EgadsFile| can read, write
-and display data from text files, but does not have any tools for automatically formatting input or 
-output data. \verb|egads.input.EgadsCsv| is designed to easily input or output data in CSV format.
-Data input using \verb|EgadsCsv| is separated into a list of arrays, which each column a separate
+
+\subsection{Working with generic text files}
+
+\Egads provides the \verb|egads.input.EgadsFile()| class as a simple wrapper for interacting with 
+generic text files. \verb|EgadsFile()| can read, writeand display data from text files, but does 
+not have any tools for automatically formatting input or output data. 
+
+\subsubsection{Opening}
+
+To open a text file the \verb|EgadsFile()| class, use the
+\verb|open(pathname, permissions)| method:
+
+\begin{command}
+    >>> import egads
+    >>> f = egads.input.EgadsFile()
+    >>> f.open('/pathname/filename.txt','r')
+\end{command}
+%
+Valid values for permissions are:
+
+\begin{itemize}
+ \item \verb|r| -- Read: opens file for reading only. Default value if nothing is provided.
+ \item \verb|w| -- Write: opens file for writing, and overwrites data in file.
+ \item \verb|a| -- Append: opens file for appending data.
+ \item \verb|r+| -- Read and write: opens file for both reading and writing.
+\end{itemize}
+
+
+\subsubsection{File Manipulation}
+
+The following methods are available to control the current position in the file and display more 
+information about the file.
+\begin{itemize}
+ \item \verb|f.display_file()| -- Prints contents of file out to standard output.
+
+ \item \verb|f.get_position()| -- Returns current position in file as integer.
+
+ \item \verb|f.seek(location, from_where)| -- Seeks to specified location in file. \verb|location| is
+an integer specifying how far to seek. Valid options for \verb|from_where| are 'b' to seek from beginning
+of file, 'c' to seek from current position in file and 'e' to seek from the end of the file.
+
+ \item \verb|f.reset()| -- Resets position to beginning of file.
+
+\end{itemize}
+
+
+\subsubsection{Reading Data}
+
+Reading data is done using the \verb|read(size)| method on a file that has been opened with \verb|r| or
+\verb|r+| permissions:
+
+\begin{command}
+    >>> import egads
+    >>> f = egads.input.EgadsFile()
+    >>> f.open('myfile.txt','r')
+    >>> single_char_value = f.read()
+    >>> multiple_chars = f.read(10)
+\end{command}
+
+If the \verb|size| parameter is not specified, the \verb|read()| function will input a single character
+from the open file. Providing an integer value \textit{n} as the \verb|size| parameter to \verb|read(size)| 
+will return \textit{n} characters from the open file.
+
+Data can be read line-by-line from text files using \verb|read_line()|:
+
+\begin{command}
+   >>> line_in = f.read_line()
+\end{command}
+
+
+\subsubsection{Writing Data}
+
+To write data to a file, use the \verb|write(data)| method on a file that has been opened with
+\verb|w|, \verb|a| or \verb|r+| permissions:
+
+\begin{command}
+   >>> import egads
+   >>> f = egads.input.EgadsFile()
+   >>> f.open('myfile.txt','a')
+   >>> data = 'Testing output data to a file.\n This text will appear on the 2nd line.'
+   >>> f.write(data) 
+\end{command}
+
+\subsubsection{Closing}
+
+To close a file, simply call the \verb|close()| method:
+
+\begin{command}
+   >>> f.close()
+\end{command}
+
+
+
+%------------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------------------------
+
+
+\subsection{Working with CSV files}
+
+\verb|egads.input.EgadsCsv()| is designed to easily input or output data in CSV format.
+Data input using \verb|EgadsCsv()| is separated into a list of arrays, which each column a separate
 array in the list. 
 
 \subsubsection{Opening}
 
-To open a text file, 
+To open a text file the \verb|EgadsCSV()| class, use the
+\verb|open(pathname, permissions, delimiter, quotechar)| method:
 
+\begin{command}
+    >>> import egads
+    >>> f = egads.input.EgadsFile()
+    >>> f.open('/pathname/filename.txt','r',',','"')
+\end{command}
+%
+Valid values for permissions are:
+
+\begin{itemize}
+ \item \verb|r| -- Read: opens file for reading only. Default value if nothing is provided.
+ \item \verb|w| -- Write: opens file for writing, and overwrites data in file.
+ \item \verb|a| -- Append: opens file for appending data.
+ \item \verb|r+| -- Read and write: opens file for both reading and writing.
+\end{itemize}
+
+The \verb|delimiter| argument is a one-character string specifying the character used to separate 
+fields in the CSV file to be read; the default value is ','. The \verb|quotechar| argument is a 
+one-character string specifying the character used to quote fields containing special characters 
+in the CSV file to to be read; the default value is '``'.
+
+\subsubsection{File Manipulation}
+
+The following methods are available to control the current position in the file and display more 
+information about the file.
+\begin{itemize}
+ \item \verb|f.display_file()| -- Prints contents of file out to standard output.
+
+ \item \verb|f.get_position()| -- Returns current position in file as integer.
+
+ \item \verb|f.seek(location, from_where)| -- Seeks to specified location in file. \verb|location| is
+an integer specifying how far to seek. Valid options for \verb|from_where| are 'b' to seek from beginning
+of file, 'c' to seek from current position in file and 'e' to seek from the end of the file.
+
+ \item \verb|f.reset()| -- Resets position to beginning of file.
+
+\end{itemize}
+
+\subsubsection{Reading Data}
+
+Reading data is done using the \verb|read(lines, format)| method on a file that has been opened with 'r' or
+'r+' permissions:
+
+\begin{command}
+    >>> import egads
+    >>> f = egads.input.EgadsCsv()
+    >>> f.open('mycsvfile.csv','r')
+    >>> single_line_as_list = f.read(1)
+    >>> all_lines_as_list = f.read()
+\end{command}
+
+\verb|read(lines, format)| returns a list of the items read in from the CSV file. The arguments
+\verb|lines| and \verb|format| are optional. If \verb|lines| is provided, \verb|read(lines, format)|
+will read in the specified number of lines, otherwise it will read the whole file. \verb|format| 
+is an optional list of characters used to decompose the elements read in from the CSV files to
+their proper types. Options are:
+\begin{itemize}
+ \item i -- int
+ \item f -- float
+ \item l -- long
+ \item s -- string
+\end{itemize}
+
+Thus to read in the line:
+
+\verb|FGBTM,20050105T143523,1.5,21,25|
+%
+the command to input with proper formatting would look like this:
+
+\begin{command}
+   >>> data = f.read(1, ['s','s','f','f'])
+\end{command}
+
+\subsubsection{Writing Data}
+
+To write data to a file, use the \verb|write(data)| method on a file that has been opened with
+'w', 'a' or 'r+' permissions:
+
+\begin{command}
+   >>> import egads
+   >>> f = egads.input.EgadsCsv()
+   >>> f.open('mycsvfile.csv','a')
+   >>> titles = ['Aircraft ID','Timestamp','Value1','Value2','Value3']
+   >>> f.write(titles) 
+\end{command}
+%
+where the \verb|data| parameter is a list of values. This list will be output to the CSV, with each
+value separated by the delimiter specifed when the file was opened (default is ',').
+
+To write multiple lines out to a file, \verb|writerows(data)| is used:
+
+\begin{command}
+   >>> data = [['FGBTM','20050105T143523',1.5,21,25],['FGBTM','20050105T143524',1.6,20,25.6]]
+   >>> f.writerows(data)
+\end{command}
+
+
+\subsubsection{Closing}
+
+To close a file, simply call the \verb|close()| method:
+
+\begin{command}
+   >>> f.close()
+\end{command}
+
+
+%------------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------------------------
 \subsection{Working with NetCDF files}
 
 \Egads provides two classes to work with NetCDF files. The simplest, \verb|egads.input.NetCdf()|, 
@@ -225,7 +432,7 @@ To open a NetCDF file, simply create a \verb|egads.input.NetCdf()| instance and 
 \begin{command}
     >>> import egads
     >>> f = egads.input.NetCdf()
-    >>> f.open('/pathname/filename','r')
+    >>> f.open('/pathname/filename.nc','r')
 \end{command}
 %
 Valid values for permissions are:
@@ -312,11 +519,39 @@ shows the calculation of density for all NetCDF files in a directory.
 
 \subsection{Scripting Hints}
 
-When scripting in Python, there are several items 
+When scripting in Python, there are several 
 
 \subsubsection{Importance of white space}
 
+Python differs from C++ and \textsc{Fortran} in how loops or nested statements are signified. Whereas
+C++ uses brackets ('\{' and '\}') or \textsc{Fortran} uses \verb|end| statements to signify the end of a
+nesting, Python uses white space. Thus, for statements to nest properly, they must be set at the 
+proper depth. As long as the document is consistent, the number of spaces used doesn't matter, however,
+most conventions call for 4 spaces to be used per level. See below for examples:
+
+\begin{Verbatim}[frame=single, label=\textsc{Fortran}, baselinestretch=1, fontsize=\small]
+X = 0
+DO I = 1,10
+  X = X + I
+  PRINT I
+END DO
+PRINT X
+\end{Verbatim}
+
+\begin{Verbatim}[frame=single, label=Python, baselinestretch=1, fontsize=\small]
+x = 0
+for i in range(1,10):
+    x = x + i
+    print i
+print x
+\end{Verbatim}
+
+
+
+
 \subsubsection{Assignment by reference}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
