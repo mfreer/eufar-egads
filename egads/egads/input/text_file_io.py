@@ -239,7 +239,7 @@ class EgadsCsv(EgadsFile):
         if filename is not None:
             self._open_file(filename, perms, delimiter, quotechar)
 
-    def open(self, filename, perms, delimiter, quotechar):
+    def open(self, filename, perms, delimiter=None, quotechar=None):
         """
         Opens file.
 
