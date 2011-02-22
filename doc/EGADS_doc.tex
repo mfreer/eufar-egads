@@ -11,6 +11,8 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{textcomp}
 \usepackage{paralist}
 \usepackage{makeidx}
 \usepackage{color,calc}
@@ -139,8 +141,10 @@ shell which supports tab-completion, debugging, history, etc.
  \end{description}
 
 \section{Installation}
-To install, type \verb|python setup.py install| from the command line. 
-To install to a user-specified location, type \verb|python setup.py install --prefix=$MYDIR|. 
+Since \egads is a pure Python distribution, it does not need to be built. However, to use it, it must 
+be installed to a location on the Python path. To install \egads, type \verb|python setup.py install| 
+from the command line. To install to a user-specified location, type 
+\verb|python setup.py install --prefix=$MYDIR|. 
 
 \section{Testing}
 
@@ -163,7 +167,7 @@ To load egads into the Python namespace, simply import it:
 \begin{command}
     >>> import egads
 \end{command}
-You may then begin working with any of the algorithms contained in \egads.
+You may then begin working with any of the algorithms and functions contained in \egads.
 
 \subsection{Exploring \egads}
 There are several useful methods to explore the routines contained in \egads. 
@@ -496,11 +500,93 @@ that are contained within the \verb|EgadsData()| instance are applied to the Net
 
 \subsubsection{Closing}
 
-To close a file, simply use the \verb|close() command|:
+To close a file, simply use the \verb|close()| method:
 
 \begin{command}
     >>> f.close()
 \end{command}
+
+\subsection{Working with algorithms}
+
+Algorithms in \egads are stored in the \verb|egads.algorithms| module, and separated into sub-modules
+by category (microphysics, thermodynamics, radiation, etc). Each algorithm follows a standard naming 
+scheme, using the algorithm's purpose and source:
+
+\begin{verbatim} 
+{calculated-parameter}_{detail}_{source}
+\end{verbatim}
+
+For example, an algorithm which calculates static temperature, which was provided by CNRM would be
+named:
+
+\begin{verbatim}
+temp_static_cnrm
+\end{verbatim}
+
+\subsubsection{Getting algorithm information}
+
+There are several methods to get information about each algorithm contained in \egads. The \egads
+Algorithm Handbook is available for easy reference outside of Python. In the handbook, each algorithm 
+is described in detail, including a brief algorithm summary, descriptions of algorithm inputs and outputs,
+the formula used in the algorithm, algorithm source and links to additional references. The handbook
+also specifies the exact name of the algorithm as defined in \egads. The handbook
+can be found on the \egads website, and in the $\backslash$doc directory packaged with \egads.
+
+Within Python, usage information on each algorithm can be found using the \verb|help()| command:
+
+\begin{command}
+   >>> help(egads.algorithms.thermodynamics.velocity_tas_cnrm)
+
+   >>>Help on function velocity_tas_cnrm in module 
+      egads.algorithms.thermodynamics.velocity_tas_cnrm:
+
+velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa)
+    FILE        velocity_tas_cnrm.py
+    
+    VERSION     $Revision$
+    
+    CATEGORY    Thermodynamics
+    
+    PURPOSE     Calculate true airspeed
+    
+    DESCRIPTION Calculates true airspeed based on static temperature, static pressure
+                and dynamic pressure using St Venant's formula.
+    
+    INPUT       T_s         vector  K or C      static temperature
+                P_s         vector  hPa         static pressure
+                dP          vector  hPa         dynamic pressure
+                cpa         coeff.  J K-1 kg-1  specific heat of air 
+						(dry air is 1004 J K-1 kg-1)
+                Racpa       coeff.  ()          R_a/c_pa
+    
+    OUTPUT      V_p         vector  m s-1       true airspeed
+    
+    SOURCE      CNRM/GMEI/TRAMM
+    
+    REFERENCES  "Mecanique des fluides", by S. Candel, Dunod.
+    
+                 Bulletin NCAR/RAF Nr 23, Feb 87, by D. Lenschow and
+                 P. Spyers-Duran
+
+
+\end{command}
+
+\subsubsection{Calling algorithms}
+
+Algorithms in \egads generally accept and return arguments of \verb|EgadsData| type, unless
+otherwise noted. This has the advantages of constant typing between algorithms, and allows
+metadata to be passed along the whole processing chain. To call an algorithm, simply pass in the 
+required arguments, in the order they are described in the algorithm help function. An algorithm call, 
+using the \verb|velocity_tas_cnrm| in the previous section as an example, would therefore be the 
+following:
+
+\begin{command}
+    >>> V_p = egads.algorithms.thermodynamics.velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa)
+\end{command}
+
+where the arguments \verb|T_s|, \verb|P_s|, \verb|dP|, etc are all assumed to be previously defined in the 
+program scope.
+
 
 \section{Scripting}
 
@@ -508,15 +594,27 @@ The recommended method for using \egads is to create script files, which are ext
 repetitive tasks. This can be done using a text editor of your choice. The example script belows 
 shows the calculation of density for all NetCDF files in a directory.
 
-\VerbatimInput[	fontsize=\small,
-	frame=single,
-	baselinestretch=1,
-	samepage=true,
+\lstset{language=Python, 
+        frame=single,
+	tabsize=4,
+	basicstyle=\footnotesize,
+	columns=fixed,
+	keepspaces=true,
+	upquote=true,
 	numbers=left,
-	numbersep=2pt,
+	numberstyle=\tiny,
+	numbersep=5pt,
+	numberfirstline=false,
+	firstnumber=1,
 	stepnumber=5,
-	xleftmargin=15pt]{example.py}
+	prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	identifierstyle=\ttfamily,
+	keywordstyle=\bfseries\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.05,0.5,0.05},
+	stringstyle=\color[rgb]{0.6,0.1,0.9},
+	title=\lstname}
 
+\lstinputlisting{example.py}
 \subsection{Scripting Hints}
 
 When scripting in Python, there are several 
@@ -524,7 +622,7 @@ When scripting in Python, there are several
 \subsubsection{Importance of white space}
 
 Python differs from C++ and \textsc{Fortran} in how loops or nested statements are signified. Whereas
-C++ uses brackets ('\{' and '\}') or \textsc{Fortran} uses \verb|end| statements to signify the end of a
+C++ uses brackets ('\verb|{|' and '\verb|}|') or \textsc{Fortran} uses \verb|end| statements to signify the end of a
 nesting, Python uses white space. Thus, for statements to nest properly, they must be set at the 
 proper depth. As long as the document is consistent, the number of spaces used doesn't matter, however,
 most conventions call for 4 spaces to be used per level. See below for examples:
@@ -549,7 +647,7 @@ print x
 
 
 
-\subsubsection{Assignment by reference}
+%\subsubsection{Assignment by reference}
 
 
 
@@ -557,12 +655,12 @@ print x
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{appendix}
+%\begin{appendix}
 
-\chapter{Class reference}
+%\chapter{Class reference}
 
  
-\end{appendix}
+%\end{appendix}
 
 
 
