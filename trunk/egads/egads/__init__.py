@@ -1,6 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
-__version__ = "$Revision::           $"
+__revision__ = "$Revision::           $"
+__version__ = "unknown"
+try: 
+    from _version import __version__
+except ImportError:
+    # No _version.py in tree, so we dont know what the version is
+    pass
 
 # TODO Add docstrings to file
 

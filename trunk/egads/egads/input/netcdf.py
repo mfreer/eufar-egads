@@ -83,8 +83,8 @@ class NetCdf(object):
 
     def get_attributes(self, varname=None):
         """
-        Returns a list of attributes found either in current NetCDF file, or attached
-        to a given variable.
+        Returns a dictionary of attributes avd values found either in current
+        NetCDF file, or attached to a given variable.
 
         Parameters
         -----------

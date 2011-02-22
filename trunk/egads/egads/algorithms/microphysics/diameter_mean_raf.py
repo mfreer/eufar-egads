@@ -1,17 +1,17 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ['mean_diameter_raf']
+__all__ = ['diameter_mean_raf']
 
 import egads
 import inspect
 
-def mean_diameter_raf(n_i, d_i):
+def diameter_mean_raf(n_i, d_i):
     """
     This file calculates mean diameter given an array of particle counts and
     a vector of their corresponding sizes.
 
-    FILE        mean_diameter_raf.py
+    FILE        diameter_mean_raf.py
 
     VERSION     $Revision$
 

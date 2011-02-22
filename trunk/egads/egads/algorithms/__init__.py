@@ -3,3 +3,5 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 
 import thermodynamics
+import microphysics
+import transforms
