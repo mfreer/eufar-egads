@@ -16,9 +16,7 @@ To use EGADS, the following packages must be installed:
   # Python netCDF4 libraries 0.8.2. Available at http://netcdf4-python.googlecode.com
 
 == Installation == 
-EGADS is a pure Python distribution, thus, it does not need to built. However,
-to use it, it must be installed to a location on the Python path. To install
-EGADS (assuming priviledged user rights), run the following command from the egads directory:
+EGADS is a pure Python distribution, thus, it does not need to built. However, to use it, it must be installed to a location on the Python path. To install EGADS (assuming priviledged user rights), run the following command from the egads directory:
 
 {{{
   python setup.py install
