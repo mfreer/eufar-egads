@@ -1,17 +1,6 @@
 #summary Instructions for EGADS installation
 #labels Featured,Phase-Deploy
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
 = EGADS Installation =
 
 Information about EGADS and the latest release can be found at: http://eufar-egads.googlecode.com
@@ -37,7 +26,7 @@ EGADS (assuming priviledged user rights), run the following command from the ega
 To install as an unpriviledged user, or to install to a directory of your choosing, the following command can be used:
 {{{
   python setup.py install --prefix MYDIR
-}}]
+}}}
 For information on other install options the --help option can be used:
 {{{
   python setup.py install --help
