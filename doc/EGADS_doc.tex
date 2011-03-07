@@ -108,8 +108,7 @@ Central to \egads is a data type that encapsulates data and metadata into one ob
 This simplifies the housekeeping of data and metadata and allows it to be easily passed between algorithms and data files.
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%% INSTALLATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -655,12 +654,56 @@ print x
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\begin{appendix}
+\begin{appendix}
 
-%\chapter{Class reference}
+\chapter{Class reference}
 
- 
-%\end{appendix}
+\subsection{egads.EgadsData}
+
+This class is designed using the EUFAR N6SP data and metadata recommendations. Its purpose is 
+to store related data and metadata and allow them to be passed between functions and algorithms 
+in a consistent manner.
+
+\begin{table}[h]
+\begin{tabular}{l p{10cm}}
+\textbf{Constructor} & \textbf{Description}  \\ \hline
+\textbf{egads.EgadsData()} & Add constructor description \\
+\end{tabular}
+\end{table}
+
+\subsection{egads.input.EgadsFile}
+
+This is the generic class for interfacing with text files. \verb|egads.input.EgadsFile| provides
+methods to open, close, read and write to text files, but does not include any interfaces to automatically
+read text file data into an \verb|EgadsData| instance.
+
+
+\begin{table}[h]
+\begin{tabular}{p{4cm} p{10cm}}
+\textbf{Constructor} & \textbf{Description} \\ \hline
+\textbf{egads.EgadsFile (filename=None, perms='r')} & The constructor for an \verb|EgadsFile| instance
+takes two optional parameters, filename and perms.
+
+\begin{description}
+ \item[filename - string, optional]
+ The complete path to the file to be opened.
+ \item[perms - char, optional]
+ Permissions used to open the file. Options are 'w' for write (overwrites
+            data), 'a' for append 'r+' for read and write, and 'r' for read. Defaults to 'r'. 
+\end{description}
+
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{l p{10cm}}
+\textbf{Method} & \textbf{Description}  \\ \hline
+\textbf{.open(filename, perms)} & Add constructor description \\
+
+\end{tabular}
+\end{table}
+
+\end{appendix}
 
 
 
