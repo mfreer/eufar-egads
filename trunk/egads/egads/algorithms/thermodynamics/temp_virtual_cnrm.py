@@ -53,8 +53,3 @@ def temp_virtual_cnrm(T_s, r):
 
 
     return result
-
-
-if __name__=="__main__":
-    import doctest
-    doctest.testmod()

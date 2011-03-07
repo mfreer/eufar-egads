@@ -1,23 +1,28 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["EgadsData", "get_file_list"]
+__all__ = ["EgadsData"]
 
-import glob
 import numpy
 import types
+import weakref
+
+from collections import defaultdict
+
 
 class EgadsData(object):
     """
     This class is designed using the EUFAR N6SP data and metadata recommendations.
-    Its purpose is to allow related data and metadata to be passed between
-    functions and algorithms in a consistent, linked manner.
+    Its purpose is to store related data and metadata and allow them to be
+    passed between functions and algorithms in a consistent manner.
     """
+
+    __refs__ = defaultdict(list)
 
     def __init__(self, value=None, units=None, long_name=None, standard_name=None,
                  cdf_name=None, fill_value=None, valid_range=None, sampled_rate=None,
                  category=None, calibration_coeff=None, dependencies=None,
-                 processor=None, ** attrs):
+                 processor=None, **attrs):
         """
         Initializes EgadsData instance with standard attributes. If no attributes
         are provided, all standard attributes are set to None.
@@ -61,32 +66,33 @@ class EgadsData(object):
             automatically (derived variables only).
 
         """
-        if value is None:
-            self.value = numpy.array([])
+        if isinstance(value, EgadsData):
+            self.__dict__ = value.__dict__.copy()
+            self.value = value.value.copy()
         else:
-            if isinstance(value, EgadsData):
-                self.__dict__ = value.__dict__.copy()
-                self.value = value.value.copy()
+            if isinstance(value, numpy.ndarray):
+                self.value = value.copy()
+            elif value is None:
+                self.value = numpy.array([])
             else:
-                if isinstance(value, numpy.ndarray):
-                    self.value = value.copy()
-                else:
-                    self.value = numpy.array(value)
+                self.value = numpy.array(value)
 
-                self.units = units
-                self.long_name = long_name
-                self.standard_name = standard_name
-                self.cdf_name = cdf_name
-                self.fill_value = fill_value
-                self.valid_range = valid_range
-                self.sampled_rate = sampled_rate
-                self.category = category
-                self.calibration_coeff = calibration_coeff
-                self.dependencies = dependencies
-                self.processor = processor
+            self.units = units
+            self.long_name = long_name
+            self.standard_name = standard_name
+            self.cdf_name = cdf_name
+            self.fill_value = fill_value
+            self.valid_range = valid_range
+            self.sampled_rate = sampled_rate
+            self.category = category
+            self.calibration_coeff = calibration_coeff
+            self.dependencies = dependencies
+            self.processor = processor
 
-                for key, val in attrs.iteritems():
-                    setattr(self, key, val)
+        for key, val in attrs.iteritems():
+            setattr(self, key, val)
+
+        self.__refs__[self.__class__].append(weakref.ref(self))
 
     def __len__(self):
 
@@ -265,14 +271,14 @@ class EgadsData(object):
 
         return self.value.shape
 
+    @classmethod
+    def _get_instances(cls):
+        """
+        Generator which returns currently defined instances of EgadsData.
 
-def get_file_list(path):
-    """
+        """
 
-    Given path, returns a list of all files in that path. Wildcards are supported.
-
-    Example: path = 'data/*.nc'
-    """
-
-    return glob.glob(path)
-
+        for inst_ref in cls.__refs__[cls]:
+            inst = inst_ref()
+            if inst is not None:
+                yield inst

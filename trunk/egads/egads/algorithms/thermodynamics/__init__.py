@@ -1,6 +1,11 @@
+"""
+EGADS thermodynamics algorithms. See EGADS Algorithm Documentation for more info.
+"""
+
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
+
 
 
 from altitude_pressure_cnrm import *

@@ -1,11 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["EgadsFile","EgadsCsv","parse_string_array"]
+__all__ = ["EgadsFile","EgadsCsv","parse_string_array","get_file_list"]
 
 import sys
 import csv
 import numpy
+import glob
 
 class EgadsFile(object): #TODO: make EgadsFile more robust.
     """
@@ -461,3 +462,15 @@ def parse_string_array(data, format):
         i += 1
 
     return parsed_data
+
+
+def get_file_list(path):
+    """
+
+    Given path, returns a list of all files in that path. Wildcards are supported.
+
+    Example: path = 'data/*.nc'
+    """
+
+    return glob.glob(path)
+
