@@ -5,6 +5,7 @@ __all__ = ['sample_area_oap_center_in_raf']
 
 import egads
 import inspect
+import numpy
 
 def sample_area_oap_center_in_raf(Lambda, D_arms, dD, M, N):
     """
@@ -39,7 +40,7 @@ def sample_area_oap_center_in_raf(Lambda, D_arms, dD, M, N):
     Lambda_mm = Lambda.value * 1e-6                 # convert wavelength to mm
     dD_mm = dD.value * 1e-3                         # convert diameter to mm
 
-    ESW = N.value * dD_mm
+    ESW = N.value * dD_mm / M.value
 
     for i in range(N.value):
         X = i+1

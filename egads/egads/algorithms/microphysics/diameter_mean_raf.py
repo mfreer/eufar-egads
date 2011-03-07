@@ -45,7 +45,7 @@ def diameter_mean_raf(n_i, d_i):
     for t in xrange(time):
         D_bar[t] = sum(n_i.value[t, :] * d_i.value[:]) / (N_t[t])
 
-    result = egads.ToolboxData(value = D_bar,
+    result = egads.EgadsData(value = D_bar,
                                units = 'um',
                                long_name = 'mean diameter',
                                standard_name = '',

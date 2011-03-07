@@ -38,7 +38,7 @@ def number_conc_total_raf(n_i, SV):
     for t in xrange(time):
         N_t = sum(n_i.value[t,:]/SV.value[t,:])
 
-    result = egads.ToolboxData(value = N_t,
+    result = egads.EgadsData(value = N_t,
                                units = 'm-3',
                                long_name = 'total number concentration',
                                standard_name = '',

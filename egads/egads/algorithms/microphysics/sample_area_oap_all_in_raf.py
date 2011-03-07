@@ -5,6 +5,7 @@ __all__ = ['sample_area_oap_all_in_raf']
 
 import egads
 import inspect
+import numpy
 
 def sample_area_oap_all_in_raf(Lambda, D_arms, dD, M, N):
     """
