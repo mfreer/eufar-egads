@@ -1,12 +1,11 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["EgadsData"]
+__all__ = ["EgadsData", "EgadsAlgorithm"]
 
 import numpy
 import types
 import weakref
-
 from collections import defaultdict
 
 
@@ -22,7 +21,7 @@ class EgadsData(object):
     def __init__(self, value=None, units=None, long_name=None, standard_name=None,
                  cdf_name=None, fill_value=None, valid_range=None, sampled_rate=None,
                  category=None, calibration_coeff=None, dependencies=None,
-                 processor=None, **attrs):
+                 processor=None, ** attrs):
         """
         Initializes EgadsData instance with standard attributes. If no attributes
         are provided, all standard attributes are set to None.
@@ -282,3 +281,65 @@ class EgadsData(object):
             inst = inst_ref()
             if inst is not None:
                 yield inst
+
+
+
+class EgadsAlgorithm(object):
+    """
+    EGADS algorithm base class. All egads algorithms should inherit this class.
+
+    The EgadsAlgorithm class provides base methods for algorithms in EGADS and
+    initializes algorithm attributes.
+
+    """
+
+    def __init__(self):
+        """
+        Initializes EgadsAlgorithm instance with None values for all standard
+        attributes.
+
+        """
+        self.name = self.__class__.__name__
+        self.version = None
+        self.date = None
+        self.inputs = None
+        self.outputs = None
+        self.author = None
+
+        self._output_fields = ['name', 'units', 'long_name', 'standard_name',
+            'fill_value', 'valid_range', 'sampled_rate',
+            'category', 'calibration_coeff', 'dependencies']
+
+        self.output_properties = {}
+
+        for key in self._output_fields:
+            self.output_properties[key] = None
+
+    def run(self):
+        """
+        Skeleton class for run method. Raises not implemented AssertionError
+        in this context, and should be redefined by EgadsAlgorithm children
+        classes.
+
+        """
+        raise AssertionError('Algorithm not implemented')
+
+    def get_info(self):
+        #TODO: Add docstring
+        print self.run.__doc__
+
+    def _populate_data_object(self, value):
+        """
+        Method for automatically populating new EgadsData instance 
+        with calculated value and algorithm/variable metadata.
+        
+        
+        """
+
+        result = EgadsData(value)
+
+        for key, val in self.output_properties.iteritems():
+            result.__setattr__(key, val)
+
+
+        return result

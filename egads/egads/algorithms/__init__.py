@@ -8,6 +8,5 @@ __version__ = "$Revision::           $"
 
 
 
-import egads.algorithms.thermodynamics
 import egads.algorithms.microphysics
 import egads.algorithms.transforms

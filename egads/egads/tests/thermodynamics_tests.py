@@ -112,11 +112,11 @@ class  ThermodynamicsTestCase(unittest.TestCase):
     #    self.foo = None
 
     def test_altitude_pressure_cnrm(self):
-        alt_p = thermodynamics.altitude_pressure_cnrm(self.T_v, self.P_s, self.P_surface, self.R_a_g)
+        alt_p = thermodynamics.AltitudePressureCnrm().run(self.T_v, self.P_s, self.P_surface, self.R_a_g)
 
         self.assertAlmostEqual(alt_p.value, 82.0105, 3, 'Altitudes dont match')
 
-        alt_p = thermodynamics.altitude_pressure_cnrm(self.array_test, self.array_test,
+        alt_p = thermodynamics.AltitudePressureCnrm().run(self.array_test, self.array_test,
                                                       self.coeff_test, self.coeff_test)
 
         self.assertEqual(alt_p.shape, self.array_shape, 'Altitude pressure array shapes dont match')
