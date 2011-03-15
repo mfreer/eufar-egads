@@ -8,7 +8,7 @@ import csv
 import numpy
 import glob
 
-class EgadsFile(object): #TODO: make EgadsFile more robust.
+class EgadsFile(object): #TODO: add error handling to EgadsFile.
     """
     Generic class for interfacing with text files.
     """
@@ -23,8 +23,8 @@ class EgadsFile(object): #TODO: make EgadsFile more robust.
             Name of file to open.
         perms : char, optional
             Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r' is the default
-            value.
+            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r'
+            is the default value.
         """
 
 
@@ -47,8 +47,8 @@ class EgadsFile(object): #TODO: make EgadsFile more robust.
             Name of file to open.
         perms : char, optional
             Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r' is the default
-            value.
+            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r'
+            is the default value.
         """
 
 
