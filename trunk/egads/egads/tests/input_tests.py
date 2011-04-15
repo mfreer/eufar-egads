@@ -15,6 +15,7 @@ import tempfile
 import unittest
 import csv
 
+import egads
 import egads.input as input
 import netCDF4
 from numpy.random.mtrand import uniform
@@ -132,11 +133,11 @@ class NetCdfFileInputTestCase(unittest.TestCase):
         
         data = input.NetCdf(self.file)
         dimdict = {DIM1_NAME : DIM1_LEN, DIM2_NAME : DIM2_LEN}
-        self.assertEqual(data.get_dimensions(), dimdict,
+        self.assertEqual(data.get_dimension_list(), dimdict,
                         'dimensions dictionary does not match')
 
         vardimdict = {DIM1_NAME : DIM1_LEN}
-        self.assertEqual(data.get_dimensions(VAR_NAME), vardimdict,
+        self.assertEqual(data.get_dimension_list(VAR_NAME), vardimdict,
                          'variable dimensions do not match')
 
     def test_load_data_1d(self):
