@@ -1,14 +1,15 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["EgadsFile","EgadsCsv","parse_string_array","get_file_list"]
+__all__ = ["EgadsFile", "EgadsCsv", "parse_string_array"]
 
-import sys
 import csv
-import numpy
-import glob
+import sys
 
-class EgadsFile(object): #TODO: add error handling to EgadsFile.
+from egads.input import FileCore
+import numpy
+
+class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
     """
     Generic class for interfacing with text files.
     """
@@ -27,37 +28,8 @@ class EgadsFile(object): #TODO: add error handling to EgadsFile.
             is the default value.
         """
 
+        FileCore.__init__(self, filename, perms, pos=0)
 
-        self.f = None
-        self.filename = filename
-        self.perms = perms
-        self.pos = 0
-
-        if filename is not None:
-            self.open(filename, perms)
-
-
-    def open(self, filename, perms):
-        """
-        Opens file.
-
-        Parameters
-        -----------
-        filename : string, optional
-            Name of file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r'
-            is the default value.
-        """
-
-
-        if perms is not None:
-            self.perms = perms
-        else:
-            perms = self.perms
-
-        self._open_file(filename, perms)
 
 
     def close(self):
@@ -65,11 +37,8 @@ class EgadsFile(object): #TODO: add error handling to EgadsFile.
         Close opened file.
         """
 
-        if self.f is not None:
-            self.f.close()
-            self.f = None
-            self.filename = None
-            self.pos = 0
+        FileCore.close(self)
+        self.pos = 0
 
     def _open_file(self, filename, perms):
         """
@@ -119,9 +88,11 @@ class EgadsFile(object): #TODO: add error handling to EgadsFile.
 
         """
 
+        self.pos = self.f.tell()
+
         return self.pos
 
-    def seek(self, location, from_where = None):
+    def seek(self, location, from_where=None):
         """
         Change current position in file.
         
@@ -135,8 +106,8 @@ class EgadsFile(object): #TODO: add error handling to EgadsFile.
         """
 
         from_switch = {'b': lambda: 0,
-                       'c': lambda: 1,
-                       'e': lambda: 2}
+            'c': lambda: 1,
+            'e': lambda: 2}
 
         from_val = from_switch.get(from_where, lambda: 0)()
 
@@ -176,7 +147,7 @@ class EgadsFile(object): #TODO: add error handling to EgadsFile.
         """
 
         if size is None:
-            filedata =  self.f.read()
+            filedata = self.f.read()
         else:
             filedata = self.f.read(size)
 
@@ -189,7 +160,7 @@ class EgadsFile(object): #TODO: add error handling to EgadsFile.
         Reads single line of data from file.
         """
 
-        filedata =  self.f.readline()
+        filedata = self.f.readline()
         self.pos = self.f.tell()
 
         return filedata
@@ -209,7 +180,7 @@ class EgadsCsv(EgadsFile):
     """
 
 
-    def __init__(self, filename=None, perms='r', delimiter = ',', quotechar = '"'):
+    def __init__(self, filename=None, perms='r', delimiter=',', quotechar='"'):
         """
         Initializes instance of EgadsFile object.
 
@@ -228,17 +199,12 @@ class EgadsCsv(EgadsFile):
             The default is '"'.
         """
 
-        self.f = None
-        self.filename = filename
-        self.perms = perms
-        self.pos = 0
-        self.reader = None
-        self.writer = None
-        self.delimiter = delimiter
-        self.quotechar = quotechar
+        FileCore.__init__(self, filename, perms,
+                           reader=None,
+                           writer=None,
+                           delimiter=delimiter,
+                           quotechar=quotechar)
 
-        if filename is not None:
-            self._open_file(filename, perms, delimiter, quotechar)
 
     def open(self, filename, perms, delimiter=None, quotechar=None):
         """
@@ -292,7 +258,7 @@ class EgadsCsv(EgadsFile):
 
         self.seek(self.pos)
 
-    def read(self, lines = None, format = None):
+    def read(self, lines=None, format=None):
         """
         Reads in and returns contents of csv file.
 
@@ -339,7 +305,7 @@ class EgadsCsv(EgadsFile):
             parsed_data = parse_string_array(data, format)
             return parsed_data
 
-    def skip_line(self, amount = 1):
+    def skip_line(self, amount=1):
         """
         Skips over line(s) in file.
         
@@ -390,7 +356,7 @@ class EgadsCsv(EgadsFile):
         
 
 
-    def _open_file(self, filename, perms, delimiter, quotechar):
+    def _open_file(self, filename, perms):
         """
         Private method for opening file.
 
@@ -417,9 +383,11 @@ class EgadsCsv(EgadsFile):
             self.perms = perms
             self.pos = self.f.tell()
             if perms == 'r' or perms == 'r+':
-                self.reader = csv.reader(self.f, delimiter = delimiter, quotechar = quotechar)
+                self.reader = csv.reader(self.f, delimiter=self.delimiter,
+                                         quotechar=self.quotechar)
             if perms == 'w' or perms == 'a' or perms == 'r+':
-                self.writer = csv.writer(self.f, delimiter = delimiter, quotechar = quotechar)
+                self.writer = csv.writer(self.f, delimiter=self.delimiter,
+                                         quotechar=self.quotechar)
         except IOError:
             print "ERROR: File %s doesn't exist" % (filename)
             raise RuntimeError
@@ -458,19 +426,9 @@ def parse_string_array(data, format):
     
     for row in parsed_data:
         fmt_count = i % len(format)
-        parsed_data[i] = numpy.asarray(row, dtype = format_array_dict[format[fmt_count]])
+        parsed_data[i] = numpy.asarray(row, dtype=format_array_dict[format[fmt_count]])
         i += 1
 
     return parsed_data
 
-
-def get_file_list(path):
-    """
-
-    Given path, returns a list of all files in that path. Wildcards are supported.
-
-    Example: path = 'data/*.nc'
-    """
-
-    return glob.glob(path)
 

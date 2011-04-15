@@ -58,13 +58,12 @@ class AltitudePressureCnrm(egads.EgadsAlgorithm):
 
 
     def run(self, T_v, P_s, P_surface, R_a_g):
-        __doc__ = altitude_pressure_cnrm.__doc__
+        self.__doc__ = altitude_pressure_cnrm.__doc__
 
         alt_p = altitude_pressure_cnrm(T_v.value, P_s.value, P_surface.value,
                                        R_a_g.value)
 
         result = self._populate_data_object(alt_p)
-
 
         return result
 
