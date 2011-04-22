@@ -13,8 +13,8 @@ class NetCdf(FileCore):
     """
     EGADS class for reading and writing to generic NetCDF files.
 
-    This module adapts the Python NetCDF4 0.8.2 library to the file access
-    methods used in EGADS.
+    This module is a sub-class of FileCore and adapts the Python NetCDF4 0.8.2
+    library to the EGADS file-access methods.
 
     """
 
@@ -24,6 +24,7 @@ class NetCdf(FileCore):
         'int':'i4',
         'float':'f4',
         'double':'f8'}
+
 
 
     def __del__(self):
@@ -47,20 +48,8 @@ class NetCdf(FileCore):
             'a' and 'r+' for append, and 'r' for read. 'r' is the default value
         """
 
-        if perms is not None:
-            self.perms = perms
-        else:
-            perms = self.perms
+        FileCore.open(self, filename, perms)
 
-        self._open_file(filename, perms)
-
-    def close(self):
-        """
-        Closes currently open NetCDF file.
-
-        """
-
-        self._close_file()
 
     def get_attribute_list(self, varname=None):
         """
@@ -302,15 +291,6 @@ class NetCdf(FileCore):
             print "ERROR: Unexpected error"
             raise
 
-    def _close_file(self):
-        """
-        Private method for closing NetCDF file.
-        """
-
-        if self.f is not None:
-            self.f.close()
-            self.f = None
-            self.filename = None
 
     def _get_attribute_list(self, var=None):
         """
@@ -380,24 +360,123 @@ class EgadsNetCdf(NetCdf):
 
     """
 
-    FILE_ATTR_DICT= {'conventions':'Conventions',
-                     'title':'title',
-                     'source':'source',
-                     'institution':'institution',
-                     'project':'project',
-                     'history':'history'}
+    
+    FILE_ATTR_DICT = {'Conventions':'conventions',
+                      'title':'title',
+                      'source':'source',
+                      'institution':'institution',
+                      'project':'project',
+                      'date_created':'date_created',
+                      'geospatial_lat_min':'geospatial_lat_min',
+                      'geospatial_lat_max':'geospatial_lat_max',
+                      'geospatial_lon_min':'geospatial_lon_min',
+                      'geospatial_lon_max':'geospatial_lon_max',
+                      'geospatial_vertical_min':'geospatial_vertical_min',
+                      'geospatial_vertical_max':'geospatial_vertical_max',
+                      'geospatial_vertical_positive':'geospatial_vertical_positive',
+                      'geospatial_vertical_units':'geospatial_vertical_units',
+                      'time_coverage_start':'time_coverage_start',
+                      'time_coverage_end':'time_coverage_end',
+                      'time_coverage_duration':'time_coverage_duration',
+                      'history':'history',
+                      'references':'references',
+                      'comment':'comment'}
+
+
 
     VAR_ATTR_DICT = {'units':'units',
-             'long_name':'long_name',
-             'standard_name':'standard_name',
-             'fill_value':'_FillValue',
-             'valid_range':'valid_range',
-             'sampled_rate':'SampledRate',
-             'category':'Category',
-             'calibration_coeff':'CalibrationCoeff',
-             'dependencies':'Dependencies',
-             'processor':'Processor'}
+                     '_FillValue':'fill_value',
+                     'long_name':'long_name',
+                     'standard_name':'standard_name',
+                     'valid_range':'valid_range',
+                     'valid_min':'valid_min',
+                     'valid_max':'valid_max',
+                     'SampledRate':'sampled_rate',
+                     'Category':'category',
+                     'CalibrationCoefficients':'calibration_coefficients',
+                     'InstrumentLocation':'instrument_location',
+                     'instrumentCoordinates':'instrument_coordinates',
+                     'Dependencies':'dependencies',
+                     'Processor':'processor',
+                     'Comments':'comments',
+                     'ancillary_variables':'ancillary_variables',
+                     'flag_values':'flag_values',
+                     'flag_masks':'flag_masks',
+                     'flag_meanings':'flag_meanings'}
 
+    RAF_GLOBAL_DICT = {'institution':'institution',
+                'Address':None,
+                'Phone':None,
+                'creator_url':None,
+                'Conventions':'Conventions',
+                'ConventionsURL':None,
+                'ConventionsVersion':None,
+                'Metadata_Conventions':None,
+                'standard_name_vocabulary':None,
+                'ProcessorRevision':None,
+                'ProcessorURL':None,
+                'date_created':'date_created',
+                'ProjectName':'project',
+                'Platform':None,
+                'ProjectNumber':None,
+                'FlightNumber':None,
+                'FlightDate':None,
+                'TimeInterval':None,
+                'InterpolationMethod':None,
+                'latitude_coordinate':'reference_latitude',
+                'longitude_coordinate':'reference_longitude',
+                'zaxis_coordinate':'reference_altitude',
+                'time_coordinate':None,
+                'geospatial_lat_min':'geospatial_lat_min',
+                'geospatial_lat_max':'geospatial_lat_max',
+                'geospatial_lon_min':'geospatial_lon_min',
+                'geospatial_lon_max':'geospatial_lon_max',
+                'geospatial_vertical_min':'geospatial_vertical_min',
+                'geospatial_vertical_max':'geospatial_vertical_max',
+                'geospatial_vertical_positive':'geospatial_vertical_positive',
+                'geospatial_vertical_units':'geospatial_vertical_units',
+                'wind_field':None,
+                'landmarks':None,
+                'Categories':None,
+                'time_coverage_start':'time_coverage_start',
+                'time_coverage_end':'time_coverage_end'}
+
+    RAF_VARIABLE_DICT = {'_FillValue':'_FillValue',
+                         'units':'units',
+                         'long_name':'long_name',
+                         'standard_name':'standard_name',
+                         'valid_range':'valid_range',
+                         'actual_min':None,
+                         'actual_max':None,
+                         'Category':'Category',
+                         'SampledRate':'SampledRate',
+                         'TimeLag':None,
+                         'TimeLagUnits':None,
+                         'DataQuality':None,
+                         'CalibrationCoefficients':'CalibrationCoefficients',
+                         'Dependencies':'Dependencies'}
+
+    CF_GLOBAL_DICT = {'title':'title',
+                      'references':'references',
+                      'history':'history',
+                      'Conventions':'Conventions',
+                      'institution':'institution',
+                      'source':'source',
+                      'comment':'comment'}
+
+    CF_VARIABLE_DICT = {'_FillValue':'_FillValue',
+                        'valid_min':'valid_min',
+                        'valid_max':'valid_max',
+                        'valid_range':'valid_range',
+                        'scale_factor':'scale_factor',
+                        'add_offset':'add_offset',
+                        'units':'units',
+                        'long_name':'long_name',
+                        'standard_name':'standard_name',
+                        'ancillary_variables':'ancillary_variables',
+                        'flag_values':'flag_values',
+                        'flag_masks':'flag_masks',
+                        'flag_meanings':'flag_meanings'}
 
     def __init__(self, filename=None, perms='r'):
         """
@@ -412,6 +491,8 @@ class EgadsNetCdf(NetCdf):
             data), 'a' and 'r+' for append, and 'r' for read. 'r' is the default
             value.
         """
+
+        FileCore.__init__(self,filename,perms)
 
         self.f = None
         self.filename = filename
@@ -439,16 +520,11 @@ class EgadsNetCdf(NetCdf):
             'a' and 'r+' for append, and 'r' for read. 'r' is the default value
         """
 
-        if perms is not None:
-            self.perms = perms
-        else:
-            perms = self.perms
-
-        self._open_file(filename, perms)
+        NetCdf.open(self,filename,perms)
 
         for key, val in self.FILE_ATTR_DICT.iteritems():
-            attribute = getattr(self.f, val,None)
-            setattr(self, key, attribute)
+            attribute = getattr(self.f, key,None)
+            setattr(self, val, attribute)
 
 
     def close(self):
@@ -456,7 +532,8 @@ class EgadsNetCdf(NetCdf):
         Close currently open NetCDF file.
         """
 
-        self._close_file()
+        NetCdf.close(self)
+
         self.conventions = None
         self.title = None
         self.source = None
@@ -505,8 +582,8 @@ class EgadsNetCdf(NetCdf):
         data.value = value
 
         for key, val in self.VAR_ATTR_DICT.iteritems():
-                attribute = getattr(varin, val,None)
-                setattr(data, key, attribute)
+                attribute = getattr(varin, key,None)
+                setattr(data, val, attribute)
 
         return data
 
@@ -543,8 +620,8 @@ class EgadsNetCdf(NetCdf):
             varout[:] = data.value
 
             for key, val in self.VAR_ATTR_DICT.iteritems():
-                attribute = getattr(data, key)
-                setattr(varout, val, attribute)
+                attribute = getattr(data, val)
+                setattr(varout, key, attribute)
 
 
 
