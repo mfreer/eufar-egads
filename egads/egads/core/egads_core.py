@@ -8,6 +8,8 @@ import types
 import weakref
 from collections import defaultdict
 
+import egads.core.metadata
+
 
 class EgadsData(object):
     """
@@ -18,10 +20,7 @@ class EgadsData(object):
 
     __refs__ = defaultdict(list)
 
-    def __init__(self, value=None, units=None, long_name=None, standard_name=None,
-                 cdf_name=None, fill_value=None, valid_range=None, sampled_rate=None,
-                 category=None, calibration_coeff=None, dependencies=None,
-                 processor=None, ** attrs):
+    def __init__(self, value=None, **attrs):
         """
         Initializes EgadsData instance with standard attributes. If no attributes
         are provided, all standard attributes are set to None.
@@ -75,21 +74,11 @@ class EgadsData(object):
                 self.value = numpy.array([])
             else:
                 self.value = numpy.array(value)
-
-            self.units = units
-            self.long_name = long_name
-            self.standard_name = standard_name
-            self.cdf_name = cdf_name
-            self.fill_value = fill_value
-            self.valid_range = valid_range
-            self.sampled_rate = sampled_rate
-            self.category = category
-            self.calibration_coeff = calibration_coeff
-            self.dependencies = dependencies
-            self.processor = processor
+                
+            self.metadata = egads.core.metadata.VariableMetadata()
 
         for key, val in attrs.iteritems():
-            setattr(self, key, val)
+            self.metadata[key] = val
 
         self.__refs__[self.__class__].append(weakref.ref(self))
 
