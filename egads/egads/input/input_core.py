@@ -29,8 +29,6 @@ class FileCore(object):
         self.filename = filename
         self.perms = perms
 
-        print kwargs
-
         for key, val in kwargs.iteritems():
             setattr(self, key, val)
 

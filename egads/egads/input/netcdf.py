@@ -491,55 +491,13 @@ class EgadsNetCdf(NetCdf):
             data), 'a' and 'r+' for append, and 'r' for read. 'r' is the default
             value.
         """
+        
+        self.file_metadata = None
 
-        FileCore.__init__(self,filename,perms)
-
-        self.f = None
-        self.filename = filename
-        self.perms = perms
-        self.conventions = None
-        self.title = None
-        self.source = None
-        self.institution = None
-        self.project = None
-        self.history = None
-
-        if filename is not None:
-            self.open(filename, perms)
-
-    def open(self, filename, perms=None):
-        """
-        Opens NetCDF file given filename.
-
-        Parameters
-        -----------
-        filename : string
-            Name of NetCDF file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites data in file),
-            'a' and 'r+' for append, and 'r' for read. 'r' is the default value
-        """
-
-        NetCdf.open(self,filename,perms)
-
-        for key, val in self.FILE_ATTR_DICT.iteritems():
-            attribute = getattr(self.f, key,None)
-            setattr(self, val, attribute)
+        FileCore.__init__(self, filename, perms)
 
 
-    def close(self):
-        """
-        Close currently open NetCDF file.
-        """
 
-        NetCdf.close(self)
-
-        self.conventions = None
-        self.title = None
-        self.source = None
-        self.institution = None
-        self.project = None
-        self.history = None
 
     def read_variable(self, varname, input_range=None):
         """
@@ -577,13 +535,12 @@ class EgadsNetCdf(NetCdf):
 
             value = varin[eval(obj)]
 
-        data = egads.EgadsData()
-        data.cdf_name = varname
-        data.value = value
+        variable_attrs = self.get_attribute_list(varname)
 
-        for key, val in self.VAR_ATTR_DICT.iteritems():
-                attribute = getattr(varin, key,None)
-                setattr(data, val, attribute)
+        variable_metadata = egads.core.metadata.VariableMetadata(variable_attrs,
+                                                                 self.file_metadata)
+
+        data = egads.EgadsData(value, variable_metadata=variable_metadata )
 
         return data
 
@@ -622,6 +579,34 @@ class EgadsNetCdf(NetCdf):
             for key, val in self.VAR_ATTR_DICT.iteritems():
                 attribute = getattr(data, val)
                 setattr(varout, key, attribute)
+
+    def _open_file(self, filename, perms):
+        """
+        Private method for opening NetCDF file.
+
+        Parameters
+        -----------
+        filename: string
+            Name of NetCDF file to open.
+        perms : char
+            Permissions used to open file. Options are 'w' for write (overwrites data in file),
+            'a' and 'r+' for append, and 'r' for read.
+        """
+
+        self.close()
+
+        try:
+            self.f = netCDF4.Dataset(filename, perms)
+            self.filename = filename
+            self.perms = perms
+            attr_dict = self.get_attribute_list()
+            self.file_metadata = egads.core.metadata.FileMetadata(attr_dict, self.filename)
+        except RuntimeError:
+            print "ERROR: File %s doesn't exist" % (filename)
+            raise RuntimeError
+        except Exception:
+            print "ERROR: Unexpected error"
+            raise
 
 
 
