@@ -109,7 +109,7 @@ class Metadata(dict):
     capabilities.
     """
 
-    def __init__(self, metadata_dict, conventions = None):
+    def __init__(self, metadata_dict, conventions = None, metadata_list=None):
         """
         Initialize Metadata instance with given metadata in dict form.
 
@@ -121,6 +121,8 @@ class Metadata(dict):
         """
 
         dict.__init__(self, metadata_dict)
+
+        self._metadata_list = metadata_list
 
         self._conventions = conventions
 
@@ -185,10 +187,11 @@ class FileMetadata(Metadata):
         if conventions is None:
             try:
                 conventions = [s.strip() for s in metadata_dict[conventions_keyword].split(',')]
-            except AttributeError:
-                raise
+            except KeyError:
+                conventions = None
 
-        Metadata.__init__(self, metadata_dict, conventions)
+        Metadata.__init__(self, metadata_dict, conventions,
+                          metadata_list=FILE_ATTR_LIST)
 
         if filename is None:
             self._filename = None
@@ -239,18 +242,34 @@ class VariableMetadata(Metadata):
             List of metadata conventions used in provided metadata dictionary.
         """
 
-        Metadata.__init__(self, metadata_dict)
+        Metadata.__init__(self, metadata_dict, metadata_list=VAR_ATTR_LIST)
 
         self.origin = parent_metadata_obj
 
         if conventions is None:
-            if parent_metadata_obj is not None:
+            if parent_metadata_obj is None:
                 self._conventions = None
+                self._source = None
             else:
                 self._conventions = parent_metadata_obj._conventions
                 self._source = parent_metadata_obj
         else:
             self._conventions = conventions
+
+    def set_source(self, parent_metadata_obj):
+        """
+        Sets parent object of VariableMetadata instance.
+
+        Parameters
+        ----------
+        parent_metadata_obj: Metadata, optional
+            Metadata object for the parent object of the current variable (file,
+            algorithm, etc)
+        """
+
+        self._source = parent_metadata_obj
+
+
 
     def parse_dictionary_objs(self):
         pass
@@ -258,6 +277,25 @@ class VariableMetadata(Metadata):
 class AlgorithmMetadata(Metadata):
     """
     This class is designed to provide storage and handling capabilities for 
-    EGADS algorithm metadata.
+    EGADS algorithm metadata. Stores instances of VariableMetadata objects
+    to use to populate algorithm variable outputs.
     """
+
+    def __init__(self, metadata_dict, child_variable_metadata=None):
+        """
+        Initialize AlgorithmMetadata instance with given metadata in dict form and
+        any child variable metadata.
+
+        Parameters
+        ----------
+        metadata_dict: dict
+            Dictionary object containing variable metadata names and values
+        child_varable_metadata: list of VariableMetadata objects, optional
+            List containing VariableMetadta
+
+        """
+
+        Metadata.__init__(self, metadata_dict, metadata_list=ALG_ATTR_LIST)
+
+        self.child_metadata = child_variable_metadata
 

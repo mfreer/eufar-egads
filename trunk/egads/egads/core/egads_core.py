@@ -3,12 +3,12 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ["EgadsData", "EgadsAlgorithm"]
 
-import numpy
+from collections import defaultdict
 import types
 import weakref
-from collections import defaultdict
 
 import egads.core.metadata
+import numpy
 
 
 class EgadsData(object):
@@ -20,7 +20,7 @@ class EgadsData(object):
 
     __refs__ = defaultdict(list)
 
-    def __init__(self, value=None, **attrs):
+    def __init__(self, value=None, variable_metadata=None, ** attrs):
         """
         Initializes EgadsData instance with standard attributes. If no attributes
         are provided, all standard attributes are set to None.
@@ -64,6 +64,7 @@ class EgadsData(object):
             automatically (derived variables only).
 
         """
+
         if isinstance(value, EgadsData):
             self.__dict__ = value.__dict__.copy()
             self.value = value.value.copy()
@@ -74,23 +75,29 @@ class EgadsData(object):
                 self.value = numpy.array([])
             else:
                 self.value = numpy.array(value)
-                
+
+        if variable_metadata is None:
             self.metadata = egads.core.metadata.VariableMetadata()
+        else:
+            self.metadata = variable_metadata
 
         for key, val in attrs.iteritems():
             self.metadata[key] = val
 
         self.__refs__[self.__class__].append(weakref.ref(self))
 
+
     def __len__(self):
 
         return len(self.value)
+
 
     def __repr__(self):
         try:
             return repr(['EgadsData', self.value])
         except AttributeError:
             return repr(None)
+
 
     def __add__(self, other):
         if isinstance(other, EgadsData):
@@ -100,8 +107,10 @@ class EgadsData(object):
             data = EgadsData(self.value + other, self.units)
             return data
 
+
     def __radd__(self, other): #TODO: fix radd to work with other classes
         return self.__add__(other)
+
 
     def __sub__(self, other):
         if isinstance(other, EgadsData):
@@ -111,6 +120,7 @@ class EgadsData(object):
             data = EgadsData(self.value - other, self.units)
             return data
 
+
     def __rsub__(self, other):
         if isinstance(other, EgadsData):
             data = EgadsData(other.value - self.value, self.units)
@@ -118,6 +128,7 @@ class EgadsData(object):
         else:
             data = EgadsData(other - self.value, self.units)
             return data
+
 
     def __mul__(self, other):
         if isinstance(other, EgadsData):
@@ -127,8 +138,10 @@ class EgadsData(object):
             data = EgadsData(self.value * other)
             return data
 
+
     def __rmul__(self, other):
         return self.__mul__(other)
+
 
     def __div__(self, other):
         if isinstance(other, EgadsData):
@@ -138,6 +151,7 @@ class EgadsData(object):
             data = EgadsData(self.value / other)
             return data
 
+
     def __rdiv__(self, other):
         if isinstance(other, EgadsData):
             data = EgadsData(other.value / self.value)
@@ -145,6 +159,7 @@ class EgadsData(object):
         else:
             data = EgadsData(other / self.value)
             return data
+
 
     def __pow__(self, other):
         if isinstance(other, EgadsData):
@@ -154,6 +169,7 @@ class EgadsData(object):
             data = EgadsData(self.value ** other)
             return data
 
+
     def __rpow__(self, other):
         if isinstance(other, EgadsData):
             data = EgadsData(other.value ** self.value)
@@ -162,10 +178,12 @@ class EgadsData(object):
             data = EgadsData(other ** self.value)
             return data
 
+
     def __neg__(self):
         data = self
         data.value = -data.value
         return data
+
 
     def __eq__(self, other):
         if isinstance(other, EgadsData):
@@ -173,17 +191,20 @@ class EgadsData(object):
         else:
             return numpy.array_equal(self.value, other)
 
+
     def __ne__(self, other):
         if isinstance(other, EgadsData):
             return self.value != other.value
         else:
             return self.value != other
     
+
     def __getattr__(self, name):
         if name is "shape":
             return self.value.shape
         else:
             raise AttributeError
+
 
     def __setattr__(self, name, value):
         if name is "value":
@@ -214,6 +235,7 @@ class EgadsData(object):
 
         return var_copy
 
+
     def print_description(self):
         """
         Generate and return a description of current EgadsData instance.
@@ -223,6 +245,7 @@ class EgadsData(object):
         outstr = self._get_description()
 
         print outstr
+
 
     def get_units(self):
         """
@@ -240,6 +263,7 @@ class EgadsData(object):
 
         print self._get_shape()
 
+
     def _get_description(self):
         """
         Generate description of current EgadsData instance.
@@ -251,6 +275,7 @@ class EgadsData(object):
 
         return outstr
 
+
     def _get_shape(self):
         """
         Get shape of current EgadsData instance.
@@ -258,6 +283,7 @@ class EgadsData(object):
         """
 
         return self.value.shape
+
 
     @classmethod
     def _get_instances(cls):
