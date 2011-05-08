@@ -21,6 +21,7 @@ SOURCE      CNRM/GMEI/TRAMM
 
 REFERENCES
 """
+import egads.core.metadata as egads_metadata
 
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
@@ -36,6 +37,16 @@ class AltitudePressureCnrm(egads.EgadsAlgorithm):
 
     def __init__(self):
         egads.EgadsAlgorithm.__init__(self)
+
+        self.alt_p_metadata = egads_metadata.VariableMetadata({'units':'m',
+                                                               'long_name':'pressure altitude',
+                                                               'standard_name':'',
+                                                               'Category':['Thermodynamic','Aircraft State']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.time_stamp()})
 
         self.version = __version__
         self.date = __date__
