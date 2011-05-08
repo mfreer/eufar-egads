@@ -249,14 +249,14 @@ class VariableMetadata(Metadata):
         if conventions is None:
             if parent_metadata_obj is None:
                 self._conventions = None
-                self._source = None
+                self.parent = None
             else:
                 self._conventions = parent_metadata_obj._conventions
-                self._source = parent_metadata_obj
+                self.parent = parent_metadata_obj
         else:
             self._conventions = conventions
 
-    def set_source(self, parent_metadata_obj):
+    def set_parent(self, parent_metadata_obj):
         """
         Sets parent object of VariableMetadata instance.
 
@@ -267,7 +267,7 @@ class VariableMetadata(Metadata):
             algorithm, etc)
         """
 
-        self._source = parent_metadata_obj
+        self.parent = parent_metadata_obj
 
 
 
@@ -299,3 +299,4 @@ class AlgorithmMetadata(Metadata):
 
         self.child_metadata = child_variable_metadata
 
+        child_variable_metadata.set_parent(self)

@@ -6,6 +6,7 @@ __all__ = ["EgadsData", "EgadsAlgorithm"]
 from collections import defaultdict
 import types
 import weakref
+import datetime
 
 import egads.core.metadata
 import numpy
@@ -342,6 +343,11 @@ class EgadsAlgorithm(object):
     def get_info(self):
         #TODO: Add docstring
         print self.run.__doc__
+
+    def time_stamp(self):
+        #TODO: Add docstring
+
+        return str(datetime.datetime.today())
 
     def _populate_data_object(self, value):
         """
