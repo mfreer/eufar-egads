@@ -1,26 +1,4 @@
-"""
 
-FILE        altitude_pressure_cnrm.py
-
-VERSION     $Revision$
-
-CATEGORY    Thermodymics
-
-PURPOSE     Calculate pressure altitude
-
-DESCRIPTION Calculate pressure altitude using virtual temperature
-
-INPUT       T_v         vector  K or C  virtual temperature
-            P_s         vector  hPa     static pressure
-            P_surface   coeff.  hPa     surface pressure
-            R_a_g       coeff           Gas constant of air divided by gravity
-
-OUTPUT      alt_p       vector  m       pressure altitude
-
-SOURCE      CNRM/GMEI/TRAMM
-
-REFERENCES
-"""
 import egads.core.metadata as egads_metadata
 
 __author__ = "mfreer"
@@ -32,9 +10,34 @@ import egads
 import inspect
 from numpy import log
 
+doc = """
+
+    FILE        altitude_pressure_cnrm.py
+
+    VERSION     $Revision$
+
+    CATEGORY    Thermodymics
+
+    PURPOSE     Calculate pressure altitude
+
+    DESCRIPTION Calculate pressure altitude using virtual temperature
+
+    INPUT       T_v         vector  K or C  virtual temperature
+                P_s         vector  hPa     static pressure
+                P_surface   coeff.  hPa     surface pressure
+                R_a_g       coeff           Gas constant of air divided by gravity
+
+    OUTPUT      alt_p       vector  m       pressure altitude
+
+    SOURCE      CNRM/GMEI/TRAMM
+
+    REFERENCES
+    """
+
 
 class AltitudePressureCnrm(egads.EgadsAlgorithm):
-
+    __doc__ = doc
+    
     def __init__(self):
         egads.EgadsAlgorithm.__init__(self)
 
@@ -43,44 +46,35 @@ class AltitudePressureCnrm(egads.EgadsAlgorithm):
                                                                'standard_name':'',
                                                                'Category':['Thermodynamic','Aircraft State']})
 
-        self.metadata = egads_metadata.AlgorithmMetadata({'Processor':self.name,
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_v', 'P_s', 'P_surface', 'R_a_g'],
+                                                          'InputUnits':['K','hPa','hPa',''],
+                                                          'Outputs':['alt_p'],
+                                                          'Processor':self.name,
                                                           'ProcessorDate':__date__,
                                                           'ProcessorVersion':__version__,
-                                                          'DateProcessed':self.time_stamp()})
-
-        self.version = __version__
-        self.date = __date__
-        self.inputs = ['T_v', 'P_s', 'P_surface', 'R_a_g']
-        self.outputs = ['alt_p']
-
-        self.output_properties['units'] = 'm'
-        self.output_properties['long_name'] = 'pressure altitude'
-        self.output_properties['standard_name'] = ''
-        self.output_properties['fill_value'] = None
-        self.output_properties['valid_range'] = None
-        self.output_properties['sampled_rate'] = None
-        self.output_properties['category'] = ['Thermodynamic','Aircraft State']
-        self.output_properties['calibration_coeff'] = None
-        self.output_properties['dependencies'] = None
-        self.output_properties['processor'] = self.name
-        self.output_properties['processor_version'] = __version__
-        self.output_properties['processor_date'] = __date__
+                                                          'DateProcessed':self.time_stamp()},
+                                                          self.alt_p_metadata)
 
 
 
-    def run(self, T_v, P_s, P_surface, R_a_g):
-        self.__doc__ = altitude_pressure_cnrm.__doc__
+    def run(self, T_v, P_s, P_surface, R_a_g, return_EGADS=True):
+        self.__doc__ = __doc__
 
-        alt_p = altitude_pressure_cnrm(T_v.value, P_s.value, P_surface.value,
-                                       R_a_g.value)
+        alt_p = self._call_algorithm(T_v, P_s, P_surface,
+                                       R_a_g)
 
-        result = self._populate_data_object(alt_p)
+        if return_EGADS:
+            result = egads.EgadsData(alt_p, self.alt_p_metadata)
+        else:
+            result = alt_p
 
         return result
 
 
-def altitude_pressure_cnrm(T_v, P_s, P_surface, R_a_g):
+    def _algorithm(self, T_v, P_s, P_surface, R_a_g):
+        self.__doc__ = doc
 
-    alt_p = R_a_g * T_v * log(P_surface / P_s)
 
-    return alt_p
+        alt_p = R_a_g * T_v * log(P_surface / P_s)
+
+        return alt_p

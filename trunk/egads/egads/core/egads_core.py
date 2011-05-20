@@ -7,6 +7,7 @@ from collections import defaultdict
 import types
 import weakref
 import datetime
+from functools import wraps
 
 import egads.core.metadata
 import numpy
@@ -21,7 +22,7 @@ class EgadsData(object):
 
     __refs__ = defaultdict(list)
 
-    def __init__(self, value=None, variable_metadata=None, ** attrs):
+    def __init__(self, value=None, variable_metadata=None, **attrs):
         """
         Initializes EgadsData instance with standard attributes. If no attributes
         are provided, all standard attributes are set to None.
@@ -78,7 +79,7 @@ class EgadsData(object):
                 self.value = numpy.array(value)
 
         if variable_metadata is None:
-            self.metadata = egads.core.metadata.VariableMetadata()
+            self.metadata = egads.core.metadata.VariableMetadata({})
         else:
             self.metadata = variable_metadata
 
@@ -322,6 +323,8 @@ class EgadsAlgorithm(object):
         self.outputs = None
         self.author = None
 
+        self.metadata = None
+
         self._output_fields = ['name', 'units', 'long_name', 'standard_name',
             'fill_value', 'valid_range', 'sampled_rate',
             'category', 'calibration_coeff', 'dependencies']
@@ -340,16 +343,49 @@ class EgadsAlgorithm(object):
         """
         raise AssertionError('Algorithm not implemented')
 
+    def _call_algorithm(self, *args):
+        """
+        Does check on arguments to pass to algorithm.
+
+        If arguments are EgadsData instances, a check is done for expected units.
+        Then the numeric value is passed to the algorithm. If argument is not
+        EgadsData instance, units are assumed to be correct, and numeric value
+        is passed to algorithm.
+
+        """
+
+        out_arg = []
+
+        for arg in args:
+            if isinstance(arg, EgadsData):
+                #TODO Add unit checking
+                out_arg.append(arg.value)
+            else:
+                out_arg.append(numpy.array(arg))
+
+        result = self._algorithm(*out_arg)
+
+        return result
+
+    def _algorithm(self):
+        """
+        Skeleton algorithm method. To be defined in EgadsAlgorithm children.
+
+        """
+
+        raise AssertionError('Algorithm not implemented')
+
+
     def get_info(self):
         #TODO: Add docstring
-        print self.run.__doc__
+        print self.__doc__
 
     def time_stamp(self):
         #TODO: Add docstring
 
         return str(datetime.datetime.today())
 
-    def _populate_data_object(self, value):
+    def _populate_data_object(self, value, metadata):
         """
         Method for automatically populating new EgadsData instance 
         with calculated value and algorithm/variable metadata.
@@ -357,10 +393,11 @@ class EgadsAlgorithm(object):
         
         """
 
-        result = EgadsData(value)
+        result = EgadsData(value, metadata)
 
         for key, val in self.output_properties.iteritems():
             result.__setattr__(key, val)
 
 
         return result
+

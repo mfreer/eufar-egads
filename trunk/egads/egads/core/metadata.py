@@ -96,6 +96,8 @@ ALG_ATTR_LIST = ['units',
                  'valid_range',
                  'Category',
                  'CalibrationCoefficient',
+                 'Inputs',
+                 'Outputs',
                  'Dependencies',
                  'Processor',
                  'ProcessorVersion',
@@ -296,7 +298,32 @@ class AlgorithmMetadata(Metadata):
         """
 
         Metadata.__init__(self, metadata_dict, metadata_list=ALG_ATTR_LIST)
+        
+        self.child_metadata = []
 
-        self.child_metadata = child_variable_metadata
+        if isinstance(child_variable_metadata, list):
+            for child in child_variable_metadata:
+                self.assign_children(child)
+        elif child_variable_metadata is not None:
+            self.assign_children(child_variable_metadata)
 
-        child_variable_metadata.set_parent(self)
+
+    def assign_children(self, child):
+        """
+        Assigns children to current AlgorithmMetadata instance. Children are
+        typically VariableMetadata instances. If VariableMetadata instance is
+        used, this method also assigns current AlgorithmMetadata instance
+        as parent in VariableMetadata child.
+
+        Parameters
+        ----------
+        child: VariableMetadata
+            Child metadata object to add to current instance children.
+        """
+
+
+        self.child_metadata.append(child)
+
+        if isinstance(child, VariableMetadata):
+            child.set_parent(self)
+            
