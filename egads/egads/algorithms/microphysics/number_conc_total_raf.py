@@ -1,12 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ['number_conc_total_raf']
+__all__ = ['NumberConcTotalRaf']
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def number_conc_total_raf(n_i, SV):
+class NumberConcTotalRaf(egads_core.EgadsAlgorithm):
     """
 
     FILE        number_conc_total_raf.py
@@ -31,29 +31,37 @@ def number_conc_total_raf(n_i, SV):
 
     """
 
-    n_shape = n_i.value.shape
-    
-    time = n_shape[0]
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    for t in xrange(time):
-        N_t = sum(n_i.value[t,:]/SV.value[t,:])
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m-3',
+                                                               'long_name':'total number concentration',
+                                                               'standard_name':'',
+                                                               'Category':['PMS Probe']})
 
-    result = egads.EgadsData(value = N_t,
-                               units = 'm-3',
-                               long_name = 'total number concentration',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['n_i', 'SV'],
+                                                          'InputUnits':['', 'm3'],
+                                                          'Outputs':['N_t'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
+    def run(self, n_i, SV):
 
-    return result
+        return egads_core.EgadsAlgorithm.run(self, n_i, SV)
 
+    def _algorithm(self, n_i, SV):
+
+
+        n_shape = n_i.shape
+
+        time = n_shape[0]
+
+        for t in xrange(time):
+            N_t = sum(n_i[t,:]/SV[t,:])
+
+        return N_t
 

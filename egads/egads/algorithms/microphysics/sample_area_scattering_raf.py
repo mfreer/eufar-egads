@@ -1,12 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ['sample_area_scattering_raf']
+__all__ = ['SampleAreaScattingRaf']
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def sample_area_scattering_raf(DOF, BD):
+class SampleAreaScattingRaf(egads_core.EgadsAlgorithm):
     """
 
     FILE        sample_area_scattering_raf.py
@@ -31,25 +31,33 @@ def sample_area_scattering_raf(DOF, BD):
 
     """
 
-    SA = DOF.value * BD.value
+
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
+
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m2',
+                                                               'long_name':'sample area',
+                                                               'standard_name':'',
+                                                               'Category':['PMS Probe']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['DOF', 'BD'],
+                                                          'InputUnits':['m','m'],
+                                                          'Outputs':['SA'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
-    result = egads.EgadsData(value = SA,
-                               units = 'm2',
-                               long_name = 'sample area',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
 
+    def run(self, DOF, BD):
 
+        return egads_core.EgadsAlgorithm.run(self, DOF, BD)
 
-    return result
+    def _algorithm(self, DOF, BD):
 
+        SA = DOF * BD
+
+        return SA
 

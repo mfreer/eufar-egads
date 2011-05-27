@@ -1,14 +1,15 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["velocity_tas_longitudinal_cnrm"]
+__all__ = ["VelocityTasLongitudinalCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
 from numpy import sqrt, tan
 
-def velocity_tas_longitudinal_cnrm(V_t, alpha, beta):
+
+class VelocityTasLongitudinalCnrm(egads_core.EgadsAlgorithm):
     """
 
     FILE        velocity_tas_longitudinal_cnrm.py
@@ -34,26 +35,35 @@ def velocity_tas_longitudinal_cnrm(V_t, alpha, beta):
 
     """
 
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    V_tx = V_t.value / sqrt(1 + tan(alpha.value) ** 2 + tan(beta.value) ** 2)
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m/s',
+                                                               'long_name':'longitudinal true air speed',
+                                                               'standard_name':'',
+                                                               'Category':['Thermodynamic','Aircraft State']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['V_t', 'alpha', 'beta'],
+                                                          'InputUnits':['m/s','rad','rad'],
+                                                          'Outputs':['V_tx'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
+
+    def run(self, V_t, alpha, beta):
+
+        return egads_core.EgadsAlgorithm.run(self, V_t, alpha, beta)
 
 
-    result = egads.EgadsData(value = V_tx,
-                               units = 'm/s',
-                               long_name = 'longitudinal true air speed',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+    def _algorithm(self, V_t, alpha, beta):
+
+        V_tx = V_t / sqrt(1 + tan(alpha) ** 2 + tan(beta) ** 2)
+
+        return V_tx
 
 
 
-    return result
 
 

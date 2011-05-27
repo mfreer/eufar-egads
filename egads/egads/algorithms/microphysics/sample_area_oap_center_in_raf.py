@@ -1,13 +1,13 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ['sample_area_oap_center_in_raf']
+__all__ = ['SampleAreaOapCenterInRaf']
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 import numpy
 
-def sample_area_oap_center_in_raf(Lambda, D_arms, dD, M, N):
+class SampleAreaOapCenterInRaf(egads_core.EgadsAlgorithm):
     """
 
     FILE        sample_area_oap_all_in_raf.py
@@ -36,40 +36,46 @@ def sample_area_oap_center_in_raf(Lambda, D_arms, dD, M, N):
 
     """
 
-    SA = numpy.array([])
-    Lambda_mm = Lambda.value * 1e-6                 # convert wavelength to mm
-    dD_mm = dD.value * 1e-3                         # convert diameter to mm
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    ESW = N.value * dD_mm / M.value
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m2',
+                                                               'long_name':'sample area, center in',
+                                                               'standard_name':'',
+                                                               'Category':['PMS Probe']})
 
-    for i in range(N.value):
-        X = i+1
-        R = X * dD_mm/2.0
-        DOF = 6 * R ** 2 / (Lambda_mm)
-        if DOF > D_arms.value:
-            DOF = D_arms.value
-
-
-        SA = numpy.append(SA, DOF * ESW * 1e-6)              # convert mm2 to m2
-
-
-
-    result = egads.EgadsData(value = SA,
-                               units = 'm2',
-                               long_name = 'sample area, center in',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['Lambda', 'D_arms', 'dD', 'M', 'N'],
+                                                          'InputUnits':['nm', 'mm', 'um', '', ''],
+                                                          'Outputs':['SA'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
 
-    return result
+
+    def run(self, Lambda, D_arms, dD, M, N):
+
+        return egads_core.EgadsAlgorithm.run(self, Lambda, D_arms, dD, M, N)
+
+    def _algorithm(self, Lambda, D_arms, dD, M, N):
 
 
+        SA = numpy.array([])
+        Lambda_mm = Lambda * 1e-6                 # convert wavelength to mm
+        dD_mm = dD * 1e-3                         # convert diameter to mm
+
+        ESW = N.value * dD_mm / M
+
+        for i in range(N):
+            X = i+1
+            R = X * dD_mm/2.0
+            DOF = 6 * R ** 2 / (Lambda_mm)
+            if DOF > D_arms:
+                DOF = D_arms
+
+            SA = numpy.append(SA, DOF * ESW * 1e-6)              # convert mm2 to m2
+
+        return SA

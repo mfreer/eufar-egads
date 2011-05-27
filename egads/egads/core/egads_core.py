@@ -9,7 +9,7 @@ import weakref
 import datetime
 from functools import wraps
 
-import egads.core.metadata
+import metadata
 import numpy
 
 
@@ -69,6 +69,7 @@ class EgadsData(object):
 
         if isinstance(value, EgadsData):
             self.__dict__ = value.__dict__.copy()
+            self.metadata = value.metadata.copy()
             self.value = value.value.copy()
         else:
             if isinstance(value, numpy.ndarray):
@@ -78,10 +79,10 @@ class EgadsData(object):
             else:
                 self.value = numpy.array(value)
 
-        if variable_metadata is None:
-            self.metadata = egads.core.metadata.VariableMetadata({})
-        else:
-            self.metadata = variable_metadata
+            if variable_metadata is None:
+                self.metadata = metadata.VariableMetadata({})
+            else:
+                self.metadata = variable_metadata
 
         for key, val in attrs.iteritems():
             self.metadata[key] = val
@@ -204,6 +205,9 @@ class EgadsData(object):
     def __getattr__(self, name):
         if name is "shape":
             return self.value.shape
+        elif name is "units":
+            return self.metadata.get('units')
+
         else:
             raise AttributeError
 
@@ -218,6 +222,8 @@ class EgadsData(object):
                     self.__dict__[name] = value.copy()
                 else:
                     self.__dict__[name] = numpy.array(value)
+        elif name is "units":
+            self.metadata['units'] = value
         else:
             if name is "__dict__":
                 for key, attr in value.iteritems():
@@ -233,6 +239,7 @@ class EgadsData(object):
 
         var_copy = EgadsData()
         var_copy.__dict__ = self.__dict__.copy()
+        var_copy.metadata = self.metadata.copy()
         var_copy.value = self.value.copy()
 
         return var_copy
@@ -310,13 +317,16 @@ class EgadsAlgorithm(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, return_Egads):
         """
         Initializes EgadsAlgorithm instance with None values for all standard
         attributes.
 
         """
         self.name = self.__class__.__name__
+
+        self.return_Egads = return_Egads
+
         self.version = None
         self.date = None
         self.inputs = None
@@ -334,14 +344,39 @@ class EgadsAlgorithm(object):
         for key in self._output_fields:
             self.output_properties[key] = None
 
-    def run(self):
+    def run(self, *args):
         """
         Skeleton class for run method. Raises not implemented AssertionError
         in this context, and should be redefined by EgadsAlgorithm children
         classes.
 
         """
-        raise AssertionError('Algorithm not implemented')
+
+        output = self._call_algorithm(*args)
+
+        if len(self.metadata['Outputs']) > 1:
+            result = []
+            for i, value in enumerate(output):
+                result.append(self._return_result(value, self.output_metadata[i]))
+            result = tuple(result)
+        else:
+            result = self._return_result(output, self.output_metadata)
+
+
+        return result
+
+
+    def _return_result(self, value, metadata):
+
+
+        if self.return_Egads is True:
+            result = EgadsData(value, metadata)
+        else:
+            result = value
+
+
+        return result
+
 
     def _call_algorithm(self, *args):
         """
@@ -365,6 +400,8 @@ class EgadsAlgorithm(object):
 
         result = self._algorithm(*out_arg)
 
+        self.time_stamp()
+
         return result
 
     def _algorithm(self):
@@ -382,6 +419,14 @@ class EgadsAlgorithm(object):
 
     def time_stamp(self):
         #TODO: Add docstring
+
+        if len(self.metadata['Outputs']) > 1:
+            for output in self.output_metadata:
+                output['DateProcessed'] = self.now()
+        else:
+            self.output_metadata['DateProcessed'] = self.now()
+
+    def now(self):
 
         return str(datetime.datetime.today())
 

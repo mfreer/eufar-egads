@@ -44,8 +44,8 @@ class EgadsDataScalarTestCase(unittest.TestCase):
 
     def test_egads_to_egads_calcs(self):
         """test scalar operations between multiple egads parameters """
-        egadstest1 = egads.EgadsData(self.value1, UNITS1)
-        egadstest2 = egads.EgadsData(self.value2, UNITS1)
+        egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
+        egadstest2 = egads.EgadsData(self.value2, units=UNITS1)
         
         self.assertEqual(self.value1 + self.value2, egadstest1 + egadstest2, 'Egads to Egads scalar addition not equal')
         self.assertEqual(self.value1 - self.value2, egadstest1 - egadstest2, 'Egads to Egads scalar subtraction not equal')
@@ -55,7 +55,7 @@ class EgadsDataScalarTestCase(unittest.TestCase):
 
     def test_egads_to_other_calcs(self):
         """ test scalar operations between egads class and other scalar"""
-        egadstest1 = egads.EgadsData(self.value1, UNITS1)
+        egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
 
         self.assertEqual(self.value1 + self.value2, egadstest1 + self.value2, 'Egads to other scalar addition not equal')
         self.assertEqual(self.value1 - self.value2, egadstest1 - self.value2, 'Egads to other scalar subtraction not equal')
@@ -65,7 +65,7 @@ class EgadsDataScalarTestCase(unittest.TestCase):
 
     def test_other_to_egads_calcs(self):
         """ test scalar operations between other scalar and egads class"""
-        egadstest1 = egads.EgadsData(self.value1, UNITS1)
+        egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
 
         self.assertEqual(self.value2 + self.value1, self.value2 + egadstest1, 'Other to Egads scalar addition not equal')
         self.assertEqual(self.value2 - self.value1, self.value2 - egadstest1, 'Other to Egads scalar subtraction not equal')
@@ -95,8 +95,8 @@ class EgadsDataVectorTestCase(unittest.TestCase):
 
     def test_egads_to_egads_calcs(self):
         """test vector operations between multiple egads parameters """
-        egadstest1 = egads.EgadsData(self.value1, UNITS1)
-        egadstest2 = egads.EgadsData(self.value2, UNITS1)
+        egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
+        egadstest2 = egads.EgadsData(self.value2, units=UNITS1)
 
         add = egadstest1 + egadstest2
         subtract = egadstest1 - egadstest2
@@ -112,7 +112,7 @@ class EgadsDataVectorTestCase(unittest.TestCase):
         
     def test_egads_to_other_calcs(self):
         """ test vector operations between egads class and other vector"""
-        egadstest1 = egads.EgadsData(self.value1, UNITS1)
+        egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
 
         add = egadstest1 + self.value2
         subtract = egadstest1 - self.value2
@@ -128,7 +128,7 @@ class EgadsDataVectorTestCase(unittest.TestCase):
 
     def test_other_to_egads_calcs(self):
         """ test vector operations between other vector and egads class"""
-        egadstest1 = egads.EgadsData(self.value1, UNITS1)
+        egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
         print egadstest1.value, self.value2
         add = self.value2 + egadstest1
         #print type(add), self.value2
@@ -148,7 +148,7 @@ class EgadsValueAssignmentTestCase(unittest.TestCase):
     """ Test assignment of EgadsData class"""
 
     def setUp(self):
-        self.value1 = egads.EgadsData([1,2,3], 'm')
+        self.value1 = egads.EgadsData([1,2,3], units='m')
         
 
     def test_self_assignment(self):

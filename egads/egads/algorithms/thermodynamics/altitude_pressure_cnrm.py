@@ -1,16 +1,15 @@
-
-import egads.core.metadata as egads_metadata
-
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ["AltitudePressureCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
+
 from numpy import log
 
-doc = """
+class AltitudePressureCnrm(egads_core.EgadsAlgorithm):
+    """
 
     FILE        altitude_pressure_cnrm.py
 
@@ -33,15 +32,11 @@ doc = """
 
     REFERENCES
     """
-
-
-class AltitudePressureCnrm(egads.EgadsAlgorithm):
-    __doc__ = doc
     
-    def __init__(self):
-        egads.EgadsAlgorithm.__init__(self)
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-        self.alt_p_metadata = egads_metadata.VariableMetadata({'units':'m',
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m',
                                                                'long_name':'pressure altitude',
                                                                'standard_name':'',
                                                                'Category':['Thermodynamic','Aircraft State']})
@@ -52,28 +47,17 @@ class AltitudePressureCnrm(egads.EgadsAlgorithm):
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
                                                           'ProcessorVersion':__version__,
-                                                          'DateProcessed':self.time_stamp()},
-                                                          self.alt_p_metadata)
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
 
-    def run(self, T_v, P_s, P_surface, R_a_g, return_EGADS=True):
-        self.__doc__ = __doc__
+    def run(self, T_v, P_s, P_surface, R_a_g):
 
-        alt_p = self._call_algorithm(T_v, P_s, P_surface,
-                                       R_a_g)
-
-        if return_EGADS:
-            result = egads.EgadsData(alt_p, self.alt_p_metadata)
-        else:
-            result = alt_p
-
-        return result
+        return egads_core.EgadsAlgorithm.run(self, T_v, P_s, P_surface, R_a_g)
 
 
     def _algorithm(self, T_v, P_s, P_surface, R_a_g):
-        self.__doc__ = doc
-
 
         alt_p = R_a_g * T_v * log(P_surface / P_s)
 

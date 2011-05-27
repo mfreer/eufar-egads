@@ -1,13 +1,14 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["pressure_angle_incidence_cnrm"]
+__all__ = ["PressureAngleIncidenceCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
+
 from numpy import multiply, power, zeros, logical_and
 
-def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha, C_beta, C_errstat):
+class PressureAngleIncidenceCnrm(egads_core.EgadsAlgorithm):
     """
 
     FILE        pressure_angle_incidence_cnrm.py
@@ -40,85 +41,128 @@ def pressure_angle_incidence_cnrm(P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha
     REFERENCES
 
     """
-    errstat25 = (C_errstat.value[0] + C_errstat.value[1] * 25 + C_errstat.value[2] * 25**2 +
-                C_errstat.value[3] * 25 ** 3)
 
-    errstat = zeros(P_sr.shape)
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
+        self.output_metadata = []
+        self.output_metadata.append(egads_metadata.VariableMetadata({'units':'hPa',
+                                                               'long_name':'static pressure',
+                                                               'standard_name':'air_pressure',
+                                                               'Category':['Thermodynamic','Atmos State']}))
 
-    errstat[delta_P_r.value > 25] = (C_errstat.value[0] + multiply(C_errstat.value[1], delta_P_r.value) +
-                                multiply(C_errstat.value[2], power(delta_P_r.value, 2)) +
-                                multiply(C_errstat.value[3], power(delta_P_r.value, 3)))
-                                
-    errstat[logical_and(delta_P_r.value > 0, delta_P_r.value <= 25)] = delta_P_r.value/25 * errstat25
-
-    P_s_value = P_sr.value - errstat
-
- 
-    delta_P_value = delta_P_r.value + errstat
-
-    alpha_value = C_alpha.value[0] + C_alpha.value[1] * delta_P_v.value / delta_P_value
-
-    beta_value = C_beta.value[0] + C_beta.value[1] * delta_P_h.value / delta_P_value
+        self.output_metadata.append(egads_metadata.VariableMetadata({'units':'hPa',
+                                                               'long_name':'dynamic pressure',
+                                                               'standard_name':'',
+                                                               'Category':['Thermodynamic','Atmos State']}))
 
 
-    P_s = egads.EgadsData(value = P_s_value,
-                               units = 'hPa',
-                               long_name = 'static pressure',
-                               standard_name = 'air_pressure',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
-
-    delta_P = egads.EgadsData(value = delta_P_value,
-                               units = 'hPa',
-                               long_name = 'dynamic pressure',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
-
-    alpha = egads.EgadsData(value = alpha_value,
-                               units = 'rad',
-                               long_name = 'angle of attack',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
-    beta = egads.EgadsData(value = beta_value,
-                               units = 'rad',
-                               long_name = 'sideslip angle',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.output_metadata.append(egads_metadata.VariableMetadata({'units':'rad',
+                                                               'long_name':'angle of attack',
+                                                               'standard_name':'',
+                                                               'Category':['Thermodynamic','Aircraft State']}))
 
 
+        self.output_metadata.append(egads_metadata.VariableMetadata({'units':'rad',
+                                                               'long_name':'static pressure',
+                                                               'standard_name':'',
+                                                               'Category':['Thermodynamic','Aircraft State']}))
 
-    return P_s, delta_P, alpha, beta
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_v', 'P_s', 'P_surface', 'R_a_g'],
+                                                          'InputUnits':['K','hPa','hPa',''],
+                                                          'Outputs':['P_s', 'delta_P', 'alpha', 'beta'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
+
+    def run(self, P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha, C_beta, C_errstat):
+        
+        return egads_core.EgadsAlgorithm.run(self, P_sr, delta_P_r, delta_P_h, 
+                                             delta_P_v, C_alpha, C_beta, C_errstat)
+
+    def _algorithm(self, P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha, C_beta,
+                    C_errstat):
+
+        errstat25 = (C_errstat[0] + C_errstat[1] * 25 + C_errstat[2] * 25**2 +
+                    C_errstat[3] * 25 ** 3)
+
+        errstat = zeros(P_sr.shape)
 
 
+        errstat[delta_P_r > 25] = (C_errstat[0] + multiply(C_errstat[1], delta_P_r) +
+                                    multiply(C_errstat[2], power(delta_P_r, 2)) +
+                                    multiply(C_errstat[3], power(delta_P_r, 3)))
+
+        errstat[logical_and(delta_P_r > 0, delta_P_r <= 25)] = delta_P_r/25 * errstat25
+
+        P_s = P_sr - errstat
+
+
+        delta_P = delta_P_r + errstat
+
+        alpha = C_alpha[0] + C_alpha[1] * delta_P_v / delta_P
+
+        beta = C_beta[0] + C_beta[1] * delta_P_h / delta_P
+
+        return P_s, delta_P, alpha, beta
+
+#    P_s = egads.EgadsData(value = P_s_value,
+#                               units = 'hPa',
+#                               long_name = 'static pressure',
+#                               standard_name = 'air_pressure',
+#                               fill_value = None,
+#                               valid_range = None,
+#                               sampled_rate = None,
+#                               category = None,
+#                               calibration_coeff = None,
+#                               dependencies = None,
+#                               processor = inspect.stack()[0][3],
+#                               processor_version = __version__,
+#                               processor_date = __date__)
+#
+#    delta_P = egads.EgadsData(value = delta_P_value,
+#                               units = 'hPa',
+#                               long_name = 'dynamic pressure',
+#                               standard_name = '',
+#                               fill_value = None,
+#                               valid_range = None,
+#                               sampled_rate = None,
+#                               category = None,
+#                               calibration_coeff = None,
+#                               dependencies = None,
+#                               processor = inspect.stack()[0][3],
+#                               processor_version = __version__,
+#                               processor_date = __date__)
+#
+#    alpha = egads.EgadsData(value = alpha_value,
+#                               units = 'rad',
+#                               long_name = 'angle of attack',
+#                               standard_name = '',
+#                               fill_value = None,
+#                               valid_range = None,
+#                               sampled_rate = None,
+#                               category = None,
+#                               calibration_coeff = None,
+#                               dependencies = None,
+#                               processor = inspect.stack()[0][3],
+#                               processor_version = __version__,
+#                               processor_date = __date__)
+#    beta = egads.EgadsData(value = beta_value,
+#                               units = 'rad',
+#                               long_name = 'sideslip angle',
+#                               standard_name = '',
+#                               fill_value = None,
+#                               valid_range = None,
+#                               sampled_rate = None,
+#                               category = None,
+#                               calibration_coeff = None,
+#                               dependencies = None,
+#                               processor = inspect.stack()[0][3],
+#                               processor_version = __version__,
+#                               processor_date = __date__)
+#
+#
+#

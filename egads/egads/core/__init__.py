@@ -4,3 +4,4 @@ __version__ = "$Revision::           $"
 
 from egads_core import EgadsData
 from egads_core import EgadsAlgorithm
+import metadata

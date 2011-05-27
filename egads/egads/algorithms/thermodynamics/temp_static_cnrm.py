@@ -1,12 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["temp_static_cnrm"]
+__all__ = ["TempStaticCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def temp_static_cnrm(Tt, dP, P_s, r_f, Racpa):
+class TempStaticCnrm(egads_core.EgadsAlgorithm):
     """
 
     FILE        temp_static_cnrm.py
@@ -33,27 +33,32 @@ def temp_static_cnrm(Tt, dP, P_s, r_f, Racpa):
     REFERENCES
 
     """
+    
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
+
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'K',
+                                                               'long_name':'static temperature',
+                                                               'standard_name':'air_temperature',
+                                                               'Category':['Thermodynamic','Atmos State']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_t', 'dP', 'P_s', 'r_f', 'Racpa'],
+                                                          'InputUnits':['K','hPa','hPa','', ''],
+                                                          'Outputs':['T_s'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
-    T_s = Tt.value / (1 + r_f.value * ((1 + dP.value / P_s.value)
-                                   ** Racpa.value - 1))
+    def run(self, Tt, dP, P_s, r_f, Racpa):
 
-    result = egads.EgadsData(value = T_s,
-                               units = 'K',
-                               long_name = 'static temperature',
-                               standard_name = 'air_temperature',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        return egads_core.EgadsAlgorithm.run(self, Tt, dP, P_s, r_f, Racpa)
 
+    def _algorithm(self, Tt, dP, P_s, r_f, Racpa):
 
+        T_s = Tt / (1 + r_f * ((1 + dP / P_s) ** Racpa - 1))
 
-    return result
-
+        return T_s
 

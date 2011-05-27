@@ -1,12 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ['sample_volume_general_raf']
+__all__ = ['SampleVolumeGeneralRaf']
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def sample_volume_general_raf(V_t, SA, t_s):
+class SampleVolumeGeneralRaf(egads_core.EgadsAlgorithm):
     """
 
     FILE        sample_volume_general_raf.py
@@ -31,26 +31,33 @@ def sample_volume_general_raf(V_t, SA, t_s):
     REFERENCES  NCAR-RAF Bulletin No. 24
 
     """
-
     
-    SV = V_t.value * SA.value.transpose() * t_s.value
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    result = egads.EgadsData(value = SV,
-                               units = 'm3',
-                               long_name = 'sample volume',
-                               standard_name = '',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m3',
+                                                               'long_name':'sample volume',
+                                                               'standard_name':'',
+                                                               'Category':['PMS Probe']})
 
-
-
-    return result
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['V_t','SA','t_s'],
+                                                          'InputUnits':['m/s','m2', 's'],
+                                                          'Outputs':['SV'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
+
+    def run(self, V_t, SA, t_s):
+
+        return egads_core.EgadsAlgorithm.run(self, V_t, SA, t_s)
+    
+
+    def _algorithm(self, V_t, SA, t_s):
+
+        SV = V_t * SA.transpose() * t_s
+
+        return SV

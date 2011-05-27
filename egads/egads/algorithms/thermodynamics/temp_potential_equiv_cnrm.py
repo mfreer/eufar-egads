@@ -1,12 +1,13 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["temp_potential_equiv_cnrm"]
+__all__ = ["TempPotentialEquivCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def temp_potential_equiv_cnrm(T_s, theta, r, c_pa):
+
+class TempPotentialEquivCnrm(egads_core.EgadsAlgorithm):
     """
 
     FILE        temp_potential_equiv_cnrm.py
@@ -37,27 +38,35 @@ def temp_potential_equiv_cnrm(T_s, theta, r, c_pa):
 
     """
 
-    L = 3136.17 - 2.34 * T_s.value
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    theta_e = theta.value * (1 + r.value * L / (c_pa.value * T_s.value))
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'K',
+                                                               'long_name':'equivalent potential temperature',
+                                                               'standard_name':'equivalent_potential_temperature',
+                                                               'Category':['Thermodynamic','Atmos State']})
 
-
-    result = egads.EgadsData(value = theta_e,
-                               units = 'K',
-                               long_name = 'equivalent potential temperature',
-                               standard_name = 'equivalent_potential_temperature',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_s', 'theta', 'r', 'c_pa'],
+                                                          'InputUnits':['K','K','g/kg','J/kg/K'],
+                                                          'Outputs':['theta_e'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
+    def run(self, T_s, theta, r, c_pa):
 
-    return result
+        return egads_core.EgadsAlgorithm.run(self, T_s, theta, r, c_pa)
+
+
+    def _algorithm(self, T_s, theta, r, c_pa):
+        L = 3136.17 - 2.34 * T_s
+
+        theta_e = theta * (1 + r * L / (c_pa * T_s))
+
+        return theta_e
+
 
 
