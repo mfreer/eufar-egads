@@ -123,24 +123,24 @@ class  ThermodynamicsTestCase(unittest.TestCase):
 
 
     def test_density_dry_air_cnrm(self):
-        rho = thermodynamics.density_dry_air_cnrm(self.P_s, self.T_s)
+        rho = thermodynamics.DensityDryAirCnrm().run(self.P_s, self.T_s)
 
         self.assertAlmostEqual(rho.value, 1.0749, 3, 'Densities dont match')
 
-        rho = thermodynamics.density_dry_air_cnrm(self.array_test, self.array_test)
+        rho = thermodynamics.DensityDryAirCnrm().run(self.array_test, self.array_test)
 
         self.assertEqual(rho.shape, self.array_shape, 'Density array shapes dont match')
 
 
     def test_hum_rel_capacitive_cnrm(self):
-        H_u = thermodynamics.hum_rel_capacitive_cnrm(self.Ucapf, self.T_s, self.P_s,
+        H_u = thermodynamics.HumRelCapacitiveCnrm().run(self.Ucapf, self.T_s, self.P_s,
                                                      self.dP, self.C_t,
                                                      self.Fmin, self.C_0,
                                                      self.C_1, self.C_2)
 
         self.assertAlmostEqual(H_u.value, 51.5624, 3, "Humidites dont match")
 
-        H_u = thermodynamics.hum_rel_capacitive_cnrm(self.array_test, self.array_test, self.array_test,
+        H_u = thermodynamics.HumRelCapacitiveCnrm().run(self.array_test, self.array_test, self.array_test,
                                                      self.array_test, self.coeff_test,
                                                      self.coeff_test, self.coeff_test,
                                                      self.coeff_test, self.coeff_test)
@@ -149,7 +149,7 @@ class  ThermodynamicsTestCase(unittest.TestCase):
 
 
     def test_pressure_angle_incidence_cnrm(self):
-        P_s, dP, alpha, beta = thermodynamics.pressure_angle_incidence_cnrm(self.P_sr, self.delta_P_r, self.delta_P_h,
+        P_s, dP, alpha, beta = thermodynamics.PressureAngleIncidenceCnrm().run(self.P_sr, self.delta_P_r, self.delta_P_h,
                                                                             self.delta_P_v, self.C_alpha, self.C_beta,
                                                                             self.C_errstat)
 
@@ -158,7 +158,7 @@ class  ThermodynamicsTestCase(unittest.TestCase):
         self.assertAlmostEqual(alpha.value, 1.0254, 3, 'angle of attack doesnt match')
         self.assertAlmostEqual(beta.value, 0.83811, 3, 'sideslip doenst match')
 
-        P_s, dP, alpha, beta = thermodynamics.pressure_angle_incidence_cnrm(self.array_test, self.array_test, self.array_test,
+        P_s, dP, alpha, beta = thermodynamics.PressureAngleIncidenceCnrm().run(self.array_test, self.array_test, self.array_test,
                                                                             self.array_test, self.coeff2_test, self.coeff2_test,
                                                                             self.coeff4_test)
 
@@ -169,62 +169,62 @@ class  ThermodynamicsTestCase(unittest.TestCase):
 
 
     def test_temp_potential_cnrm(self):
-        theta = thermodynamics.temp_potential_cnrm(self.T_s, self.P_s, self.Racpa)
+        theta = thermodynamics.TempPotentialCnrm().run(self.T_s, self.P_s, self.Racpa)
 
         self.assertAlmostEqual(theta.value, 305.34692, 3, 'Potential temp doesnt match')
 
-        theta = thermodynamics.temp_potential_cnrm(self.array_test, self.array_test, self.coeff_test)
+        theta = thermodynamics.TempPotentialCnrm().run(self.array_test, self.array_test, self.coeff_test)
 
         self.assertEqual(theta.shape, self.array_shape, 'Potential temp array shapes dont match')
 
     def test_temp_potential_equiv_cnrm(self):
-        theta_e = thermodynamics.temp_potential_equiv_cnrm(self.T_s, self.theta,
+        theta_e = thermodynamics.TempPotentialEquivCnrm().run(self.T_s, self.theta,
                                                            self.r, self.cpa)
 
         self.assertAlmostEqual(theta_e.value, 288.7698, 3, 'Equivalent potential temp doesnt match')
 
-        theta_e = thermodynamics.temp_potential_equiv_cnrm(self.array_test, self.array_test,
+        theta_e = thermodynamics.TempPotentialEquivCnrm().run(self.array_test, self.array_test,
                                                            self.array_test, self.coeff_test)
 
         self.assertEqual(theta_e.shape, self.array_shape, 'Equiv potential temp array shapes dont match')
 
     def test_temp_static_cnrm(self):
-        T_s = thermodynamics.temp_static_cnrm(self.T_t, self.dP, self.P_s, self.r_f, self.Racpa)
+        T_s = thermodynamics.TempStaticCnrm().run(self.T_t, self.dP, self.P_s, self.r_f, self.Racpa)
 
         self.assertAlmostEqual(T_s.value, 336.30515, 3, 'Static temp doesnt match')
 
-        T_s = thermodynamics.temp_static_cnrm(self.array_test, self.array_test,
+        T_s = thermodynamics.TempStaticCnrm().run(self.array_test, self.array_test,
                                               self.array_test, self.coeff_test,
                                               self.coeff_test)
 
         self.assertEqual(T_s.shape, self.array_shape, 'Static temp array shapes dont match')
 
     def test_temp_virtual_cnrm(self):
-        T_v = thermodynamics.temp_virtual_cnrm(self.T_s, self.r)
+        T_v = thermodynamics.TempVirtualCnrm().run(self.T_s, self.r)
 
         self.assertAlmostEqual(T_v.value, 298.33109, 3, 'Virtual temp doesnt match')
 
-        T_v = thermodynamics.temp_virtual_cnrm(self.array_test, self.array_test)
+        T_v = thermodynamics.TempVirtualCnrm().run(self.array_test, self.array_test)
 
         self.assertEqual(T_v.shape, self.array_shape, 'Virtual temp array shapes dont match')
 
     def test_velocity_tas_cnrm(self):
-        V_p = thermodynamics.velocity_tas_cnrm(self.T_s, self.P_s, self.dP, self.cpa, self.Racpa)
+        V_p = thermodynamics.VelocityTasCnrm().run(self.T_s, self.P_s, self.dP, self.cpa, self.Racpa)
 
         self.assertAlmostEqual(V_p.value, 175.9018, 3, 'TAS doenst match')
 
-        V_p = thermodynamics.velocity_tas_cnrm(self.array_test, self.array_test,
+        V_p = thermodynamics.VelocityTasCnrm().run(self.array_test, self.array_test,
                                                self.array_test, self.coeff_test,
                                                self.coeff_test)
 
         self.assertEqual(V_p.shape, self.array_shape, 'TAS array shapes dont match')
 
     def test_velocity_tas_longitudinal(self):
-        V_tx = thermodynamics.velocity_tas_longitudinal_cnrm(self.V_t, self.alpha, self.beta)
+        V_tx = thermodynamics.VelocityTasLongitudinalCnrm().run(self.V_t, self.alpha, self.beta)
 
         self.assertAlmostEqual(V_tx.value, 199.9875, 3, 'Longitudinal TAS doesnt match')
 
-        V_tx = thermodynamics.velocity_tas_longitudinal_cnrm(self.array_test,
+        V_tx = thermodynamics.VelocityTasLongitudinalCnrm().run(self.array_test,
                                                              self.array_test,
                                                              self.array_test)
 

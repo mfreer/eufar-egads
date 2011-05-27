@@ -1,15 +1,15 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["hum_rel_capacitive_cnrm"]
+__all__ = ["HumRelCapacitiveCnrm"]
+
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
 from numpy import multiply, power
 import scipy
 
-import egads
-import inspect
-
-def hum_rel_capacitive_cnrm(Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
+class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
     """
 
     FILE        hum_rel_capacitive_cnrm.py
@@ -41,41 +41,40 @@ def hum_rel_capacitive_cnrm(Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
 
     """
 
-    tempUcapf = scipy.array(Ucapf.value)
-    tempUcapf[tempUcapf < Fmin.value] = Fmin.value
-    Ucapf.value = tempUcapf.tolist()
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
+
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'%',
+                                                               'long_name':'relative humidity',
+                                                               'standard_name':'relative_humidity',
+                                                               'Category':['Thermodynamic','Atmos State']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['Ucapf', 'T_s', 'P_s', 'dP', 'C_t', 'Fmin', 'C_0', 'C_1', 'C_2'],
+                                                          'InputUnits':['Hz','K','hPa','hPa', '%/C', 'Hz', '', '', ''],
+                                                          'Outputs':['H_u'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
-    #TODO: Add control for other units
-    if T_s.units == 'K':
+    def run(self, Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
+        
+        return egads_core.EgadsAlgorithm.run(self, Ucapf, T_s, P_s, dP, C_t, 
+                                             Fmin, C_0, C_1, C_2)
+                                             
+    def _algorithm(self, Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
+
+        tempUcapf = scipy.array(Ucapf)
+        tempUcapf[tempUcapf < Fmin] = Fmin
+        Ucapf = tempUcapf.tolist()
+
+
         temp_factor = 273.15+20
-    else:
-        temp_factor = 20
-
-    H_u = P_s.value / (P_s.value + dP.value) * (C_0.value +
-                                                         multiply(C_1.value, Ucapf.value) +
-                                                         multiply(C_2.value, power(Ucapf.value, 2)) +
-                                                         multiply(C_t.value, (T_s.value - temp_factor)))
 
 
+        H_u = P_s / (P_s + dP) * (C_0 + multiply(C_1, Ucapf) +
+            multiply(C_2, power(Ucapf, 2)) + multiply(C_t, (T_s - temp_factor)))
 
-    result = egads.EgadsData(value = H_u,
-                               units = '%',
-                               long_name = 'relative humidity',
-                               standard_name = 'relative_humidity',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
-
-
-
-
-    return result
-
-
+        return H_u

@@ -13,7 +13,11 @@ except ImportError:
 # from tests import test_all
 
 
-from core.egads_core import *
+import core
+import core.metadata
 import algorithms
 import input
+
+from core.egads_core import *
+
 from tests.test_all import test

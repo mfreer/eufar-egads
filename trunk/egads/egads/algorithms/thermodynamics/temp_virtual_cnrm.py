@@ -1,12 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["temp_virtual_cnrm"]
+__all__ = ["TempVirtualCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def temp_virtual_cnrm(T_s, r):
+class TempVirtualCnrm(egads_core.EgadsAlgorithm):
     """
 
     FILE        temp_virtual_cnrm.py
@@ -30,26 +30,35 @@ def temp_virtual_cnrm(T_s, r):
 
     """
     
-    RvRa = 1.608
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    T_v = T_s.value * (1 + RvRa * r.value) / (1 + r.value)
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'K',
+                                                               'long_name':'virtual temperature',
+                                                               'standard_name':'virtual_temperature',
+                                                               'Category':['Thermodynamic','Atmos State']})
 
-
-
-    result = egads.EgadsData(value = T_v,
-                               units = 'K',
-                               long_name = 'virtual temperature',
-                               standard_name = 'virtual_temperature',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_s', 'r'],
+                                                          'InputUnits':['K','g/kg'],
+                                                          'Outputs':['T_v'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
+    def run(self, T_s, r):
 
-    return result
+        return egads_core.EgadsAlgorithm.run(self, T_s, r)
+
+
+
+    def _algorithm(self, T_s, r):
+
+        RvRa = 1.608
+
+        T_v = T_s * (1 + RvRa * r) / (1 + r)
+
+        return T_v
+

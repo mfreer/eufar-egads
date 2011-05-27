@@ -1,12 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["density_dry_air_cnrm"]
+__all__ = ["DensityDryAirCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def density_dry_air_cnrm(P_s, T_s):
+class DensityDryAirCnrm(egads_core.EgadsAlgorithm):
     """
     FILE        density_dry_air_cnrm.py
 
@@ -31,27 +31,34 @@ def density_dry_air_cnrm(P_s, T_s):
 
     """
 
-    R_a = 287.05 #J/kg/K
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    rho = (P_s.value * 100) / (R_a * T_s.value)
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'kg/m3',
+                                                               'long_name':'density',
+                                                               'standard_name':'air_density',
+                                                               'Category':['Thermodynamic','Atmos State']})
 
-
-    result = egads.EgadsData(value = rho,
-                               units = 'kg/m3',
-                               long_name = 'density',
-                               standard_name = 'air_density',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['P_s', 'T_s'],
+                                                          'InputUnits':['hPa','K'],
+                                                          'Outputs':['rho'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
 
-    return result
+    def run(self, P_s, T_s):
 
+        return egads_core.EgadsAlgorithm.run(self, P_s, T_s)
+
+    def _algorithm(self, P_s, T_s):
+
+        R_a = 287.05 #J/kg/K
+
+        rho = (P_s * 100) / (R_a * T_s)
+
+        return rho
 

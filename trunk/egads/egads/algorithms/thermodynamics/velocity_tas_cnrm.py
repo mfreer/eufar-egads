@@ -1,13 +1,12 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["velocity_tas_cnrm"]
+__all__ = ["VelocityTasCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-
-def velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa):
+class VelocityTasCnrm(egads_core.EgadsAlgorithm):
     """
 
     FILE        velocity_tas_cnrm.py
@@ -38,27 +37,34 @@ def velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa):
 
     """
 
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    V_p = (2 * cpa.value * T_s.value * ((1 + dP.value / P_s.value) ** Racpa.value
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m/s',
+                                                               'long_name':'True Air Speed',
+                                                               'standard_name':'platform_speed_wrt_air',
+                                                               'Category':['Thermodynamic','Aircraft State']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_s', 'P_s', 'dP', 'cpa', 'Racpa'],
+                                                          'InputUnits':['K','hPa','hPa','J K-1 kg-1', ''],
+                                                          'Outputs':['V_p'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
+
+    def run(self, T_s, P_s, dP, cpa, Racpa):
+
+        return egads_core.EgadsAlgorithm.run(self, T_s, P_s, dP, cpa, Racpa)
+
+
+    def _algorithm(self, T_s, P_s, dP, cpa, Racpa):
+
+        V_p = (2 * cpa * T_s * ((1 + dP / P_s) ** Racpa
                         -1)) ** .5
 
+        return V_p
 
-    result = egads.EgadsData(value = V_p,
-                               units = 'm/s',
-                               long_name = 'True Air Speed',
-                               standard_name = 'platform_speed_wrt_air',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
-
-
-
-    return result
 
 

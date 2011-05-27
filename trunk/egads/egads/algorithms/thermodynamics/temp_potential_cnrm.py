@@ -1,16 +1,15 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["temp_potential_cnrm"]
+__all__ = ["TempPotentialCnrm"]
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def temp_potential_cnrm(T_s, P_s, Racpa):
+class TempPotentialCnrm(egads_core.EgadsAlgorithm):
     """
-    This file provides a template for creation of EGADS algorithms.
 
-    FILE        algorithm_template.py
+    FILE        temp_potential_cnrm.py
 
     VERSION     $Revision$
 
@@ -34,24 +33,30 @@ def temp_potential_cnrm(T_s, P_s, Racpa):
 
     """
 
-    theta = T_s.value * (1000.0/P_s.value) ** (Racpa.value)
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    result = egads.EgadsData(value = theta,
-                               units = 'K',
-                               long_name = 'potential temperature',
-                               standard_name = 'air_potential_temperature',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'K',
+                                                               'long_name':'potential temperature',
+                                                               'standard_name':'air_potential_temperature',
+                                                               'Category':['Thermodynamic','Atmos State']})
 
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_s', 'P_s', 'Racpa'],
+                                                          'InputUnits':['K','hPa',''],
+                                                          'Outputs':['theta'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
+    def run(self, T_s, P_s, Racpa):
 
-    return result
+        return egads_core.EgadsAlgorithm.run(self, T_s, P_s, Racpa)
 
+    def _algorithm(self, T_s, P_s, Racpa):
+
+        theta = T_s * (1000.0/P_s) ** (Racpa)
+
+        return theta
 

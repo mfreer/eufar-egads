@@ -1,7 +1,7 @@
 __author__ = "mfreer"
 __date__ = "$Date:: 2011-03-15 18:45#$"
 __version__ = "$Revision:: 53        $"
-__all__ = []
+__all__ = ['Metadata', 'FileMetadata','VariableMetadata','AlgorithmMetadata']
 
 
 FILE_ATTR_DICT = {'Conventions':'conventions',

@@ -482,8 +482,7 @@ class EgadsNetCdf(NetCdf):
         """
         Initializes NetCDF instance.
 
-        Parameters
-        -----------
+        **Parameters**:
         filename : string, optional
             Name of NetCDF file to open.
         perms : char, optional
@@ -504,16 +503,15 @@ class EgadsNetCdf(NetCdf):
         Reads in a variable from currently opened NetCDF file and maps the NetCDF
         attributies to an EgadsData instance.
 
-        Parameters
-        -----------
-        varname : string
-            Name of NetCDF variable to read in.
-        input_range : vector, optional
-            Range of values in each dimension to input. :TODO: add example
+        Parameters:
 
-        Returns
-        -------
-        data : EgadsData
+            * `varname` : string -- Name of NetCDF variable to read in.
+            * `input_range` : vector, optional -- Range of values in each dimension
+                to input. :TODO: add example
+
+        Returns:
+
+        * `data` : EgadsData
             Values and metadata of the specified variable in an EgadsData instance.
         """
 
