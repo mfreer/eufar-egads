@@ -109,15 +109,16 @@ class Metadata(dict):
     """
     This is a generic class to designed to provide basic metadata storage and handling
     capabilities.
+
+
     """
 
     def __init__(self, metadata_dict, conventions = None, metadata_list=None):
         """
         Initialize Metadata instance with given metadata in dict form.
 
-        Parameters
-        ----------
-        metadata_dict: dict
+
+        :param dict metadata_dict:
             Dictionary object containing metadata names and values.
 
         """
@@ -132,9 +133,7 @@ class Metadata(dict):
         """
         Method to add metadata items to current Metadata instance.
 
-        Parameters
-        ----------
-        metadata_dict: dict
+        :param metadata_dict:
             Dictionary object containing metadata names and values.
         """
 
@@ -147,9 +146,7 @@ class Metadata(dict):
         """
         Sets conventions to be used in current Metadata instance
 
-        Parameters
-        ----------
-        conventions: list of strings
+        :param list conventions:
             List of conventions used in current metadata instance.
 
         """
@@ -172,16 +169,14 @@ class FileMetadata(Metadata):
         determine which conventions are used by the metadata. The user can optionally
         supply which conventions the metadata uses.
 
-        Parameters
-        ----------
-        metadata_dict: dict
+        :param dict metadata_dict:
             Dictionary object containing metadata names and values.
-        filename: string
+        :param string filename:
             Filename for origin of file metadata.
-        conventions_keyword: string, optional
+        :param string conventions_keyword: Optional -
             Keyword contained in metadata dictionary used to detect which metadata
             conventions are used.
-        conventions: list of strings, optional
+        :param list conventions: Optional -
             List of metadata conventions used in provided metadata dictionary.
         """
 
@@ -207,9 +202,7 @@ class FileMetadata(Metadata):
         """
         Sets file object used for current FileMetadata instance.
 
-        Parameters
-        ----------
-        filename: string
+        :param string filename:
             Filename of provided metadata.
         """
 
@@ -233,14 +226,12 @@ class VariableMetadata(Metadata):
         provided to auto-detect conventions. Otherwise, the user can specify which
         conventions are used in the variable metadata.
 
-        Parameters
-        ----------
-        metadata_dict: dict
+        :param dict metadata_dict:
             Dictionary object contaning variable metadata names and values
-        parent_metadata_obj: Metadata, optional
+        :param Metadata parent_metadata_obj: Metadata, optional
             Metadata object for the parent object of current variable (file,
             algorithm, etc). This field is optional.
-        conventions: list of strings, optional
+        :param list conventions: Optional -
             List of metadata conventions used in provided metadata dictionary.
         """
 
@@ -262,9 +253,7 @@ class VariableMetadata(Metadata):
         """
         Sets parent object of VariableMetadata instance.
 
-        Parameters
-        ----------
-        parent_metadata_obj: Metadata, optional
+        :param Metadata parent_metadata_obj: Optional -
             Metadata object for the parent object of the current variable (file,
             algorithm, etc)
         """
@@ -288,11 +277,9 @@ class AlgorithmMetadata(Metadata):
         Initialize AlgorithmMetadata instance with given metadata in dict form and
         any child variable metadata.
 
-        Parameters
-        ----------
-        metadata_dict: dict
+        :param dict metadata_dict:
             Dictionary object containing variable metadata names and values
-        child_varable_metadata: list of VariableMetadata objects, optional
+        :param list child_varable_metadata: Optional -
             List containing VariableMetadta
 
         """
@@ -315,9 +302,7 @@ class AlgorithmMetadata(Metadata):
         used, this method also assigns current AlgorithmMetadata instance
         as parent in VariableMetadata child.
 
-        Parameters
-        ----------
-        child: VariableMetadata
+        :param VariableMetadata child:
             Child metadata object to add to current instance children.
         """
 
