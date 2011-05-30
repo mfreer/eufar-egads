@@ -18,13 +18,12 @@ class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
         """
         Initializes instance of EgadsFile object.
 
-        Parameters
-        -----------
-        filename : string, optional
+
+        :param string filename : string, optional
             Name of file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r'
+        :param char perms: Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites
+            data), ``a`` for append ``r+`` for read and write, and ``r`` for read. ``r``
             is the default value.
         """
 
@@ -44,13 +43,12 @@ class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
         """
         Private method for opening file.
 
-        Parameters
-        -----------
-        filename: string
+
+        :param string filename:
             Name of file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r' is the default
+        :param char perms: Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites
+            data), ``a`` for append ``r+`` for read and write, and ``r`` for read. ``r`` is the default
             value.
         """
 
@@ -96,13 +94,12 @@ class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
         """
         Change current position in file.
         
-        Parameters
-        -----------
-        location: int
+
+        :param integer location:
             Position in file to seek to.
-        from_where: char, optional
-            Where to seek from. Valid options are 'b' for beginning, 'c' for
-            current and 'e' for end.
+        :param char from_where: Optional -
+            Where to seek from. Valid options are ``b`` for beginning, ``c`` for
+            current and ``e`` for end.
         """
 
         from_switch = {'b': lambda: 0,
@@ -118,13 +115,11 @@ class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
     def write(self, data):  #TODO: make write method more robust
         """
         Writes data to a file. Data must be in the form of a string, with line
-        ends signified by '\n'.
+        ends signified by ``\\n``.
 
-        Parameters
-        -----------
-        data: string
+        :param string data:
             Data to output to current file at current file position. Data must
-            be a string, with '\n' signifying line end.
+            be a string, with ``\\n`` signifying line end.
         """
 
         self.f.write(data)
@@ -134,16 +129,13 @@ class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
         """
         Reads data in from file.
 
-        Parameters
-        -----------
-        size: int, optional
+        :param int size: Optional -
             Number of bytes to read in from file. If left empty, entire file will
             be read in.
 
-        Returns
-        --------
-        filedata: string
+        :returns:
             String data from text file.
+        :rtype: string
         """
 
         if size is None:
@@ -184,17 +176,15 @@ class EgadsCsv(EgadsFile):
         """
         Initializes instance of EgadsFile object.
 
-        Parameters
-        -----------
-        filename: string, optional
+        :param string filename: Optional -
             Name of file to open.
-        perms: char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r' is the default
+        :param char perms: Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites
+            data), ``a`` for append ``r+`` for read and write, and ``r`` for read. ``r`` is the default
             value.
-        delimiter: string, optional
+        :param string delimiter: Optional -
             One-character string used to separate fields. Default is ','.
-        quotechar: string, optional
+        :param string quotechar: Optional -
             One-character string used to quote fields containing special characters.
             The default is '"'.
         """
@@ -210,17 +200,15 @@ class EgadsCsv(EgadsFile):
         """
         Opens file.
 
-        Parameters
-        -----------
-        filename : string, optional
+        :param string filename:
             Name of file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r' is the default
-            value.
-        delimiter: string, optional
+        :param char perms:  Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites
+            data), ``a`` for append ``r+`` for read and write, and ``r`` for read.
+            ``r`` is the default value.
+        :param string delimiter: Optional -
             One-character string used to separate fields. Default is ','.
-        quotechar: string, optional
+        :param string quotechar: Optional -
             One-character string used to quote fields containing special characters.
             The default is '"'.
         """
@@ -262,21 +250,19 @@ class EgadsCsv(EgadsFile):
         """
         Reads in and returns contents of csv file.
 
-        Parameters
-        -----------
-        lines: int, optional
+
+        :param int lines: Optional -
             Number specifying the number of lines to read in. If left blank,
             the whole file will be read and returned.
-        format: list of characters
+        :param list format: Optional -
             List type composed of one character strings used to decompose elements
-            read in to their proper types. Options are 'i' for int, 'f' for float,
-            'l' for long and 's' for string.
+            read in to their proper types. Options are ``i`` for int, ``f`` for float,
+            ``l`` for long and ``s`` for string.
 
-        Returns
-        -------
-        data: list of arrays
+        :returns:
             List of arrays of values read in from file. If a format string is provided,
             the arrays are returned with the proper data type.
+        :rtype: list of arrays
         """
 
         data = []
@@ -309,9 +295,7 @@ class EgadsCsv(EgadsFile):
         """
         Skips over line(s) in file.
         
-        Parameters
-        -----------
-        amount: int, optional
+        :param int amount: Optional -
             Number of lines to skip over. Default value is 1.
         
         """
@@ -322,9 +306,8 @@ class EgadsCsv(EgadsFile):
         """
         Writes single row out to file.
 
-        Parameters
-        -----------
-        data: list
+
+        :param list data:
             Data to be output to file using specified delimiter.
 
         """
@@ -336,9 +319,9 @@ class EgadsCsv(EgadsFile):
         """
         Writes data out to file.
 
-        Parameters
-        -----------
-        data: list of variables to output
+
+        :param list data:
+            List of variables to output.
 
         """
 
@@ -360,17 +343,15 @@ class EgadsCsv(EgadsFile):
         """
         Private method for opening file.
 
-        Parameters
-        -----------
-        filename: string
+        :param string filename:
             Name of file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' for append 'r+' for read and write, and 'r' for read. 'r' is the default
+        :param char perms: Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites
+            data), ``a`` for append ``r+`` for read and write, and ``r`` for read. ``r`` is the default
             value.
-        delimiter: string, optional
+        :param string delimiter: Optional -
             One-character string used to separate fields. Default is ','.
-        quotechar: string, optional
+        :param string quotechar: Optional -
             One-character string used to quote fields containing special characters.
             The default is '"'.
         """
@@ -400,19 +381,17 @@ def parse_string_array(data, format):
     """
     Converts elements in string list using format list to their proper types.
 
-    Parameters
-    -----------
-    data: numpy.ndarray of stings
+
+    :param numpy.ndarray data:
         Input string array.
-    format: list of characters
+    :param list format:
         List type composed of one character strings used to decompose elements
         read in to their proper types. Options are 'i' for int, 'f' for float,
         'l' for long and 's' for string.
 
-    Returns
-    -------
-    parsed_data: numpy.ndarray
+    :returns:
         Array parsed into its proper types.
+    :rtype: numpy.ndarray
     """
 
 

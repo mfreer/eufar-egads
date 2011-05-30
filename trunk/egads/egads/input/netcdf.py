@@ -13,7 +13,7 @@ class NetCdf(FileCore):
     """
     EGADS class for reading and writing to generic NetCDF files.
 
-    This module is a sub-class of FileCore and adapts the Python NetCDF4 0.8.2
+    This module is a sub-class of :class:`~.FileCore` and adapts the Python NetCDF4 0.8.2
     library to the EGADS file-access methods.
 
     """
@@ -39,13 +39,11 @@ class NetCdf(FileCore):
         """
         Opens NetCDF file given filename.
 
-        Parameters
-        -----------
-        filename : string
+        :param string filename:
             Name of NetCDF file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites data in file),
-            'a' and 'r+' for append, and 'r' for read. 'r' is the default value
+        :param char perms: Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites data in file),
+            ``a`` and ``r+`` for append, and ``r`` for read. ``r`` is the default value
         """
 
         FileCore.open(self, filename, perms)
@@ -56,9 +54,7 @@ class NetCdf(FileCore):
         Returns a dictionary of attributes avd values found either in current
         NetCDF file, or attached to a given variable.
 
-        Parameters
-        -----------
-        varname : string, optional
+        :param string varname: Optional -
             Name of variable to get list of attributes from. If no variable name is
             provided, the function returns top-level NetCDF attributes.
 
@@ -72,18 +68,15 @@ class NetCdf(FileCore):
         the attribute is returned from the variable specified, otherwise the global
         attribute is examined.
 
-        Parameters
-        -----------
-        name : string
+        :param string name:
             Name of attribute to examine
-        varname : string, optional
+        :param string varname: Optional -
             Name of variable attribute is attached to. If none specified, global
             attributes are examined.
 
-        Returns
-        -------
-        attr_value : string
+        :returns:
             Value of attribute examined
+        :rtype:  string
 
         """
 
@@ -97,9 +90,8 @@ class NetCdf(FileCore):
         NetCDF file. If a variable name is provided, the dimension names and
         lengths associated with that variable are returned.
 
-        Parameters
-        -----------
-        varname : string, optional
+
+        :param string varname: Optional -
             Name of variable to get list of associated dimensions for. If no variable
             name is provided, the function returns all dimensions in the NetCDF file.
 
@@ -111,10 +103,6 @@ class NetCdf(FileCore):
         """
         Returns a list of variables found in the current NetCDF file.
 
-        Parameters
-        -----------
-        None
-
         """
         
         return self._get_variable_list()
@@ -123,9 +111,6 @@ class NetCdf(FileCore):
         """
         If file is open, returns the filename.
 
-        Parameters
-        -----------
-        None
 
         """
 
@@ -134,12 +119,9 @@ class NetCdf(FileCore):
     def get_perms(self):
         """
         Returns the current permissions on the file that is open. Returns None if
-        no file is currently open. Options are 'w' for write (overwrites
-        data in file),'a' and 'r+' for append, and 'r' for read.
+        no file is currently open. Options are ``w`` for write (overwrites
+        data in file),``a`` and ``r+`` for append, and ``r`` for read.
 
-        Parameters
-        -----------
-        None
 
         """
 
@@ -154,17 +136,14 @@ class NetCdf(FileCore):
         """
         Reads a variable from currently opened NetCDF file.
         
-        Parameters
-        -----------
-        varname : string
+        :param string varname:
             Name of NetCDF variable to read in.
-        input_range : vector, optional
+        :param vector input_range: Optional -
             Range of values in each dimension to input. TODO add example
 
-        Returns
-        -------
-        value : array
+        :returns:
             Values from specified variable read in from NetCDF file.
+        :rtype: array
         """
 
         try:
@@ -191,21 +170,20 @@ class NetCdf(FileCore):
         """
         Writes/creates variable in currently opened NetCDF file.
 
-        Parameters
-        -----------
-        value : arraylike
+
+        :param array value:
             Array of values to output to NetCDF file.
-        varname : string
+        :param string varname:
             Name of variable to create/write to.
-        dims : tuple of strings, optional
+        :param tuple dims: Optional -
             Name(s) of dimensions to assign to variable. If variable already exists
             in NetCDF file, this parameter is optional. For scalar variables,
             pass an empty tuple.
-        type : string, optional
-            Data type of variable to write. Defaults to 'double'. If variable exists,
-            data type remains unchanged. Options for type are 'double', 'float',
-            'int', 'short', 'char', and 'byte'
-        fill_value : value, optional
+        :param string type: Optional -
+            Data type of variable to write. Defaults to ``double``. If variable exists,
+            data type remains unchanged. Options for type are ``double``, ``float``,
+            ``int``, ``short``, ``char``, and ``byte``
+        :param float fill_value: Optional -
             Overrides default NetCDF _FillValue, if provided.
 
         """
@@ -223,11 +201,9 @@ class NetCdf(FileCore):
         """
         Adds dimension to currently open file.
 
-        Parameters
-        -----------
-        name : string
+        :param string name:
             Name of dimension to add
-        size : integer
+        :param integer size:
             Integer size of dimension to add.
 
         """
@@ -243,13 +219,11 @@ class NetCdf(FileCore):
         is added to specified variable, otherwise it is added to global file
         attributes.
 
-        Parameters
-        -----------
-        name : string
+        :param string name:
             Attribute name.
-        value : string
+        :param string value:
             Value to assign to attribute name.
-        varname : string, optional
+        :param string varname: Optional -
             If varname is provided, attribute name and value are added to specified
             variable in the NetCDF file.
         """
@@ -269,13 +243,11 @@ class NetCdf(FileCore):
         """
         Private method for opening NetCDF file.
 
-        Parameters
-        -----------
-        filename: string
+        :param string filename:
             Name of NetCDF file to open.
-        perms : char
-            Permissions used to open file. Options are 'w' for write (overwrites data in file),
-            'a' and 'r+' for append, and 'r' for read.
+        :param char perms:
+            Permissions used to open file. Options are ``w`` for write (overwrites data in file),
+            ``a`` and ``r+`` for append, and ``r`` for read.
         """
 
         self.close()
@@ -482,12 +454,12 @@ class EgadsNetCdf(NetCdf):
         """
         Initializes NetCDF instance.
 
-        **Parameters**:
-        filename : string, optional
-            Name of NetCDF file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites
-            data), 'a' and 'r+' for append, and 'r' for read. 'r' is the default
+        :param string filename:
+            Optional - Name of NetCDF file to open.
+        :param char perms:
+            Optional -  Permissions used to open file.
+            Options are ``w`` for write (overwrites data),
+            ``a`` and ``r+`` for append, and ``r`` for read. ``r`` is the default
             value.
         """
         
@@ -501,18 +473,19 @@ class EgadsNetCdf(NetCdf):
     def read_variable(self, varname, input_range=None):
         """
         Reads in a variable from currently opened NetCDF file and maps the NetCDF
-        attributies to an EgadsData instance.
+        attributies to an :class:`~egads.core.EgadsData` instance.
 
-        Parameters:
 
-            * `varname` : string -- Name of NetCDF variable to read in.
-            * `input_range` : vector, optional -- Range of values in each dimension
-                to input. :TODO: add example
+        :param string varname:
+            Name of NetCDF variable to read in.
 
-        Returns:
+        :param vector input_range:
+            Optional -- Range of values in each dimension to input. :TODO: add example
 
-        * `data` : EgadsData
-            Values and metadata of the specified variable in an EgadsData instance.
+
+        :returns: Values and metadata of the specified variable in an EgadsData instance.
+        :rtype: EgadsData
+
         """
 
         try:
@@ -546,23 +519,23 @@ class EgadsNetCdf(NetCdf):
         """
         Writes/creates varible in currently opened NetCDF file.
 
-        Parameters
-        -----------
-        data : EgadsData
-            Instance of EgadsData object to write out to file. All data and
-            attributes will be written out to the file.
-        varname : string, optional
-            Name of variable to create/write to. If no varname is provided, and
-            if cdf_name attribute in EgadsData object is defined, then the variable
-            will be written to cdf_name.
-        dims : tuple of strings, optional
+
+        :param gadsData data:
+            Instance of EgadsData object to write out to file.
+            All data and attributes will be written out to the file.
+
+        :param string varname: Optional -
+            Name of variable to create/write to. If no varname is provided,
+            and if cdf_name attribute in EgadsData object is defined, then the
+            variable will be written to cdf_name.
+        :param tuple dims: Optional - 
             Name(s) of dimensions to assign to variable. If variable already exists
             in NetCDF file, this parameter is optional. For scalar variables,
             pass an empty tuple.
-        type : string, optional
-            Data type of variable to write. Defaults to 'double'. If variable exists,
-            data type remains unchanged. Options for type are 'double', 'float',
-            'int', 'short', 'char', and 'byte'
+        :param string type: Optional - 
+            Data type of variable to write. Defaults to ``double``. If variable exists,
+            data type remains unchanged. Options for type are ``double``, ``float``,
+            ``int``, ``short``, ``char``, and ``byte``
 
         """
 
@@ -582,13 +555,11 @@ class EgadsNetCdf(NetCdf):
         """
         Private method for opening NetCDF file.
 
-        Parameters
-        -----------
-        filename: string
+        :param string filename:
             Name of NetCDF file to open.
-        perms : char
-            Permissions used to open file. Options are 'w' for write (overwrites data in file),
-            'a' and 'r+' for append, and 'r' for read.
+        :param char perms:
+            Permissions used to open file. Options are ``w`` for write (overwrites data in file),
+            ``a`` and ``r+`` for append, and ``r`` for read.
         """
 
         self.close()
