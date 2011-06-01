@@ -42,21 +42,24 @@ The easiest way to access them is using the ``help()`` function:
 
    >>> help(egads.input.NetCdf)
 
-will return all methods and their associated documentation for the NetCdf class.
+or
+   >>> egads.input.NetCdf?
+
+will return all methods and their associated documentation for the :class:`~.NetCdf` class.
 
 
 Working with generic text files
 ---------------------------------
 
-EGADS provides the ``egads.input.EgadsFile()`` class as a simple wrapper for interacting with 
-generic text files. ``EgadsFile()`` can read, writeand display data from text files, but does 
+EGADS provides the :class:`egads.input.text_file_io.EgadsFile` class as a simple wrapper for interacting with 
+generic text files. :class:`~.EgadsFile` can read, write and display data from text files, but does 
 not have any tools for automatically formatting input or output data. 
 
 Opening
 ^^^^^^^^
 
-To open a text file the ``EgadsFile()`` class, use the
-``open(pathname, permissions)`` method:
+To open a text file the :class:`~.EgadsFile` class, use the
+:meth:`~.EgadsFile.open(filename, permissions)` method:
 
     >>> import egads
     >>> f = egads.input.EgadsFile()
@@ -78,7 +81,7 @@ information about the file.
 
 * ``f.display_file()`` -- Prints contents of file out to standard output.
 * ``f.get_position()`` -- Returns current position in file as integer.
-* ``f.seek(location, from_where)`` -- Seeks to specified location in file. ``location`` is an integer specifying how far to seek. Valid options for ``from_where`` are 'b' to seek from beginning of file, 'c' to seek from current position in file and 'e' to seek from the end of the file.
+* ``f.seek(location, from_where)`` -- Seeks to specified location in file. ``location`` is an integer specifying how far to seek. Valid options for ``from_where`` are ``b`` to seek from beginning of file, ``c`` to seek from current position in file and ``e`` to seek from the end of the file.
 * ``f.reset()`` -- Resets position to beginning of file.
 
 Reading Data
@@ -123,18 +126,18 @@ To close a file, simply call the ``close()`` method:
 Working with CSV files
 -----------------------
 
-``egads.input.EgadsCsv()`` is designed to easily input or output data in CSV format.
-Data input using ``EgadsCsv()`` is separated into a list of arrays, which each column a separate
+:class:`egads.input.text_file_io.EgadsCsv` is designed to easily input or output data in CSV format.
+Data input using :class:`~.EgadsCsv` is separated into a list of arrays, which each column a separate
 array in the list. 
 
 Opening
 ^^^^^^^^
 
-To open a text file the ``EgadsCSV()`` class, use the
+To open a text file the :class:`~.EgadsCsv` class, use the
 ``open(pathname, permissions, delimiter, quotechar)`` method:
 
     >>> import egads
-    >>> f = egads.input.EgadsFile()
+    >>> f = egads.input.EgadsCsv()
     >>> f.open('/pathname/filename.txt','r',',','"')
 
 Valid values for permissions are:
@@ -145,9 +148,9 @@ Valid values for permissions are:
 * ``r+`` -- Read and write: opens file for both reading and writing.
 
 The ``delimiter`` argument is a one-character string specifying the character used to separate 
-fields in the CSV file to be read; the default value is ','. The ``quotechar`` argument is a 
+fields in the CSV file to be read; the default value is ``,``. The ``quotechar`` argument is a 
 one-character string specifying the character used to quote fields containing special characters 
-in the CSV file to to be read; the default value is '``'.
+in the CSV file to to be read; the default value is ``"``.
 
 File Manipulation
 ^^^^^^^^^^^^^^^^^^
@@ -157,13 +160,13 @@ information about the file.
 
 * ``f.display_file()`` -- Prints contents of file out to standard output.
 * ``f.get_position()`` -- Returns current position in file as integer.
-* ``f.seek(location, from_where)`` -- Seeks to specified location in file. ``location`` is an integer specifying how far to seek. Valid options for ``from_where`` are 'b' to seek from beginning of file, 'c' to seek from current position in file and 'e' to seek from the end of the file.
+* ``f.seek(location, from_where)`` -- Seeks to specified location in file. ``location`` is an integer specifying how far to seek. Valid options for ``from_where`` are ``b`` to seek from beginning of file, ``c`` to seek from current position in file and ``e`` to seek from the end of the file.
 * ``f.reset()`` -- Resets position to beginning of file.
 
 Reading Data
 ^^^^^^^^^^^^^^
 
-Reading data is done using the ``read(lines, format)`` method on a file that has been opened with 'r' or 'r+' permissions:
+Reading data is done using the ``read(lines, format)`` method on a file that has been opened with ``r`` or ``r+`` permissions:
 
     >>> import egads
     >>> f = egads.input.EgadsCsv()
@@ -178,10 +181,10 @@ will read in the specified number of lines, otherwise it will read the whole fil
 is an optional list of characters used to decompose the elements read in from the CSV files to
 their proper types. Options are:
 
-* i -- int
-* f -- float
-* l -- long
-* s -- string
+* ``i`` -- int
+* ``f`` -- float
+* ``l`` -- long
+* ``s`` -- string
 
 Thus to read in the line:
 
@@ -222,15 +225,15 @@ To close a file, simply call the ``close()`` method:
 Working with NetCDF files
 --------------------------
 
-EGADS provides two classes to work with NetCDF files. The simplest, ``egads.input.NetCdf()``, 
-allows simple read/write operations to NetCDF files. The other, ``egads.input.EgadsNetCdf()``, 
+EGADS provides two classes to work with NetCDF files. The simplest, :class:`egads.input.netcdf.NetCdf`, 
+allows simple read/write operations to NetCDF files. The other, :class:`egads.input.netcdf.EgadsNetCdf`, 
 is designed to interface with NetCDF files conforming to the N6SP data and metadata regulations. 
-This class directly reads or writes NetCDF data using instances of the ``EgadsData`` class.
+This class directly reads or writes NetCDF data using instances of the :class:`~.EgadsData` class.
 
 Opening
 ^^^^^^^^
 
-To open a NetCDF file, simply create a ``egads.input.NetCdf()`` instance and then use the ``open(pathname, permissions)`` command:
+To open a NetCDF file, simply create a :class:`.NetCdf()` instance and then use the ``open(pathname, permissions)`` command:
 
     >>> import egads
     >>> f = egads.input.NetCdf()
@@ -241,7 +244,7 @@ Valid values for permissions are:
 * ``r`` -- Read: opens file for reading only. Default value if nothing is provided.
 * ``w`` -- Write: opens file for writing, and overwrites data in file.
 * ``a`` -- Append: opens file for appending data.
-* ``r+`` -- Same as 'a'.
+* ``r+`` -- Same as ``a``.
 
 Getting info
 ^^^^^^^^^^^^^
@@ -260,7 +263,8 @@ To read data from a file, use the ``read_variable()`` function:
 
     >>> data = f.read_variable(var_name, input_range)
 
-where ``var_name`` is the name of the variable to read in, and ``input_range`` (optional) is a XXXXX
+where ``var_name`` is the name of the variable to read in, and ``input_range`` (optional) is a list
+of min/max values.
 
 If using the ``egads.input.NetCdf()`` class, an array of values contained in ``var_name`` 
 will be returned. IF using the ``egads.input.EgadsNetCdf()`` class, an instance of the 
@@ -269,7 +273,7 @@ will be returned. IF using the ``egads.input.EgadsNetCdf()`` class, an instance 
 Writing data
 ^^^^^^^^^^^^^
 
-The following describe how to add dimenisons or attributes to a file.
+The following describe how to add dimensions or attributes to a file.
 
 * ``f.add_dim(dim_name, dim_size)`` -- add dimension to file
 * ``f.add_attribute(attr_name, attr_value)`` -- add attribute to file
@@ -284,10 +288,10 @@ of dimension names (not needed if the variable already exists), and ``type`` is 
 data type of the variable. The default value is *double*, other valid options 
 are *float*, *int*, *short*, *char* and *byte*. 
 
-If using ``egads.input.NetCdf()``, values for ``data`` passed into ``write_variable`` 
-must be scalar or array. Otherwise, if using ``egads.input.EgadsNetCdf()``, an instance 
-of ``EgadsData()`` must be passed into ``write_variable``. In this case, any attributes 
-that are contained within the ``EgadsData()`` instance are applied to the NetCDF variable as well.
+If using :class:`~.NetCdf`, values for ``data`` passed into ``write_variable`` 
+must be scalar or array. Otherwise, if using :class:`~.EgadsNetCdf`, an instance 
+of :class:`~.EgadsData` must be passed into ``write_variable``. In this case, any attributes 
+that are contained within the :class:`~.EgadsData` instance are applied to the NetCDF variable as well.
 
 Closing
 ^^^^^^^^
@@ -300,9 +304,8 @@ To close a file, simply use the ``close()`` method:
 Working with algorithms
 ------------------------
 
-Algorithms in EGADS are stored in the ``egads.algorithms`` module, and separated into sub-modules
-by category (microphysics, thermodynamics, radiation, etc). Each algorithm follows a standard naming 
-scheme, using the algorithm's purpose and source:
+Algorithms in EGADS are stored in the :mod:`egads.algorithms` module, and separated into sub-modules
+by category (microphysics, thermodynamics, radiation, etc). Each algorithm follows a standard naming scheme, using the algorithm's purpose and source:
 
 ``{CalculatedParameter}{Detail}{Source}``
 
@@ -319,7 +322,7 @@ Algorithm Handbook is available for easy reference outside of Python. In the han
 is described in detail, including a brief algorithm summary, descriptions of algorithm inputs and outputs,
 the formula used in the algorithm, algorithm source and links to additional references. The handbook
 also specifies the exact name of the algorithm as defined in EGADS. The handbook
-can be found on the EGADS website, and in the $\backslash$doc directory packaged with EGADS.
+can be found on the EGADS website, and in the \doc directory packaged with EGADS.
 
 Within Python, usage information on each algorithm can be found using the ``help()`` command::
 
@@ -397,12 +400,11 @@ Importance of white space
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Python differs from C++ and Fortran in how loops or nested statements are signified. Whereas
-C++ uses brackets ('``{``' and '``}``') or \textsc{Fortran} uses ``end`` statements to signify the end of a
+C++ uses brackets ('``{``' and '``}``') or FORTRAN uses ``end`` statements to signify the end of a
 nesting, Python uses white space. Thus, for statements to nest properly, they must be set at the 
-proper depth. As long as the document is consistent, the number of spaces used doesn't matter, however,
-most conventions call for 4 spaces to be used per level. See below for examples:
+proper depth. As long as the document is consistent, the number of spaces used doesn't matter, however, most conventions call for 4 spaces to be used per level. See below for examples:
 
-FORTRAN::
+**FORTRAN**::
 
 	X = 0
 	DO I = 1,10
@@ -411,7 +413,7 @@ FORTRAN::
 	END DO
 	PRINT X
 
-Python::
+**Python**::
 
 	x = 0
 	for i in range(1,10):

@@ -218,3 +218,6 @@ man_pages = [
     ('index', 'egads', u'EGADS Documentation',
      [u'EUFAR'], 1)
 ]
+
+
+autoclass_content = 'both'

@@ -18,6 +18,19 @@ class EgadsData(object):
     This class is designed using the EUFAR N6SP data and metadata recommendations.
     Its purpose is to store related data and metadata and allow them to be
     passed between functions and algorithms in a consistent manner.
+
+    **Constructor Variables**
+
+    :param value: Optional -
+        Scalar or array of values to initialize EgadsData object.
+    :param VariableMetadata variable_metadata: Optional -
+        VariableMetadata dictionary object containing relevant metadata
+        for the current EgadsData instance.
+    :param **attrs: Optional -
+        Keyword/value pairs of additional metadata which will be added into
+        the existing variable_metadata object.
+
+
     """
 
     __refs__ = defaultdict(list)
@@ -27,43 +40,14 @@ class EgadsData(object):
         Initializes EgadsData instance with standard attributes. If no attributes
         are provided, all standard attributes are set to None.
 
-        Parameters
-        -----------
-        value : scalar or array-like, optional
-            Scalar or array of values for EgadsData object.
-        units : string, optional
-            Units of EgadsData object. Best practice is to conform to UDUNITS
-            conventions for unit names
-            (see http://www.unidata.ucar.edu/software/udunits/udunits-2/udunits2lib.html)
-        long_name : string, optional
-            Descriptive name for EgadsData object.
-        standard_name : string, optional
-            Standard name for EgadsData object conforming to CF conventions
-            standard name table (see http://cf-pcmdi.llnl.gov/documents/cf-standard-names/)
-        cdf_name : string, optional
-            Name of variable if read in from NetCDF file. This will be populated
-            automatically, in most instances.
-        fill_value : scalar, optional
-            Value typically from NetCDF file (in the form of _FillValue) that
-            indicates values used to pre-fill the quantity in question.
-        valid_range : vector, optional
-            A vector of two number specifying the range of valid values for this
-            variable. Should be composed of the valid minimum, followed by the
-            valid maximum. If one of these values is 'None', then the relevant
-            min or max range will be considered unlimited.
-        sampled_rate : scalar, optional
-            Rate at which the data was sampled in Hz.
-        category : list, optional
-            Names of probe category.
-        calibration_coeff : list, optional
-            Coefficients used to convert analog channels to digital counts (raw
-            variables only).
-        dependencies : list, optional
-            List of input variables used to produce this variable (derived variables
-            only).
-        processor: string, optional
-            List of toolbox processors used to produce this variable. Added
-            automatically (derived variables only).
+        :param value: Optional -
+            Scalar or array of values to initialize EgadsData object.
+        :param VariableMetadata variable_metadata: Optional -
+            VariableMetadata dictionary object containing relevant metadata
+            for the current EgadsData instance.
+        :param **attrs: Optional -
+            Keyword/value pairs of additional metadata which will be added into
+            the existing variable_metadata object.
 
         """
 
@@ -315,13 +299,26 @@ class EgadsAlgorithm(object):
     The EgadsAlgorithm class provides base methods for algorithms in EGADS and
     initializes algorithm attributes.
 
+    **Constructor Variables**
+
+    :param bool return_Egads: Optional - 
+        Flag used to configure which object type will be returned by the current
+        EgadsAlgorithm. If ``true`` an :class: EgadsData instance with relevant
+        metadata will be returned by the algorithm, otherwise an array or
+        scalar will be returned.
+
     """
 
-    def __init__(self, return_Egads):
+    def __init__(self, return_Egads=True):
         """
         Initializes EgadsAlgorithm instance with None values for all standard
         attributes.
 
+        :param bool return_Egads: Optional -
+            Flag used to configure which object type will be returned by the current
+            EgadsAlgorithm. If ``true`` an :class: EgadsData instance with relevant
+            metadata will be returned by the algorithm, otherwise an array or
+            scalar will be returned.
         """
         self.name = self.__class__.__name__
 
