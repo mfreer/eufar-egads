@@ -3,10 +3,10 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ['']
 
-import egads
-import inspect
+import egads.core.egads_core as egads_core
+import egads.core.metadata as egads_metadata
 
-def algorithm_template(inputs):
+class AlgorithmTemplate(egads_core.EgadsAlgorithm):
     """
     This file provides a template for creation of EGADS algorithms.
 
@@ -30,26 +30,34 @@ def algorithm_template(inputs):
 
     """
 
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-    ## Do processing here:
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'%',
+                                                               'long_name':'template',
+                                                               'standard_name':'',
+                                                               'Category':['']})
 
-
-    result = egads.EgadsData(value = output,
-                               units = '%',
-                               long_name = 'template',
-                               standard_name = 'template',
-                               fill_value = None,
-                               valid_range = None,
-                               sampled_rate = None,
-                               category = None,
-                               calibration_coeff = None,
-                               dependencies = None,
-                               processor = inspect.stack()[0][3],
-                               processor_version = __version__,
-                               processor_date = __date__)
-
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':[''],
+                                                          'InputUnits':[''],
+                                                          'Outputs':['template'],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
 
 
-    return result
+    def run(self, inputs):
+
+        return egads_core.EgadsAlgorithm.run(self, inputs)
+
+
+    def _algorithm(self, inputs):
+
+        ## Do processing here:
+
+
+        return result
 
 

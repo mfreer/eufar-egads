@@ -10,19 +10,26 @@ class FileCore(object):
     Abstract class which holds basic file access methods and attributes.
     Designed to be subclassed by NetCDF, NASA Ames and basic text file
     classes.
+
+    **Constructor Variables**
+    
+    :param string filename: Optional -
+        Name of file to open.
+    :param char perms: Optional -
+        Permissions used to open file. Options are ``w`` for write (overwrites data in file),
+        ``a`` and ``r+`` for append, and ``r`` for read. ``r`` is the default value
+
     """
 
     def __init__(self, filename=None, perms='r', **kwargs):
         """
         Initializes file instance.
 
-        Parameters
-        -----------
-        filename : string, optional
+        :param string filename: Optional -
             Name of file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites data in file),
-            'a' and 'r+' for append, and 'r' for read. 'r' is the default value
+        :param char perms: Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites data in file),
+            ``a`` and ``r+`` for append, and ``r`` for read. ``r`` is the default value
         """
 
         self.f = None
@@ -39,13 +46,11 @@ class FileCore(object):
         """
         Opens file given filename.
 
-        Parameters
-        -----------
-        filename : string
+        :param string filename:
             Name of file to open.
-        perms : char, optional
-            Permissions used to open file. Options are 'w' for write (overwrites data in file),
-            'a' and 'r+' for append, and 'r' for read. 'r' is the default value
+        :param char perms: Optional -
+            Permissions used to open file. Options are ``w`` for write (overwrites data in file),
+            ``a`` and ``r+`` for append, and ``r`` for read. ``r`` is the default value
         """
 
         if perms is not None:
@@ -73,7 +78,9 @@ def get_file_list(path):
 
     Given path, returns a list of all files in that path. Wildcards are supported.
 
-    Example: path = 'data/*.nc'
+    Example::
+    
+        file_list = get_file_list('data/*.nc')
     """
 
     return glob.glob(path)

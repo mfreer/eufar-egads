@@ -18,7 +18,7 @@ Optional Packages
 
 The following are useful when using or compiling EGADS:
 
-* IPython - An optional package which simplifies Python command line usage (http://ipython.scipy.org). IPython is an enhanced interactive Python shell which supports tab-completion, debugging, history, etc. 
+* IPython - An optional package which simplifies Python command line usage (http://ipython.scipy.org). IPython is an enhanced interactive Python shell which supports tab-completion, debugging, command history, etc. 
 
 Installation
 ************
