@@ -46,8 +46,7 @@ setup(name = 'egads',
                   'egads.algorithms.thermodynamics',
                   'egads.algorithms.transforms',
                   'egads.input',
-                  'egads.tests',
-                  'nappy'],
+                  'egads.tests'],
       classifiers = filter(None, classifiers.split("\n")),
 
       )
