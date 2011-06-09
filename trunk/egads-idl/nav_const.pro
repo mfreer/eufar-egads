@@ -1,6 +1,6 @@
 ;+
 ; NAME:
-;   pre_dims_gps_const
+;   nav_const
 ;
 ; PURPOSE:
 ;   Additional consistency check & QA for .gps (no correction!)
@@ -8,7 +8,7 @@
 ; CATEGORY:
 ;		
 ; CALLING SEQUENCE:
-;   pre_dims_gps_const, fname, stat_lun=stat_lun, gps_err_array=gps_err_array, gps_data=gps_data
+;   nav_const, fname, stat_lun=stat_lun, gps_err_array=gps_err_array, gps_data=gps_data
 ; 
 ; INPUTS:
 ;    fname => base-filename WITH .gps - suffix !
@@ -53,7 +53,7 @@
 ; 
 ;-
 
-pro pre_dims_gps_const, fname, stat_lun=stat_lun, gps_err_array=gps_err_array, gps_data=gps_data, extradatum=extradatum
+pro nav_const, fname, stat_lun=stat_lun, gps_err_array=gps_err_array, gps_data=gps_data, extradatum=extradatum
 
   ; ---------------------------------------------
   ; consistency check for .gps

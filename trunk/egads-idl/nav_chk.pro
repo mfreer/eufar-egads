@@ -1,6 +1,6 @@
 ;+
 ; NAME:
-;   pre_dims_gps_chk
+;   nav_chk
 ;
 ; PURPOSE:
 ;   Check and correct .gps - File
@@ -8,7 +8,7 @@
 ; CATEGORY:
 ;		
 ; CALLING SEQUENCE:
-;   pre_dims_gps_chk, fname = name_tmp, linenumb_hdr = linenumb_hdr, stat_lun=stat_lun
+;   nav_chk, fname = name_tmp, linenumb_hdr = linenumb_hdr, stat_lun=stat_lun
 ;
 ; INPUTS:
 ;    fname => base-filename WITH .gps - suffix !
@@ -53,7 +53,7 @@
 ; 
 ;-
 
-pro pre_dims_gps_chk, fname = name_tmp, linenumb_hdr = linenumb_hdr, stat_lun=stat_lun
+pro nav_chk, fname = name_tmp, linenumb_hdr = linenumb_hdr, stat_lun=stat_lun
 
 ; -----------------------------------------
 ; read .gps file
