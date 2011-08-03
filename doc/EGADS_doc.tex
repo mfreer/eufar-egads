@@ -451,11 +451,11 @@ Valid values for permissions are:
 \subsubsection{Getting info}
 
 \begin{itemize}
-\item \verb|f.get_dimensions()| -- returns list of all dimensions and their sizes
-\item \verb|f.get_dimensions(var_name)| -- returns list of all dimensions for \verb|var_name|
-\item \verb|f.get_attributes()| -- returns a list of all top-level attributes
-\item \verb|f.get_attributes(var_name)| -- returns list of all attributes attached to \verb|var_name|
-\item \verb|f.get_variables()| -- returns list of all variables
+\item \verb|f.get_dimension_list()| -- returns list of all dimensions and their sizes
+\item \verb|f.get_dimension_list(var_name)| -- returns list of all dimensions for \verb|var_name|
+\item \verb|f.get_attribute_list()| -- returns a list of all top-level attributes
+\item \verb|f.get_attribute_list(var_name)| -- returns list of all attributes attached to \verb|var_name|
+\item \verb|f.get_variable_list()| -- returns list of all variables
 \item \verb|f.get_filename()| -- returns filename for currently opened file
 \end{itemize}
 
@@ -512,14 +512,14 @@ by category (microphysics, thermodynamics, radiation, etc). Each algorithm follo
 scheme, using the algorithm's purpose and source:
 
 \begin{verbatim} 
-{calculated-parameter}_{detail}_{source}
+{CalculatedParameter}{Detail}{Source}
 \end{verbatim}
 
 For example, an algorithm which calculates static temperature, which was provided by CNRM would be
 named:
 
 \begin{verbatim}
-temp_static_cnrm
+TempStaticCnrm
 \end{verbatim}
 
 \subsubsection{Getting algorithm information}
@@ -534,38 +534,38 @@ can be found on the \egads website, and in the $\backslash$doc directory package
 Within Python, usage information on each algorithm can be found using the \verb|help()| command:
 
 \begin{command}
-   >>> help(egads.algorithms.thermodynamics.velocity_tas_cnrm)
+   >>> help(egads.algorithms.thermodynamics.VelocityTasCnrm)
 
-   >>>Help on function velocity_tas_cnrm in module 
-      egads.algorithms.thermodynamics.velocity_tas_cnrm:
+   >>> Help on class VelocityTasCnrm in module egads.algorithms.thermodynamics.velocity_tas_cnrm:
 
-velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa)
-    FILE        velocity_tas_cnrm.py
-    
-    VERSION     $Revision$
-    
-    CATEGORY    Thermodynamics
-    
-    PURPOSE     Calculate true airspeed
-    
-    DESCRIPTION Calculates true airspeed based on static temperature, static pressure
-                and dynamic pressure using St Venant's formula.
-    
-    INPUT       T_s         vector  K or C      static temperature
-                P_s         vector  hPa         static pressure
-                dP          vector  hPa         dynamic pressure
-                cpa         coeff.  J K-1 kg-1  specific heat of air 
-						(dry air is 1004 J K-1 kg-1)
-                Racpa       coeff.  ()          R_a/c_pa
-    
-    OUTPUT      V_p         vector  m s-1       true airspeed
-    
-    SOURCE      CNRM/GMEI/TRAMM
-    
-    REFERENCES  "Mecanique des fluides", by S. Candel, Dunod.
-    
-                 Bulletin NCAR/RAF Nr 23, Feb 87, by D. Lenschow and
-                 P. Spyers-Duran
+class VelocityTasCnrm(egads.core.egads_core.EgadsAlgorithm)
+ |  FILE        velocity_tas_cnrm.py
+ |  
+ |  VERSION     $Revision$
+ |  
+ |  CATEGORY    Thermodynamics
+ |  
+ |  PURPOSE     Calculate true airspeed
+ |  
+ |  DESCRIPTION Calculates true airspeed based on static temperature, static pressure
+ |              and dynamic pressure using St Venant's formula.
+ |  
+ |  INPUT       T_s         vector  K or C      static temperature
+ |              P_s         vector  hPa         static pressure
+ |              dP          vector  hPa         dynamic pressure
+ |              cpa         coeff.  J K-1 kg-1  specific heat of air (dry air is 1004 J K-1 kg-1)
+ |              Racpa       coeff.  ()          R_a/c_pa
+ |  
+ |  OUTPUT      V_p         vector  m s-1       true airspeed
+ |  
+ |  SOURCE      CNRM/GMEI/TRAMM
+ |  
+ |  REFERENCES  "Mecanique des fluides", by S. Candel, Dunod.
+ |  
+ |               Bulletin NCAR/RAF Nr 23, Feb 87, by D. Lenschow and
+ |               P. Spyers-Duran
+ |  
+...
 
 
 \end{command}
@@ -574,13 +574,17 @@ velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa)
 
 Algorithms in \egads generally accept and return arguments of \verb|EgadsData| type, unless
 otherwise noted. This has the advantages of constant typing between algorithms, and allows
-metadata to be passed along the whole processing chain. To call an algorithm, simply pass in the 
+metadata to be passed along the whole processing chain. Units on parameters being passed in are also
+checked for consistency, reducing errors in calculations. However, algorithms will accept any normal
+data type, as well. They can also return non-\verb|EgadsData| instances, if desired. 
+
+To call an algorithm, simply pass in the 
 required arguments, in the order they are described in the algorithm help function. An algorithm call, 
-using the \verb|velocity_tas_cnrm| in the previous section as an example, would therefore be the 
+using the \verb|VelocityTasCnrm| in the previous section as an example, would therefore be the 
 following:
 
 \begin{command}
-    >>> V_p = egads.algorithms.thermodynamics.velocity_tas_cnrm(T_s, P_s, dP, cpa, Racpa)
+    >>> V_p = egads.algorithms.thermodynamics.VelocityTasCnrm().run(T_s, P_s, dP, cpa, Racpa)
 \end{command}
 
 where the arguments \verb|T_s|, \verb|P_s|, \verb|dP|, etc are all assumed to be previously defined in the 
