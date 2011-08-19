@@ -3,7 +3,6 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ["NetCdf","EgadsNetCdf"]
 
-import numpy
 import netCDF4
 import egads
 
@@ -237,7 +236,13 @@ class NetCdf(FileCore):
         else:
             print 'ERROR: No file open'
 
+    def convert_to_nasa_ames(self):
+        #TODO Add convert_to_nasa_ames method (from nappy).
+        pass
 
+    def convert_to_csv(self):
+        #TODO Add convert_to_csv method (from nappy).
+        pass
 
     def _open_file(self, filename, perms):
         """
