@@ -72,6 +72,20 @@ class FileCore(object):
             self.filename = None
 
 
+    def get_perms(self):
+        """
+        Returns the current permissions on the file that is open. Returns None if
+        no file is currently open. Options are ``w`` for write (overwrites
+        data in file),``a`` and ``r+`` for append, and ``r`` for read.
+
+
+        """
+
+        if self.f is not None:
+            return self.perms
+        else:
+            return
+
 
 def get_file_list(path):
     """

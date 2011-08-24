@@ -4,7 +4,9 @@ __version__ = "$Revision::           $"
 __all__ = ["NetCdf","EgadsNetCdf"]
 
 import netCDF4
+import nappy
 import egads
+
 
 from egads.input import FileCore
 
@@ -148,8 +150,7 @@ class NetCdf(FileCore):
         try:
             varin = self.f.variables[varname]
         except KeyError:
-            print "ERROR: Variable %s does not exist in %s" % (varname, self.filename)
-            raise KeyError
+            raise KeyError("ERROR: Variable %s does not exist in %s" % (varname, self.filename))
         except Exception:
             print "Error: Unexpected error"
             raise
@@ -218,7 +219,7 @@ class NetCdf(FileCore):
         is added to specified variable, otherwise it is added to global file
         attributes.
 
-        :param string name:
+        :param string attrname:
             Attribute name.
         :param string value:
             Value to assign to attribute name.
@@ -236,13 +237,66 @@ class NetCdf(FileCore):
         else:
             print 'ERROR: No file open'
 
-    def convert_to_nasa_ames(self):
-        #TODO Add convert_to_nasa_ames method (from nappy).
-        pass
+    def convert_to_nasa_ames(self, na_file=None, var_ids=None, na_items_to_override={},
+                             only_return_file_names=False, exclude_vars=[],
+                             requested_ffi=None, delimiter='    ', float_format='%g',
+                             size_limit=None, annotation=False, no_header=False):
+        """
+        Convert currently open NetCDF file to one or more NASA Ames files
+        using the Nappy API.
 
-    def convert_to_csv(self):
-        #TODO Add convert_to_csv method (from nappy).
-        pass
+        :param string na_file:
+            Optional - Name of output NASA Ames file. If none is provided, name of
+            current NetCDF file is used and suffix changed to .na
+        :param list var_ids:
+            List of variables (as ids) to include in the output file.
+        :param dict na_items_to_override:
+            Optional - Dictionary of NASA Ames keyword items with corresponding values
+            to override in output file. NASA Ames keywords are: DATE, RDATE,
+            ANAME, MNAME, ONAME, ORG, SNAME, VNAME
+        :param bool only_return_file_names:
+            Optional - If true, only return list of file names that would be written.
+            Default - False
+        :param list exclude_vars:
+            Optional - List of variables (as ids) to exclude from the output NASA
+            Ames file.
+        :param int requested_ffi:
+            The NASA Ames File Format Index (FFI) you wish to write to. Options
+            are limited depending on the data structures found.
+        :param string delimiter:
+            Optional - The delimiter desired for use between data items in the data
+            file. Default - Tab.
+        :param string float_format:
+            Optional - The formatting string used for formatting floats when writing
+            to output file. Default - %g
+        :param int size_limit:
+            Optional - If format FFI is 1001 then chop files into size_limit rows of data.
+        :param bool annotation:
+            Optional - If set to true, write the output file with an additional left-hand
+            column describing the contents of each header line. Default - False.
+        :param bool no_header:
+            Optional - If set to true, then only the data blocks are written to file.
+            Default - False.
+
+
+        """
+
+        nappy.convertNCtoNA(self.filename, na_file, var_ids, na_items_to_override,
+                            only_return_file_names, exclude_vars, requested_ffi,
+                            delimiter, float_format, size_limit, annotation,
+                            no_header)
+
+    def convert_to_csv(self, csv_file=None):
+        """
+        Converts currently open NetCDF file to CSV file using Nappy API.
+        
+        :param string csv_file:
+            Optional - Name of output CSV file. If none is provided, name of current
+            NetCDF is used and suffix changed to .csv
+        """
+
+        nappy.convertNCtoCSV(self.filename, csv_file)
+
 
     def _open_file(self, filename, perms):
         """
@@ -262,8 +316,7 @@ class NetCdf(FileCore):
             self.filename = filename
             self.perms = perms
         except RuntimeError:
-            print "ERROR: File %s doesn't exist" % (filename)
-            raise RuntimeError
+            raise RuntimeError("ERROR: File %s doesn't exist" % (filename))
         except Exception:
             print "ERROR: Unexpected error"
             raise
@@ -325,7 +378,7 @@ class NetCdf(FileCore):
         if self.f is not None:
             return self.f.variables.keys()
         else:
-            raise # TODO Add specific file execption
+            raise # TODO Add specific file exception
 
 
 

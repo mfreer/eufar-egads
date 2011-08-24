@@ -137,7 +137,7 @@ class EgadsDataVectorTestCase(unittest.TestCase):
         divide = self.value2 / egadstest1
         power = self.value2 ** egadstest1
 
-        #assert_array_equal(self.value1 + self.value2, add.value, 'Egads to Egads vector addition not equal')
+        assert_array_equal(self.value1 + self.value2, add.value, 'Egads to Egads vector addition not equal')
         assert_array_equal(self.value1 - self.value2, subtract.value, 'Egads to Egads vector subtraction not equal')
         assert_array_equal(self.value1 * self.value2, multiply.value, 'Egads to Egads vector multiplication not equal')
         assert_array_equal(self.value1 / self.value2, divide.value, 'Egads to Egads vector division not equal')

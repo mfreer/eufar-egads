@@ -6,7 +6,7 @@ __all__ = ["NasaAmes"]
 
 import egads
 import nappy
-
+import nappy.nc_interface.na_to_cdms
 
 from egads.input import FileCore
 
@@ -35,31 +35,73 @@ class NasaAmes(FileCore):
         FileCore.__init__(self, filename, perms)
 
 
-    def read_variable(self, varname):
-        #TODO Add read_variable method.
-        pass
+    def read_variable(self, varname, time_units=None):
+        """
+        Read in variable from currently open NASA Ames file to :class: EgadsData
+        object. Any additional variable metadata is additionally read in.
+
+        :param string|int varname:
+            String name or sequential number of variable to read in from currently
+            open file.
+        """
+
+        if isinstance(varname, int):
+            varnum = varname
+        else:
+            var_list = self.get_variable_list()
+            varnum = var_list.index(varname)
+
+
+        (variable, units, miss, scale) = self.f.getVariable(varnum)
+
+        variable_metadata = egads.core.metadata.VariableMetadata({'name':variable,
+                                                                  'units':units,
+                                                                  '_FillValue':miss,
+                                                                  'scale_factor':scale},
+                                                                  self.file_metadata)
+
+
+        convertor = nappy.nc_interface.na_to_cdms.NADictToCdmsObjects(self.f,
+                                                                    variables=[varnum],
+                                                                    time_warning=False,
+                                                                    time_units=time_units)
+                                                                    
+        (cdms_primary, cdms_aux, global_attrs) = convertor.convert()
+        na_data = cdms_primary[0]
+
+        data = egads.EgadsData(na_data, variable_metadata)
+
+        return data
 
     def write_variable(self, data, varname):
         #TODO Add write_variable method.
         pass
 
     def get_variable_list(self):
-        #TODO Add get_variable_list method.
-        pass
+        """ 
+        Returns list of all main variables in NASA Ames file.
+        
+        """
+        
+        var_list = self.f.getVariables()
+        
+        
+        varname = []
+        for var in var_list:
+            varname.append(var[0])
+        
+        return varname
 
-    def get_perms(self):
-        #TODO Add get_perms method.
-        pass
 
     def convert_to_netcdf(self, nc_file=None, mode='w', variables=None, aux_variables=None,
                           global_attributes=[], time_units=None, time_warning=True,
                           rename_variables={}):
         """
-        Converts currently open NASA Ames file to NetCDF file.
+        Converts currently open NASA Ames file to NetCDF file using the Nappy API.
 
         :param string nc_file:
-            Optional - Name of output NetCDF file. If none is provided, suffix on current
-            NA file is changed to .nc
+            Optional - Name of output NetCDF file. If none is provided, name of current
+            NA file is used and suffix changed to .nc
         :param char mode:
             Optional - ``w`` for write (ovewrites data), ``a`` for append. Default: ``w``.
         :param list variables:
@@ -89,11 +131,11 @@ class NasaAmes(FileCore):
 
     def convert_to_csv(self, csv_file=None, annotation=False, no_header=False):
         """
-        Converts currently open NASA Ames file to CSV file.
+        Converts currently open NASA Ames file to CSV file using the Nappy API.
 
         :param string csv_file:
-            Optional - Name of output CSV file. If none is provided, suffix on currently open
-            NA file is changed to .csv
+            Optional - Name of output CSV file. If none is provided, name of current
+            NA file is used and suffix changed to .csv
         :param bool annotation:
             Optional - Adds additional left-hand column to output file if set to True. Default: False.
         :param bool no_header:

@@ -60,8 +60,8 @@ class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
             self.perms = perms
             self.pos = self.f.tell()
         except IOError:
-            print "ERROR: File %s doesn't exist" % (filename)
-            raise RuntimeError
+#            print "ERROR: File %s doesn't exist" % (filename)
+            raise
         except Exception:
             print "ERROR: Unexpected error"
             raise

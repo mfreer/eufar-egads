@@ -394,7 +394,7 @@ shows the calculation of density for all NetCDF files in a directory.
 Scripting Hints
 ----------------
 
-When scripting in Python, there are several 
+When scripting in Python, there are several  
 
 Importance of white space
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

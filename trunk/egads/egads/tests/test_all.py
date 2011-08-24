@@ -14,4 +14,4 @@ def test():
     suite.addTest(egads_tests.suite())
     suite.addTest(thermodynamics_tests.suite())
 
-    unittest.TextTestRunner(verbosity=5).run(suite)
+    unittest.TextTestRunner(verbosity=2).run(suite)
