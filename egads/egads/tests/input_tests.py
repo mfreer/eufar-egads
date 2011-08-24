@@ -1,5 +1,5 @@
 """
-Test suite for NetCDF and text file input and output libraries.
+Test suite for NetCDF, NASA Ames and text file input and output libraries.
 
 Uses NetCDF4 Python library to test known inputs and outputs against the EGADS
 NetCDF library (based on NetCDF4).
@@ -46,8 +46,11 @@ DIM1_LEN = 10
 DIM2_NAME = 'y'
 DIM2_LEN = 5
 
+
 random_data = uniform(size=(DIM1_LEN))
 random_mult_data = uniform(size=(DIM1_LEN, DIM2_LEN))
+
+
 
 
 class NetCdfFileInputTestCase(unittest.TestCase):
@@ -185,22 +188,23 @@ class NetCdfFileInputTestCase(unittest.TestCase):
 
         infile = input.EgadsNetCdf(self.file)
 
-        self.assertEqual(infile.history, None, 'NetCDF history attribute doesnt match')
-        self.assertEqual(infile.title, TITLE, 'NetCDF title attribute doesnt match')
+        
+        self.assertEqual(infile.file_metadata['title'], TITLE, 'NetCDF title attribute doesnt match')
 
         data = infile.read_variable(VAR_NAME)
 
         assert_array_equal(data.value, random_data)
         self.assertEqual(data.units, VAR_UNITS, 'EgadsData units attribute doesnt match')
-        self.assertEqual(data.long_name, VAR_LONG_NAME, 'EgadsData long name attribute doesnt match')
-        self.assertEqual(data.standard_name, VAR_STD_NAME,'EgadsData standard name attribute doesnt match')
+        self.assertEqual(data.metadata['units'], VAR_UNITS, 'EgadsData units attribute doesnt match')
+        self.assertEqual(data.metadata['long_name'], VAR_LONG_NAME, 'EgadsData long name attribute doesnt match')
+        self.assertEqual(data.metadata['standard_name'], VAR_STD_NAME,'EgadsData standard name attribute doesnt match')
 
 
 
 
 
 class NetCdfFileOutputTestCase(unittest.TestCase):
-    """ Test ouput to NetCDF file """
+    """ Test output to NetCDF file """
     def setUp(self):
         self.file = FILE_NAME
 
@@ -234,9 +238,6 @@ class NetCdfFileOutputTestCase(unittest.TestCase):
     def tearDown(self):
         os.remove(self.file)
     
-    def test_create_file(self):
-        """ test creation of new NetCDF file """
-        self.fail('Test not implemented')
 
     def test_dimension_creation(self):
         """ test creation of dimensions in file """
@@ -291,7 +292,7 @@ class EgadsFileInputTestCase(unittest.TestCase):
 
         self.assertEqual(f.filename, self.filename, 'Filenames do not match')
 
-        self.assertRaises(RuntimeError, input.EgadsFile, 'nofile.txt')
+        self.assertRaises(IOError, input.EgadsFile, 'nofile.txt')
 
         self.assertEqual(f.pos, 0, 'File position is not correct')
 
@@ -452,7 +453,7 @@ class EgadsCsvInputTestCase(unittest.TestCase):
 
         self.assertEqual(self.f.filename, self.filename, 'Filenames do not match')
 
-        self.assertRaises(RuntimeError, input.EgadsFile, 'nofile.txt')
+        self.assertRaises(IOError, input.EgadsFile, 'nofile.txt')
 
         self.assertEqual(self.f.pos, 0, 'File position is not correct')
 
@@ -507,6 +508,94 @@ class EgadsCsvOutputTestCase(unittest.TestCase):
         f.close()
 
 
+class NAInputTestCase(unittest.TestCase):
+    """ Test reading of NASA Ames files. """
+
+    def setUp(self):
+        self.filename = tempfile.mktemp('.na');
+
+        f = input.EgadsFile(self.filename, 'w')
+
+        filetext = '''26  1001
+M.Freer; email: eufarsp@eufar.net
+EUFAR
+Test NASA Ames File
+Test001
+  1  1
+2011  8 23  2011  8  24
+0
+Time_np (seconds after midnight)
+  4
+1
+1
+1
+1
+-9900
+-9900
+-9900
+-9900
+GPS LAT (degrees +-90)
+GPS LON (degrees +-180)
+Height above sea level (m)
+Time (seconds after midnight)
+  1
+This is a test file for verifying the status of the EGADS NASA Ames functionality.
+  1
+TIME GPS_LAT_NP GPS_LON_NP GPS_ALT_NP TIME
+ 51143.42    48.0797    11.2809    584.3 51143.42
+ 51144.42    48.0792    11.2800    585.6 51144.42
+ 51145.42    48.0787    11.2793    587.8 51145.42
+ 51146.42    48.0782    11.2786    591.3 51146.42
+ 51147.42    48.0775    11.2778    596.0 51147.42'''
+
+        f.write(filetext)
+
+        f.close()
+
+
+        self.originator = 'M.Freer; email: eufarsp@eufar.net'
+        self.org = 'EUFAR'
+        self.scom = ['This is a test file for verifying the status of the EGADS NASA Ames functionality.']
+        self.var_names = ['GPS LAT', 'GPS LON', 'Height above sea level', 'Time']
+        self.units = ['degrees +-90', 'degrees +-180', 'm', 'seconds after midnight']
+        self.miss_vals = [-9900.0, -9900.0, -9900.0, -9900.0]
+        self.time_max = 51147.42
+        self.time_min = 51143.42
+        self.GPS_LON_max = 11.2778
+        self.GPS_LON_min = 11.2809
+
+
+    def test_read_file(self):
+        "Test reading data in from NASA Ames file"
+
+        f = egads.input.NasaAmes(self.filename)
+
+        self.assertEqual(self.org, f.file_metadata['Organisation'], 'Organisation values do not match')
+        self.assertEqual(self.originator, f.file_metadata['Originator'], 'Originator values do not match')
+        self.assertEqual(self.scom, f.file_metadata['SpecialComments'], 'Special comments do not match')
+
+
+        var_names = f.get_variable_list()
+
+        self.assertEqual(self.var_names, var_names, 'Variable names do not match')
+
+        var1_intcall = f.read_variable(1)
+
+        self.assertEqual(self.units[1], var1_intcall.metadata['units'], 'Var 1 units do not match')
+        self.assertEqual(self.miss_vals[1], var1_intcall.metadata['_FillValue'], 'Var 1 missing values do not match')
+        self.assertEqual(self.GPS_LON_max, var1_intcall.value[-1], 'Var 1 max values do not match')
+        self.assertEqual(self.GPS_LON_min, var1_intcall.value[0], 'Var 1 min values do not match')
+
+        var1_namecall = f.read_variable(var_names[1])
+
+        self.assertEqual(self.units[1], var1_namecall.metadata['units'], 'Var 1 units do not match')
+        self.assertEqual(self.miss_vals[1], var1_namecall.metadata['_FillValue'], 'Var 1 missing values do not match')
+        self.assertEqual(self.GPS_LON_max, var1_namecall.value[-1], 'Var 1 max values do not match')
+        self.assertEqual(self.GPS_LON_min, var1_namecall.value[0], 'Var 1 min values do not match')
+
+
+
+    
 
 
 
@@ -517,9 +606,11 @@ def suite():
     text_out_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsFileOutputTestCase)
     csv_in_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsCsvInputTestCase)
     csv_out_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsCsvOutputTestCase)
+    na_in_suite = unittest.TestLoader().loadTestsFromTestCase(NAInputTestCase)
+
 
     return unittest.TestSuite([netcdf_in_suite, netcdf_out_suite, text_in_suite, 
-                               text_out_suite, csv_in_suite, csv_out_suite])
+                               text_out_suite, csv_in_suite, csv_out_suite, na_in_suite])
 
 if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=5).run(suite())

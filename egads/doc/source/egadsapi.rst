@@ -22,7 +22,10 @@ File Classes
 .. automodule:: egads.input.input_core
 	:members:
 
-.. automodule:: egads.input.netcdf
+.. automodule:: egads.input.nasa_ames_io
+	:members:
+
+.. automodule:: egads.input.netcdf_io
 	:members:
 	:show-inheritance:
 
