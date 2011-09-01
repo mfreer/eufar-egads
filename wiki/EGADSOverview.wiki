@@ -1,5 +1,4 @@
 #labels Introduction
-
 = Introduction =
 
 The EGADS (EUFAR General Airborne Data-processing Software) package is a Python-based, open-source collection of mature, community-contributed algorithms for processing all aspects of airborne atmospheric science data. EGADS provides standard libraries to interface with common data formats such as NetCDF and NASA Ames. EGADS was created to provide a centralized library of algorithms for reference to operators, researchers and users of airborne data. 
@@ -8,5 +7,4 @@ The current EGADS implementation allows users to interact with data processing a
 
 = Details =
 
-*Structure*
-The EGADS core framework contains a data class called EgadsData that permits data and metadata to be easily passed between functions in a consistent manner. EGADS algorithms accept the EgadsData as inputs, and return populated instances of the EGADS data class.
+For more information about EGADS installation, usage and features, please see the documentation at http://packages.python.org/egads/
