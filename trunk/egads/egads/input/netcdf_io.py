@@ -52,8 +52,8 @@ class NetCdf(FileCore):
 
     def get_attribute_list(self, varname=None):
         """
-        Returns a dictionary of attributes avd values found either in current
-        NetCDF file, or attached to a given variable.
+        Returns a dictionary of attributes and values found in current NetCDF file
+        either globally, or attached to a given variable.
 
         :param string varname: Optional -
             Name of variable to get list of attributes from. If no variable name is

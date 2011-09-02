@@ -92,6 +92,33 @@ class NasaAmes(FileCore):
         
         return varname
 
+    def get_attribute_list(self, varname=None):
+        """
+        Returns a dictionary of attributes and values found in current NASA Ames
+        file either globally, or attached to a given variable.
+
+        :param string| varname:
+            Optional - Name or number of variable to get list of attributes from. If no
+            variable name is provided, the function returns global attributes.
+        """
+
+        if varname is not None:
+            if isinstance(varname, int):
+                varnum = varname
+            else:
+                var_list = self.get_variable_list()
+                varnum = var_list.index(varname)
+
+            (variable, units, miss, scale) = self.f.getVariable(varnum)
+            
+            vardict = {'name':variable,
+                       'units':units,
+                       '_FillValue':miss,
+                       'scale_factor':scale}
+            return vardict
+        else:
+            return self.f.getNADict()
+
 
     def convert_to_netcdf(self, nc_file=None, mode='w', variables=None, aux_variables=None,
                           global_attributes=[], time_units=None, time_warning=True,
@@ -160,7 +187,7 @@ class NasaAmes(FileCore):
         self.close()
 
         try:
-            self.f = nappy.openNAFile(filename)
+            self.f = nappy.openNAFile(filename, mode=perms)
             self.filename = filename
             self.perms = perms
             attr_dict = {}
