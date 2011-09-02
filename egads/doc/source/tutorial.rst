@@ -300,6 +300,52 @@ To close a file, simply use the ``close()`` method:
 
     >>> f.close()
 
+Working with NASA Ames files
+----------------------------
+
+To work with NASA Ames files, EGADS incorporates the NAPpy library developed by Ag Stephens of BADC. Information about NAPpy can be found at http://proj.badc.rl.ac.uk/ndg/wiki/nappy
+
+In EGADS, the NAPpy API has been adapted to match the other EGADS file access methods. Thus, from EGADS, NASA Ames files can be accessed via the
+:class:`egads.input.nasa_ames_io.NasaAmes' class.
+
+Opening
+^^^^^^^^
+To open a NASA Ames file, simply create a :class:`.NasaAmes()` instance and then use the ``open(pathname, permissions)`` command:
+
+    >>> import egads
+    >>> f = egads.input.NasaAmes()
+    >>> f.open('/pathname/filename.na','r')
+
+Valid values for permissions are:
+
+* ``r`` -- Read: opens file for reading only. Default value if nothing is provided.
+* ``w`` -- Write: opens file for writing, and overwrites data in file.
+* ``a`` -- Append: opens file for appending data.
+* ``r+`` -- Same as ``a``.
+
+ Getting info
+^^^^^^^^^^^^^
+
+* ``f.get_attribute_list()`` -- returns a list of all top-level attributes
+* ``f.get_attribute_list(var_name)`` -- returns list of all attributes attached to ``var_name``
+* ``f.get_variable_list()`` -- returns list of all variables
+* ``f.get_filename()`` -- returns filename for currently opened file
+
+Reading data
+^^^^^^^^^^^^^
+
+To read data from a file, use the ``read_variable()`` function:
+
+    >>> data = f.read_variable(var_name)
+
+where ``var_name`` is the name of the variable to read in. The data will be read in to an instance of the ``EgadsData()`` class, containing 
+the values and attributes of ``var_name``.
+
+Writing data
+^^^^^^^^^^^^
+Currently, EGADS does not support writing data out in NASA Ames format. However, conversions can be done with appropriate data between NetCDF and NASA Ames.
+
+
 
 Working with algorithms
 ------------------------
