@@ -280,7 +280,7 @@ class AlgorithmMetadata(Metadata):
         :param dict metadata_dict:
             Dictionary object containing variable metadata names and values
         :param list child_varable_metadata: Optional -
-            List containing VariableMetadta
+            List containing VariableMetadata
 
         """
 

@@ -343,7 +343,18 @@ the values and attributes of ``var_name``.
 
 Writing data
 ^^^^^^^^^^^^
-Currently, EGADS does not support writing data out in NASA Ames format. However, conversions can be done with appropriate data between NetCDF and NASA Ames.
+Currently, EGADS does not support writing data out in NASA Ames format. However, conversions can be done with appropriate data between NetCDF and NASA Ames. 
+See the section on converting formats for more information.
+
+Converting between file formats
+--------------------------------
+
+To convert between file formats, EGADS adopts features from the NAPpy library into the EGADS framework. The format conversion methods are incorporated into the
+EGDAS file classes, thus to convert a file from NASA Ames to NetCDF, the :meth:`convert_to_netcdf` method in the :class:`egads.input.NasaAmes` class would be used.
+See below for examples:
+
+   >>> f = egads.input.NasaAmes('/pathname/filename.na')
+   >>> f.convert_to_netcdf('/pathname/output_netcdf.nc'
 
 
 

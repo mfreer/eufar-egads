@@ -121,7 +121,7 @@ class NasaAmes(FileCore):
 
 
     def convert_to_netcdf(self, nc_file=None, mode='w', variables=None, aux_variables=None,
-                          global_attributes=[], time_units=None, time_warning=True,
+                          global_attributes=[], time_units=None, time_warning=False,
                           rename_variables={}):
         """
         Converts currently open NASA Ames file to NetCDF file using the Nappy API.
@@ -144,7 +144,7 @@ class NasaAmes(FileCore):
             to use for time units if there is a valid time axis.
         :param bool time_warning:
             Optional - Suppresses time units warning for invalid time units if set to False.
-            Default: True.
+            Default: False.
         :param dict rename_variables:
             Optional - Dictionary of {old_name: new_name} variable ID pairs used to
             rename variables as they are written to the NetCDF file.
@@ -170,7 +170,7 @@ class NasaAmes(FileCore):
 
         """
 
-        nappy.convertNAtoCSV(self.filename, csv_file, annotation, no_header)
+        nappy.convertNAToCSV(self.filename, csv_file, annotation, no_header)
 
     def _open_file(self, filename, perms):
         """
