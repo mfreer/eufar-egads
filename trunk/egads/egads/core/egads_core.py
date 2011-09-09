@@ -324,13 +324,8 @@ class EgadsAlgorithm(object):
 
         self.return_Egads = return_Egads
 
-        self.version = None
-        self.date = None
-        self.inputs = None
-        self.outputs = None
-        self.author = None
-
         self.metadata = None
+        self.output_metadata = None
 
         self._output_fields = ['name', 'units', 'long_name', 'standard_name',
             'fill_value', 'valid_range', 'sampled_rate',
@@ -343,9 +338,8 @@ class EgadsAlgorithm(object):
 
     def run(self, *args):
         """
-        Skeleton class for run method. Raises not implemented AssertionError
-        in this context, and should be redefined by EgadsAlgorithm children
-        classes.
+        Basic run method. This method should be called from EgadsAlgorithm children,
+        passsing along the correct inputs to the _call_algorithm method.
 
         """
 
@@ -403,7 +397,7 @@ class EgadsAlgorithm(object):
 
     def _algorithm(self):
         """
-        Skeleton algorithm method. To be defined in EgadsAlgorithm children.
+        Skeleton algorithm method. Must be defined in EgadsAlgorithm children.
 
         """
 

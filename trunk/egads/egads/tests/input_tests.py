@@ -47,6 +47,40 @@ DIM2_NAME = 'y'
 DIM2_LEN = 5
 
 
+NAFILETEXT = '''26  1001
+M.Freer; email: eufarsp@eufar.net
+EUFAR
+Test NASA Ames File
+Test001
+  1  1
+2011  8 23  2011  8  24
+0
+Time_np (seconds after midnight)
+  4
+1
+1
+1
+1
+-9900
+-9900
+-9900
+-9900
+GPS LAT (degrees +-90)
+GPS LON (degrees +-180)
+Height above sea level (m)
+Time (seconds after midnight)
+  1
+This is a test file for verifying the status of the EGADS NASA Ames functionality.
+  1
+TIME GPS_LAT_NP GPS_LON_NP GPS_ALT_NP TIME2
+ 51143.42    48.0797    11.2809    584.3 51143.42
+ 51144.42    48.0792    11.2800    585.6 51144.42
+ 51145.42    48.0787    11.2793    587.8 51145.42
+ 51146.42    48.0782    11.2786    591.3 51146.42
+ 51147.42    48.0775    11.2778    596.0 51147.42'''
+
+
+
 random_data = uniform(size=(DIM1_LEN))
 random_mult_data = uniform(size=(DIM1_LEN, DIM2_LEN))
 
@@ -516,39 +550,7 @@ class NAInputTestCase(unittest.TestCase):
 
         f = input.EgadsFile(self.filename, 'w')
 
-        filetext = '''26  1001
-M.Freer; email: eufarsp@eufar.net
-EUFAR
-Test NASA Ames File
-Test001
-  1  1
-2011  8 23  2011  8  24
-0
-Time_np (seconds after midnight)
-  4
-1
-1
-1
-1
--9900
--9900
--9900
--9900
-GPS LAT (degrees +-90)
-GPS LON (degrees +-180)
-Height above sea level (m)
-Time (seconds after midnight)
-  1
-This is a test file for verifying the status of the EGADS NASA Ames functionality.
-  1
-TIME GPS_LAT_NP GPS_LON_NP GPS_ALT_NP TIME
- 51143.42    48.0797    11.2809    584.3 51143.42
- 51144.42    48.0792    11.2800    585.6 51144.42
- 51145.42    48.0787    11.2793    587.8 51145.42
- 51146.42    48.0782    11.2786    591.3 51146.42
- 51147.42    48.0775    11.2778    596.0 51147.42'''
-
-        f.write(filetext)
+        f.write(NAFILETEXT)
 
         f.close()
 
@@ -594,8 +596,73 @@ TIME GPS_LAT_NP GPS_LON_NP GPS_ALT_NP TIME
         self.assertEqual(self.GPS_LON_min, var1_namecall.value[0], 'Var 1 min values do not match')
 
 
+class ConvertFormatTestCase(unittest.TestCase):
+    """ Test conversion between formats using nappy toolbox """
 
-    
+    def setUp(self):
+        self.nafilename = tempfile.mktemp('.na');
+
+        f = input.EgadsFile(self.nafilename, 'w')
+
+        f.write(NAFILETEXT)
+
+        f.close()
+
+        self.ncfilename = tempfile.mktemp('.nc')
+        f = netCDF4.Dataset(self.ncfilename, 'w')
+        f.attribute = GLOBAL_ATTRIBUTE
+        f.Conventions = CONVENTIONS
+        f.title = TITLE
+        f.source = SOURCE
+        f.institution = INSTITUTION
+        f.project = PROJECT
+
+        f.createDimension(DIM1_NAME, DIM1_LEN)
+        f.createDimension(DIM2_NAME, DIM2_LEN)
+        v1 = f.createVariable(VAR_NAME, 'f8', (DIM1_NAME))
+        v2 = f.createVariable(VAR_MULT_NAME, 'f8', (DIM1_NAME, DIM2_NAME))
+        v1.units = VAR_UNITS
+        v2.units = VAR_MULT_UNITS
+        v1.long_name = VAR_LONG_NAME
+        v1.standard_name = VAR_STD_NAME
+        v1.Category = CATEGORY
+        v1[:] = random_data
+        v2[:] = random_mult_data
+
+        f.close()
+
+        self.nc_out_name = tempfile.mktemp('.nc')
+        self.csv_out_name = tempfile.mktemp('.csv')
+        self.na_out_name = tempfile.mktemp('.na')
+
+    def test_convert_nc_to_csv(self):
+        """ Test conversion of NetCDF to CSV """
+
+        f = egads.input.NetCdf(self.ncfilename)
+
+        f.convert_to_csv(self.csv_out_name)
+
+
+    def test_convert_nc_to_na(self):
+        """ Test conversion of NetCDF to NASA Ames """
+
+        f = egads.input.NetCdf(self.ncfilename)
+
+        f.convert_to_nasa_ames(self.na_out_name)
+
+    def test_convert_na_to_csv(self):
+        """ Test conversion of NASA Ames to CSV """
+
+        f = egads.input.NasaAmes(self.nafilename)
+
+        f.convert_to_csv(self.csv_out_name)
+
+    def test_convert_na_to_nc(self):
+        """ Test conversion of NASA Ames to NetCDF"""
+
+        f = egads.input.NasaAmes(self.nafilename)
+
+        f.convert_to_netcdf(self.nc_out_name)
 
 
 
@@ -607,10 +674,14 @@ def suite():
     csv_in_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsCsvInputTestCase)
     csv_out_suite = unittest.TestLoader().loadTestsFromTestCase(EgadsCsvOutputTestCase)
     na_in_suite = unittest.TestLoader().loadTestsFromTestCase(NAInputTestCase)
+    convert_format_suite = unittest.TestLoader().loadTestsFromTestCase(ConvertFormatTestCase)
 
 
     return unittest.TestSuite([netcdf_in_suite, netcdf_out_suite, text_in_suite, 
-                               text_out_suite, csv_in_suite, csv_out_suite, na_in_suite])
+                               text_out_suite, csv_in_suite, csv_out_suite, na_in_suite,
+                               convert_format_suite])
+
+
 
 if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=5).run(suite())

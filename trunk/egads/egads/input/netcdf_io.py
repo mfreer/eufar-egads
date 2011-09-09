@@ -281,7 +281,7 @@ class NetCdf(FileCore):
 
         """
 
-        nappy.convertNCtoNA(self.filename, na_file, var_ids, na_items_to_override,
+        nappy.convertNCToNA(self.filename, na_file, var_ids, na_items_to_override,
                             only_return_file_names, exclude_vars, requested_ffi,
                             delimiter, float_format, size_limit, annotation,
                             no_header)
@@ -295,7 +295,7 @@ class NetCdf(FileCore):
             NetCDF is used and suffix changed to .csv
         """
 
-        nappy.convertNCtoCSV(self.filename, csv_file)
+        nappy.convertNCToCSV(self.filename, csv_file)
 
 
     def _open_file(self, filename, perms):
