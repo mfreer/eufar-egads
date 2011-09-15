@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:: 2010-10-19 19:10#$"
-__version__ = "$Revision:: 38        $"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ["NasaAmes"]
 
 
