@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:: 2011-03-15 18:45#$"
-__version__ = "$Revision:: 53        $"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ['Metadata', 'FileMetadata','VariableMetadata','AlgorithmMetadata']
 
 

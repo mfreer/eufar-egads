@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:: 2011-02-22 16:13#$"
-__version__ = "$Revision:: 45        $"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ["FileCore", "get_file_list"]
 
 import glob
@@ -85,6 +85,15 @@ class FileCore(object):
             return self.perms
         else:
             return
+
+    def get_filename(self):
+        """
+        If file is open, returns the filename.
+
+        """
+
+        return self.filename
+
 
 
 def get_file_list(path):

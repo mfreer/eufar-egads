@@ -390,7 +390,7 @@ Within Python, usage information on each algorithm can be found using the ``help
 	class VelocityTasCnrm(egads.core.egads_core.EgadsAlgorithm)
 	 |  FILE        velocity_tas_cnrm.py
 	 | 
-	 |  VERSION     $Revision: 38 $
+	 |  VERSION     $Revision$
 	 |  
 	 |  CATEGORY    Thermodynamics
 	 |  
@@ -451,7 +451,8 @@ shows the calculation of density for all NetCDF files in a directory.
 Scripting Hints
 ----------------
 
-When scripting in Python, there are several  
+When scripting in Python, there are several important differences from other programming languages to keep in mind. This section outlines a few of these 
+differences.
 
 Importance of white space
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

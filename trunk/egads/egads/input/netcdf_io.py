@@ -108,14 +108,6 @@ class NetCdf(FileCore):
         
         return self._get_variable_list()
 
-    def get_filename(self):
-        """
-        If file is open, returns the filename.
-
-
-        """
-
-        return self.filename
 
     def get_perms(self):
         """
