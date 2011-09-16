@@ -5,7 +5,7 @@ __all__ = ["NasaAmes"]
 
 
 import egads
-import nappy
+import nappy as nappy
 import nappy.nc_interface.na_to_cdms
 
 from egads.input import FileCore
@@ -65,7 +65,7 @@ class NasaAmes(FileCore):
                                                                     variables=[varnum],
                                                                     time_warning=False,
                                                                     time_units=time_units)
-                                                                    
+
         (cdms_primary, cdms_aux, global_attrs) = convertor.convert()
         na_data = cdms_primary[0]
 
@@ -82,14 +82,14 @@ class NasaAmes(FileCore):
         Returns list of all main variables in NASA Ames file.
         
         """
-        
+
         var_list = self.f.getVariables()
-        
-        
+
+
         varname = []
         for var in var_list:
             varname.append(var[0])
-        
+
         return varname
 
     def get_attribute_list(self, varname=None):
@@ -110,7 +110,7 @@ class NasaAmes(FileCore):
                 varnum = var_list.index(varname)
 
             (variable, units, miss, scale) = self.f.getVariable(varnum)
-            
+
             vardict = {'name':variable,
                        'units':units,
                        '_FillValue':miss,
@@ -151,7 +151,7 @@ class NasaAmes(FileCore):
 
         """
         if 'Conventions' not in global_attributes:
-            global_attributes.append(('Conventions','CF-1.0'))
+            global_attributes.append(('Conventions', 'CF-1.0'))
 
         nappy.convertNAToNC(self.filename, nc_file, mode, variables, aux_variables,
                             global_attributes, time_units, time_warning, rename_variables)
@@ -201,7 +201,7 @@ class NasaAmes(FileCore):
             attr_dict['Mission'] = self.f.getMission()
             attr_dict['Source'] = self.f.getSource()
             self.file_metadata = egads.core.metadata.FileMetadata(attr_dict, self.filename,
-                                                                  conventions = "NASAAmes")
+                                                                  conventions="NASAAmes")
         except RuntimeError:
             print "ERROR: File %s doesn't exist" % (filename)
             raise RuntimeError

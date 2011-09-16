@@ -1,12 +1,11 @@
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
-__all__ = ["NetCdf","EgadsNetCdf"]
+__all__ = ["NetCdf", "EgadsNetCdf"]
 
 import netCDF4
-import nappy
 import egads
-
+import nappy
 
 from egads.input import FileCore
 
@@ -105,7 +104,7 @@ class NetCdf(FileCore):
         Returns a list of variables found in the current NetCDF file.
 
         """
-        
+
         return self._get_variable_list()
 
 
@@ -121,7 +120,7 @@ class NetCdf(FileCore):
         if self.f is not None:
             return self.perms
         else:
-            return 
+            return
 
 
 
@@ -382,7 +381,7 @@ class EgadsNetCdf(NetCdf):
 
     """
 
-    
+
     FILE_ATTR_DICT = {'Conventions':'conventions',
                       'title':'title',
                       'source':'source',
@@ -512,7 +511,7 @@ class EgadsNetCdf(NetCdf):
             ``a`` and ``r+`` for append, and ``r`` for read. ``r`` is the default
             value.
         """
-        
+
         self.file_metadata = None
 
         FileCore.__init__(self, filename, perms)
@@ -561,7 +560,7 @@ class EgadsNetCdf(NetCdf):
         variable_metadata = egads.core.metadata.VariableMetadata(variable_attrs,
                                                                  self.file_metadata)
 
-        data = egads.EgadsData(value, variable_metadata=variable_metadata )
+        data = egads.EgadsData(value, variable_metadata=variable_metadata)
 
         return data
 
