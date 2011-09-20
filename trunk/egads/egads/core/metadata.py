@@ -1,51 +1,8 @@
+from Carbon import CF
 __author__ = "mfreer"
 __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ['Metadata', 'FileMetadata','VariableMetadata','AlgorithmMetadata']
-
-
-FILE_ATTR_DICT = {'Conventions':'conventions',
-                  'title':'title',
-                  'source':'source',
-                  'institution':'institution',
-                  'project':'project',
-                  'date_created':'date_created',
-                  'geospatial_lat_min':'geospatial_lat_min',
-                  'geospatial_lat_max':'geospatial_lat_max',
-                  'geospatial_lon_min':'geospatial_lon_min',
-                  'geospatial_lon_max':'geospatial_lon_max',
-                  'geospatial_vertical_min':'geospatial_vertical_min',
-                  'geospatial_vertical_max':'geospatial_vertical_max',
-                  'geospatial_vertical_positive':'geospatial_vertical_positive',
-                  'geospatial_vertical_units':'geospatial_vertical_units',
-                  'time_coverage_start':'time_coverage_start',
-                  'time_coverage_end':'time_coverage_end',
-                  'time_coverage_duration':'time_coverage_duration',
-                  'history':'history',
-                  'references':'references',
-                  'comment':'comment'}
-
-
-
-VAR_ATTR_DICT = {'units':'units',
-                 '_FillValue':'fill_value',
-                 'long_name':'long_name',
-                 'standard_name':'standard_name',
-                 'valid_range':'valid_range',
-                 'valid_min':'valid_min',
-                 'valid_max':'valid_max',
-                 'SampledRate':'sampled_rate',
-                 'Category':'category',
-                 'CalibrationCoefficients':'calibration_coefficients',
-                 'InstrumentLocation':'instrument_location',
-                 'instrumentCoordinates':'instrument_coordinates',
-                 'Dependencies':'dependencies',
-                 'Processor':'processor',
-                 'Comments':'comments',
-                 'ancillary_variables':'ancillary_variables',
-                 'flag_values':'flag_values',
-                 'flag_masks':'flag_masks',
-                 'flag_meanings':'flag_meanings'}
 
 FILE_ATTR_LIST = ['Conventions',
                   'title',
@@ -104,6 +61,81 @@ ALG_ATTR_LIST = ['units',
                  'ProcessorDate',
                  'DateProcessed']
 
+# Table of metadata elements used to convert between vocabularies.
+# List is [CF, RAF, IWGADTS, N6SP, NASA AMES]
+METADATA_GLOBAL_CONVERT_TABLE = [['title','','title','title',''],
+                                 ['references','','','references',''],
+                                 ['','Address','','',''],
+                                 ['','Phone','','',''],
+                                 ['','Categories','','',''],
+                                 ['','geospatial_lat_min','','geospatial_lat_min',''],
+                                 ['','geospatial_lat_max','','geospatial_lat_max',''],
+                                 ['','geospatial_lon_min','','geospatial_lon_min',''],
+                                 ['','geospatial_lon_max','','geospatial_lon_max',''],
+                                 ['','geospatial_vertical_min','','geospatial_vertical_min',''],
+                                 ['','geospatial_vertical_max','','geospatial_vertical_max',''],
+                                 ['','time_coverage_start','','time_coverage_start',''],
+                                 ['','time_coverage_end','','time_coverage_end',''],
+                                 ['','TimeInterval','','time_duration',''],
+                                 ['','DateProcessed','','','RDATE'],
+                                 ['','date_created','','date_created','DATE'],
+                                 ['','FlightDate','','',''],
+                                 ['history','DataQuality','data_quality','history',''],
+                                 ['institution','institution','institution','institution',''],
+                                 ['source','','source','source','ONAME'],
+                                 ['','creator_url','','',''],
+                                 ['','ConventionsURL','','',''],
+                                 ['','ConventionsVersion','','',''],
+                                 ['','Metadata_Conventions','','',''],
+                                 ['','Standard_name_vocabulary','','',''],
+                                 ['comment','','','comment','COMMENTS'],
+                                 ['','ProcessorRevision','','',''],
+                                 ['','ProcessorURL','','',''],
+                                 ['','ProjectName','','','MNAME'],
+                                 ['','Platform','','',''],
+                                 ['','ProjectNumber','project','project',''],
+                                 ['','FlightNumber','','',''],
+                                 ['','InterpolationMethod','','',''],
+                                 ['','latitude_coordinate','','',''],
+                                 ['','longitude_coodrinate','','',''],
+                                 ['','zaxis_coordinate','','',''],
+                                 ['','time_coordinate','','',''],
+                                 ['','wind_field','','',''],
+                                 ['','landmarks','','',''],
+                                 ['','geospatial_vertical_positive','','',''],
+                                 ['','geopsatial_vertical_units','','','']]
+
+# Table of metadata elements used to convert between vocabularies on a per-variable basis.
+# List is [CF, RAF, IWGADTS, N6SP, NASA AMES]
+METADATA_VARIABLE_CONVERT_TABLE = [['_FillValue','_FillValue','missing_value','_FillValue','AMISS'],
+                                   ['valid_min','','','valid_min',''],
+                                   ['valid_max','','','valid_max',''],
+                                   ['valid_range','','valid_range','valid_range',''],
+                                   ['scale_factor','','','','ASCAL'],
+                                   ['add_offset','','','',''],
+                                   ['units','units','units','units',''],
+                                   ['long_name','long_name','long_name','long_name','ANAME'],
+                                   ['standard_name','standard_name','standard_name','standard_name',''],
+                                   ['ancillary_variables','','','ancillary_variables',''],
+                                   ['flag_values','','','flag_values',''],
+                                   ['flag_masks','','','flag_masks',''],
+                                   ['flag_meanings','','','flag_meanings',''],
+                                   ['','SampledRate','','SampledRate',''],
+                                   ['','CalibrationCoefficients','','CalibrationCoefficients',''],
+                                   ['','Category','','Category',''],
+                                   ['','','','InstrumentCoordinates',''],
+                                   ['','','','InstrumentLocation',''],
+                                   ['','Dependencies','','Dependencies',''],
+                                   ['','','','Processor',''],
+                                   ['','','','Comments',''],
+                                   ['','','source','','SNAME']]
+
+CF_TABLE_COLUMN = 0
+RAF_TABLE_COLUMN = 1
+IWGADTS_TABLE_COLUMN = 2
+N6SP_TABLE_COLUMN = 3
+NASA_AMES_TABLE_COLUMN = 4
+
 
 class Metadata(dict):
     """
@@ -127,7 +159,12 @@ class Metadata(dict):
 
         self._metadata_list = metadata_list
 
-        self._conventions = conventions
+        if conventions is None:
+            if self.has_key('Conventions'):
+                self._conventions = self['Conventions']
+        else:
+            self._conventions = conventions
+        
 
     def add_items(self, metadata_dict):
         """
@@ -155,6 +192,76 @@ class Metadata(dict):
 
     def parse_dictionary_objs(self):
         pass
+    
+    def compliance_check(self, conventions=None):
+        """
+        Checks for compliance with metadata conventions. If no specific 
+        conventions are provided, then compliance check will be based on 
+        metadata conventions listed in Conventions metadata field.
+        
+        :param string|list conventions:
+            Optional - Comma separated string or list of coventions to use for 
+            conventions check. Current conventions recognized are ``CF``, 
+            ``RAF``, ``IWGADTS``, ``N6SP``, ``EUFAR``, ``NASA Ames``
+            
+        """
+        
+        if conventions is None:
+            if self.has_key('Conventions'):
+                conventions = self['Conventions']
+            else:
+                raise AttributeError  #TODO: specify error message
+        
+        if isinstance(conventions, str):
+            conventions = conventions.split(',')
+        
+        convention_num = None
+        
+        for convention in conventions:
+            if 'CF' in convention:
+                convention_num = CF_TABLE_COLUMN
+            elif 'RAF' in convention:
+                convention_num = RAF_TABLE_COLUMN
+            elif 'IWGADTS' in convention:
+                convention_num = IWGADTS_TABLE_COLUMN
+            elif 'N6SP' in convention:
+                convention_num = N6SP_TABLE_COLUMN
+            elif 'EUFAR' in convention:
+                convention_num = N6SP_TABLE_COLUMN
+            elif 'NASA' in convention:
+                convention_num = NASA_AMES_TABLE_COLUMN
+            else:
+                raise AttributeError #TODO: add specific error type and error message
+            
+            param_missing_list = self._parse_metadata_compliance(convention_num)
+
+            
+        def _parse_metadata_compliance(self, convention_num):
+            """ 
+            Private method to parse through a metadata parameter list to determine
+            compliance with standard.
+            
+            :param int convention_num:
+                Number specifying which convention standard to use in comparison.
+                
+            """
+            use_table = None
+            if isinstance(self, FileMetadata):
+                use_table = METADATA_GLOBAL_CONVERT_TABLE
+            
+            if isinstance(self, VariableMetadata):
+                use_table = METADATA_VARIABLE_CONVERT_TABLE
+                
+            if use_table is None:
+                raise AttributeError #TODO: Add specific error type for wrong class
+            
+            param_missing_list = []
+            for parameter in use_table:
+                if parameter[convention_num] not in self and parameter[convention_num] is not '':
+                    param_missing_list.append(parameter[convention_num])
+                    
+            return param_missing_list
+                  
 
 class FileMetadata(Metadata):
     """
