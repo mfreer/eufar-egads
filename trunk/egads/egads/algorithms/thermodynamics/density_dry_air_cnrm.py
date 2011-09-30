@@ -37,10 +37,10 @@ class DensityDryAirCnrm(egads_core.EgadsAlgorithm):
         self.output_metadata = egads_metadata.VariableMetadata({'units':'kg/m3',
                                                                'long_name':'density',
                                                                'standard_name':'air_density',
-                                                               'Category':['Thermodynamic','Atmos State']})
+                                                               'Category':['Thermodynamic', 'Atmos State']})
 
         self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['P_s', 'T_s'],
-                                                          'InputUnits':['hPa','K'],
+                                                          'InputUnits':['hPa', 'K'],
                                                           'Outputs':['rho'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,

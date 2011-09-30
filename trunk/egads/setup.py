@@ -9,10 +9,14 @@ contributed by members of the EUFAR Expert Working Groups and are mature and
 well-established in the scientific community.
 """
 
-from distutils.core import setup
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 classifiers = """\
-Development Status :: 2 - Pre-Alpha
+Development Status :: 4 - Beta
 Environment :: Console
 Intended Audience :: Developers
 Intended Audience :: Education
@@ -26,7 +30,7 @@ Topic :: Scientific/Engineering :: Atmospheric Science
 doclines = __doc__.split('\n')
 
 setup(name = 'egads',
-      version = '0.4.0',
+      version = '0.4.2',
       description = doclines[0],
       long_description = '\n'.join(doclines[2:]),
       author = 'EUFAR',
@@ -46,8 +50,10 @@ setup(name = 'egads',
                   'egads.algorithms.thermodynamics',
                   'egads.algorithms.transforms',
                   'egads.input',
-                  'egads.tests'],
+                  'egads.tests',
+		  'nappy'],
       classifiers = filter(None, classifiers.split("\n")),
-
+      requires = ['numpy (>=1.3.0)', 'scipy (>=0.6.0)','netCDF4 (>=0.8.2)', 'nappy (>=0.9.9)'],
+      install_requires = ['numpy >= 1.3.0','scipy >= 0.6.0','netCDF4 >= 0.8.2','nappy >= 0.9.9'],
       )
       
