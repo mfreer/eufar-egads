@@ -12,6 +12,7 @@ Building EGADS requires the following packages:
 * numpy 1.3.0 or newer. Available at http://numpy.scipy.org/
 * scipy 0.6.0 or newer. Available at http://www.scipy.org/
 * Python netCDF4 libraries 0.8.2. Available at http://code.google.com/p/netcdf4-python/
+* NAPpy 0.9.9 or newer. Available at http://proj.badc.rl.ac.uk/ndg/wiki/nappy
 
 Optional Packages
 *****************
@@ -28,7 +29,7 @@ from the command line. To install to a user-specified location, type ``python se
 
 Testing
 ********
-To test EGADS after it is installed, run the following commands in Python:
+To test EGADS after it is installed, run the run_tests.py Python script, or from Pythno, run the following commands:
 
    >>> import egads
    >>> egads.test()
