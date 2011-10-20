@@ -323,7 +323,7 @@ Valid values for permissions are:
 * ``a`` -- Append: opens file for appending data.
 * ``r+`` -- Same as ``a``.
 
- Getting info
+Getting info
 ^^^^^^^^^^^^^
 
 * ``f.get_attribute_list()`` -- returns a list of all top-level attributes
@@ -379,7 +379,7 @@ Algorithm Handbook is available for easy reference outside of Python. In the han
 is described in detail, including a brief algorithm summary, descriptions of algorithm inputs and outputs,
 the formula used in the algorithm, algorithm source and links to additional references. The handbook
 also specifies the exact name of the algorithm as defined in EGADS. The handbook
-can be found on the EGADS website, and in the \doc directory packaged with EGADS.
+can be found on the EGADS website.
 
 Within Python, usage information on each algorithm can be found using the ``help()`` command::
 
@@ -432,11 +432,13 @@ required arguments, in the order they are described in the algorithm help functi
 using the ``VelocityTasCnrm`` in the previous section as an example, would therefore be the 
 following:
 
-    >>> V_p = egads.algorithms.thermodynamics.VelocityTasCnrm().run(T_s, P_s, dP, cpa, Racpa)
+    >>> V_p = egads.algorithms.thermodynamics.VelocityTasCnrm().run(T_s, P_s, dP, cpa, Racpa)	
 
 where the arguments ``T_s``, ``P_s``, ``dP``, etc are all assumed to be previously defined in the 
-program scope.
+program scope. In this instance, the algorithm returns an ``EgadsData`` instance to ``V_p``. To run
+the algorithm, but return a standard data type (scalar or array of doubles), set the ``return_Egads`` flag to ``false``.
 
+    >>> V_p = egads.algorithms.thermodynamics.VelocityTasCnrm(return_Egads=false).run(T_s, P_s, dP, cpa, Racpa)
 
 
 Scripting
@@ -458,7 +460,7 @@ Importance of white space
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Python differs from C++ and Fortran in how loops or nested statements are signified. Whereas
-C++ uses brackets ('``{``' and '``}``') or FORTRAN uses ``end`` statements to signify the end of a
+C++ uses brackets ('``{``' and '``}``') and FORTRAN uses ``end`` statements to signify the end of a
 nesting, Python uses white space. Thus, for statements to nest properly, they must be set at the 
 proper depth. As long as the document is consistent, the number of spaces used doesn't matter, however, most conventions call for 4 spaces to be used per level. See below for examples:
 
