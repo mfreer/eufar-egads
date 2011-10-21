@@ -44,18 +44,12 @@ VAR_ATTR_LIST = ['units',
                  'flag_masks',
                  'flag_meanings']
 
-ALG_ATTR_LIST = ['units',
-                 'long_name',
-                 'standard_name',
-                 'valid_range',
-                 'Category',
-                 'CalibrationCoefficient',
-                 'Inputs',
+ALG_ATTR_LIST = ['Inputs',
+                 'InputUnits',
                  'Outputs',
-                 'Dependencies',
                  'Processor',
-                 'ProcessorVersion',
                  'ProcessorDate',
+                 'ProcessorVersion',
                  'DateProcessed']
 
 # Table of metadata elements used to convert between vocabularies.
@@ -156,11 +150,7 @@ class Metadata(dict):
 
         self._metadata_list = metadata_list
 
-        if conventions is None:
-            if self.has_key('Conventions'):
-                self._conventions = self['Conventions']
-        else:
-            self._conventions = conventions
+        self._conventions = conventions
 
 
     def add_items(self, metadata_dict):
@@ -388,7 +378,7 @@ class AlgorithmMetadata(Metadata):
 
         """
 
-        Metadata.__init__(self, metadata_dict, metadata_list=ALG_ATTR_LIST)
+        Metadata.__init__(self, metadata_dict, conventions = 'EGADS Algorithm', metadata_list=ALG_ATTR_LIST)
 
         self.child_metadata = []
 
