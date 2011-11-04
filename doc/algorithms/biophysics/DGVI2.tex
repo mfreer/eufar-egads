@@ -1,13 +1,13 @@
 %% $Revision: 26 $
-\index{DGVI1}
-\algdescgeneral{DGVI1}
+\index{DGVI2}
+\algdescgeneral{DGVI2}
 %
 { %%%%%% Algorithm name %%%%%%
-biophys\_indices (DGVI1 is one index calculated within the overall program)
+biophys\_indices (DGVI2 is one index calculated within the overall program)
 }
 %
 { %%%%%% Algorithm summary %%%%%%
-Calculation of Derivative-based Green Vegetation Index (DGVI). Surface under curve of first derivative between 626nm and 795nm.
+Calculation of Derivative-based Green Vegetation Index (DGVI). Surface under curve of second derivative between 626nm and 795nm.
 }
 %
 { %%%%%% Category %%%%%%
@@ -19,12 +19,12 @@ Narrow band multi- or hyperspectral imagery (ENVI standard image data) including
 }
 %
 { %%%%%% Outputs %%%%%%
-Single band with DGVI1 values
+Single band with DGVI2 values
 }
 %
 { %%%%%% Formula %%%%%%
 \begin{displaymath}
-DGVI1 = \int _{\lambda_1 =626nm}^{\lambda_2 =795nm}	\mid \frac{d   \rho}{d  \lambda }\mid d \lambda
+DGVI2 = \int _{\lambda_1 =626nm}^{\lambda_2 =795nm} \mid \frac{d \rho}{d^2  \lambda }\mid d \lambda
 \end{displaymath}
 }
 %
