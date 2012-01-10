@@ -4,26 +4,28 @@
 == Thermodynamics ==
 
 || *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
-|| altitude_pressure_cnrm || || || || ||
-|| density_dry_air_cnrm || || || || ||
-|| hum_rel_capacitive_cnrm || || || || ||
-|| pressure_angle_incidence_cnrm || || || || ||
-|| temp_potential_cnrm || || || || ||
-|| temp_potential_equiv_cnrm || || || || ||
-|| temp_static_cnrm || || || || ||
-|| temp_virtual_cnrm || || || || ||
-|| velocity_tas_cnrm || || || || ||
-|| velocity_tas_longitudinal_cnrm || || || || ||
+|| altitude_pressure_cnrm || X || X || || X ||
+|| density_dry_air_cnrm || X || X || || X ||
+|| hum_rel_capacitive_cnrm || X || X || || X ||
+|| pressure_angle_incidence_cnrm || X || X || || X ||
+|| temp_potential_cnrm || X || X || || X ||
+|| temp_potential_equiv_cnrm || X || X || || X ||
+|| temp_static_cnrm || X || X || || X ||
+|| temp_virtual_cnrm || X || X || || X ||
+|| velocity_mach_raf || || X || || || 
+|| velocity_tas_cnrm || X || X || || X ||
+|| velocity_tas_raf || || X || || || 
+|| velocity_tas_longitudinal_cnrm || X || X || || X ||
 
 == Microphysics == 
 
 || *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
-|| diameter_mean_raf || || || || ||
-|| number_conc_total_raf || || || || ||
-|| sample_area_oap_all_in_raf || || || || ||
-|| sample_area_oap_center_in_raf || || || || ||
-|| sample_area_scattering_raf || || || || ||
-|| sample_volume_general_raf || || || || ||
+|| diameter_mean_raf || X || || || ||
+|| number_conc_total_raf || X || || || ||
+|| sample_area_oap_all_in_raf || X || || || ||
+|| sample_area_oap_center_in_raf || X || || || ||
+|| sample_area_scattering_raf || X || || || ||
+|| sample_volume_general_raf || X || || || ||
 
 == Transforms == 
 
