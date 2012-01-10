@@ -1,0 +1,36 @@
+#summary This page describes the implementation, validation and unit test status of EGADS algorithms.
+
+
+== Thermodynamics ==
+
+|| *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
+|| altitude_pressure_cnrm || || || || ||
+|| density_dry_air_cnrm || || || || ||
+|| hum_rel_capacitive_cnrm || || || || ||
+|| pressure_angle_incidence_cnrm || || || || ||
+|| temp_potential_cnrm || || || || ||
+|| temp_potential_equiv_cnrm || || || || ||
+|| temp_static_cnrm || || || || ||
+|| temp_virtual_cnrm || || || || ||
+|| velocity_tas_cnrm || || || || ||
+|| velocity_tas_longitudinal_cnrm || || || || ||
+
+== Microphysics == 
+
+|| *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
+|| diameter_mean_raf || || || || ||
+|| number_conc_total_raf || || || || ||
+|| sample_area_oap_all_in_raf || || || || ||
+|| sample_area_oap_center_in_raf || || || || ||
+|| sample_area_scattering_raf || || || || ||
+|| sample_volume_general_raf || || || || ||
+
+== Transforms == 
+
+|| *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
+|| || || || || ||
+
+== Radiation ==
+
+|| *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
+|| || || || || ||
