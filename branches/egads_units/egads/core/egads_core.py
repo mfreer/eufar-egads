@@ -87,6 +87,7 @@ class EgadsData(pq.Quantity):
         return self.view(type=numpy.ndarray)
     @value.setter
     def value(self, value, indx=None):
+
         print value, indx
 #
 #    @property
