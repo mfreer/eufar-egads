@@ -9,11 +9,17 @@ import weakref
 import datetime
 from functools import wraps
 
-import metadata
 import numpy
+import quantities as pq
 
+import metadata
 
-class EgadsData(object):
+#from .units import unit_registry
+#from .units import Unit
+
+#import quantities as units
+
+class EgadsData(pq.Quantity):
     """
     This class is designed using the EUFAR N6SP data and metadata recommendations.
     Its purpose is to store related data and metadata and allow them to be
@@ -35,7 +41,24 @@ class EgadsData(object):
 
     __refs__ = defaultdict(list)
 
-    def __init__(self, value=None, variable_metadata=None, **attrs):
+    def __new__(cls, value=None, units='', variable_metadata={}, **attrs):
+        if isinstance(units, metadata.VariableMetadata):
+            if not variable_metadata:
+                variable_metadata = units
+            units = units.get('units', '')
+
+
+        ret = pq.Quantity.__new__(cls, value, units)
+
+        if variable_metadata:
+            ret.metadata = metadata.VariableMetadata(variable_metadata)
+        else:
+            ret.metadata = variable_metadata
+
+        return ret
+
+
+    def __init__(self, value=None, units='', variable_metadata=None, **attrs):
         """
         Initializes EgadsData instance with standard attributes. If no attributes
         are provided, all standard attributes are set to None.
@@ -51,22 +74,7 @@ class EgadsData(object):
 
         """
 
-        if isinstance(value, EgadsData):
-            self.__dict__ = value.__dict__.copy()
-            self.metadata = value.metadata.copy()
-            self.value = value.value.copy()
-        else:
-            if isinstance(value, numpy.ndarray):
-                self.value = value.copy()
-            elif value is None:
-                self.value = numpy.array([])
-            else:
-                self.value = numpy.array(value)
 
-            if variable_metadata is None:
-                self.metadata = metadata.VariableMetadata({})
-            else:
-                self.metadata = variable_metadata
 
         for key, val in attrs.iteritems():
             self.metadata[key] = val
@@ -74,146 +82,161 @@ class EgadsData(object):
         self.__refs__[self.__class__].append(weakref.ref(self))
 
 
-    def __len__(self):
+    @property
+    def value(self):
+        return self.view(type=numpy.ndarray)
+    @value.setter
+    def value(self, value, indx=None):
+        print value, indx
+#
+#    @property
+#    def units(self):
+#        try:
+#            return self.metadata['units'].symbol
+#        except KeyError:
+#            return ''
+#    @units.setter
+#    def units(self, units):
+#        if isinstance(units, str):
+#            self.metadata['units'] = unit_registry[units]
+#        elif isinstance(units, units.Unit):
+#            self.metadata['units'] = units
+#
+#    def __len__(self):
+#        return len(self.value)
 
-        return len(self.value)
 
 
     def __repr__(self):
         try:
-            return repr(['EgadsData', self.value])
+            return repr(['EgadsData', self.value, self.units])
         except AttributeError:
             return repr(None)
+#
+#
+#    def __add__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(self.value + other.value, self.units)
+#            return data
+#        else:
+#            data = EgadsData(self.value + other, self.units)
+#            return data
+#
+#
+#    def __radd__(self, other): #TODO: fix radd to work with other classes
+#        return self.__add__(other)
+#
+#
+#    def __sub__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(self.value - other.value, self.units)
+#            return data
+#        else:
+#            data = EgadsData(self.value - other, self.units)
+#            return data
+#
+#
+#    def __rsub__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(other.value - self.value, self.units)
+#            return data
+#        else:
+#            data = EgadsData(other - self.value, self.units)
+#            return data
+#
+#
+#    def __mul__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(self.value * other.value)
+#            return data
+#        else:
+#            data = EgadsData(self.value * other)
+#            return data
+#
+#
+#    def __rmul__(self, other):
+#        return self.__mul__(other)
+#
+#
+#    def __div__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(self.value / other.value)
+#            return data
+#        else:
+#            data = EgadsData(self.value / other)
+#            return data
+#
+#
+#    def __rdiv__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(other.value / self.value)
+#            return data
+#        else:
+#            data = EgadsData(other / self.value)
+#            return data
+#
+#
+#    def __pow__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(self.value ** other.value)
+#            return data
+#        else:
+#            data = EgadsData(self.value ** other)
+#            return data
+#
+#
+#    def __rpow__(self, other):
+#        if isinstance(other, EgadsData):
+#            data = EgadsData(other.value ** self.value)
+#            return data
+#        else:
+#            data = EgadsData(other ** self.value)
+#            return data
+#
+#
+#    def __neg__(self):
+#        data = self
+#        data.value = -data.value
+#        return data
+#
+#
+#    def __eq__(self, other):
+#        if isinstance(other, EgadsData):
+#            return numpy.array_equal(self.value, other.value)
+#        else:
+#            return numpy.array_equal(self.value, other)
+#
+#
+#    def __ne__(self, other):
+#        if isinstance(other, EgadsData):
+#            return self.value != other.value
+#        else:
+#            return self.value != other
+#
+##
+#    def __getattr__(self, name):
+#        if name is "shape":
+#            return self.value.shape
+#        else:
+#            raise AttributeError
 
 
-    def __add__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value + other.value, self.units)
-            return data
-        else:
-            data = EgadsData(self.value + other, self.units)
-            return data
-
-
-    def __radd__(self, other): #TODO: fix radd to work with other classes
-        return self.__add__(other)
-
-
-    def __sub__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value - other.value, self.units)
-            return data
-        else:
-            data = EgadsData(self.value - other, self.units)
-            return data
-
-
-    def __rsub__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(other.value - self.value, self.units)
-            return data
-        else:
-            data = EgadsData(other - self.value, self.units)
-            return data
-
-
-    def __mul__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value * other.value)
-            return data
-        else:
-            data = EgadsData(self.value * other)
-            return data
-
-
-    def __rmul__(self, other):
-        return self.__mul__(other)
-
-
-    def __div__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value / other.value)
-            return data
-        else:
-            data = EgadsData(self.value / other)
-            return data
-
-
-    def __rdiv__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(other.value / self.value)
-            return data
-        else:
-            data = EgadsData(other / self.value)
-            return data
-
-
-    def __pow__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value ** other.value)
-            return data
-        else:
-            data = EgadsData(self.value ** other)
-            return data
-
-
-    def __rpow__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(other.value ** self.value)
-            return data
-        else:
-            data = EgadsData(other ** self.value)
-            return data
-
-
-    def __neg__(self):
-        data = self
-        data.value = -data.value
-        return data
-
-
-    def __eq__(self, other):
-        if isinstance(other, EgadsData):
-            return numpy.array_equal(self.value, other.value)
-        else:
-            return numpy.array_equal(self.value, other)
-
-
-    def __ne__(self, other):
-        if isinstance(other, EgadsData):
-            return self.value != other.value
-        else:
-            return self.value != other
-    
-
-    def __getattr__(self, name):
-        if name is "shape":
-            return self.value.shape
-        elif name is "units":
-            return self.metadata.get('units')
-
-        else:
-            raise AttributeError
-
-
-    def __setattr__(self, name, value):
-        if name is "value":
-            if isinstance(value, EgadsData):
-                self.__dict__ = value.__dict__.copy()
-                self.__dict__[name] = value.value.copy()
-            else:
-                if isinstance(value, numpy.ndarray):
-                    self.__dict__[name] = value.copy()
-                else:
-                    self.__dict__[name] = numpy.array(value)
-        elif name is "units":
-            self.metadata['units'] = value
-        else:
-            if name is "__dict__":
-                for key, attr in value.iteritems():
-                    self.__dict__[key] = attr
-            else:
-                self.__dict__[name] = value
+#    def __setattr__(self, name, value):
+#        if name is "value":
+#            if isinstance(value, EgadsData):
+#                self.__dict__ = value.__dict__.copy()
+#                self.__dict__[name] = value.value.copy()
+#            else:
+#                if isinstance(value, numpy.ndarray):
+#                    self.__dict__[name] = value.copy()
+#                else:
+#                    self.__dict__[name] = numpy.array(value)
+#        else:
+#            if name is "__dict__":
+#                for key, attr in value.iteritems():
+#                    self.__dict__[key] = attr
+#            else:
+#                self.__dict__[name] = value
 
 
     def copy(self):
@@ -221,10 +244,9 @@ class EgadsData(object):
         Generate and return a copy of the current EgadsData instance.
         """
 
-        var_copy = EgadsData()
+        var_copy = super(EgadsData, self).copy()
         var_copy.__dict__ = self.__dict__.copy()
         var_copy.metadata = self.metadata.copy()
-        var_copy.value = self.value.copy()
 
         return var_copy
 

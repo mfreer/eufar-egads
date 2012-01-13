@@ -34,19 +34,19 @@ class EgadsDataScalarTestCase(unittest.TestCase):
         """ Test initialization of EgadsData instance with vector input """
 
         egadstest = egads.EgadsData(self.value1)
-        
+
         self.assertEqual(self.value1, egadstest.value, 'Scalar assignment not equal')
-        
+
         egadstest2 = egads.EgadsData()
         egadstest2.value = self.value2
-        
+
         self.assertEqual(self.value2, egadstest2.value, 'Scalar assignment not equal')
 
     def test_egads_to_egads_calcs(self):
         """test scalar operations between multiple egads parameters """
         egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
         egadstest2 = egads.EgadsData(self.value2, units=UNITS1)
-        
+
         self.assertEqual(self.value1 + self.value2, egadstest1 + egadstest2, 'Egads to Egads scalar addition not equal')
         self.assertEqual(self.value1 - self.value2, egadstest1 - egadstest2, 'Egads to Egads scalar subtraction not equal')
         self.assertEqual(self.value1 * self.value2, egadstest1 * egadstest2, 'Egads to Egads scalar multiplication not equal')
@@ -77,13 +77,13 @@ class EgadsDataVectorTestCase(unittest.TestCase):
     """ Test EgadsData class with vector values """
 
     def setUp(self):
-        self.value1 = numpy.array([1,2,3,4,5])
-        self.value2 = numpy.array([2,2,2,2,2])
+        self.value1 = numpy.array([1, 2, 3, 4, 5])
+        self.value2 = numpy.array([2, 2, 2, 2, 2])
         self.scalar = 5
 
 
     def test_egads_vector_assignment(self):
-        """ Test initialization of EgadsData instance with vector input """ 
+        """ Test initialization of EgadsData instance with vector input """
         egadstest = egads.EgadsData(self.value1)
 
         assert_array_equal(self.value1, egadstest.value, 'Vector assignment not equal')
@@ -109,10 +109,10 @@ class EgadsDataVectorTestCase(unittest.TestCase):
         assert_array_equal(self.value1 * self.value2, multiply.value, 'Egads to Egads vector multiplication not equal')
         assert_array_equal(self.value1 / self.value2, divide.value, 'Egads to Egads vector division not equal')
         assert_array_equal(self.value1 ** self.value2, power.value, 'Egads to Egads vector power not equal')
-        
+
     def test_egads_to_other_calcs(self):
         """ test vector operations between egads class and other vector"""
-        egadstest1 = egads.EgadsData(self.value1, units=UNITS1)
+        egadstest1 = egads.EgadsData(self.value1, units='')
 
         add = egadstest1 + self.value2
         subtract = egadstest1 - self.value2
@@ -148,8 +148,8 @@ class EgadsValueAssignmentTestCase(unittest.TestCase):
     """ Test assignment of EgadsData class"""
 
     def setUp(self):
-        self.value1 = egads.EgadsData([1,2,3], units='m')
-        
+        self.value1 = egads.EgadsData([1, 2, 3], units='m')
+
 
     def test_self_assignment(self):
         """ Testing assignment of EgadsData class to self """
@@ -163,13 +163,13 @@ class EgadsValueAssignmentTestCase(unittest.TestCase):
         value2.units = 's'
 
         self.assertEqual(self.value1.units, 'm', ['Original units have changed to', self.value1.units])
-        assert_array_equal(self.value1.value, numpy.array([1,2,3]), 'Original array has changed')
+        assert_array_equal(self.value1.value, numpy.array([1, 2, 3]), 'Original array has changed')
 
         self.value1.units = 'cm'
         self.value1.value[1] = 200
 
         self.assertEqual(value2.units, 's', 'New units have changed')
-        assert_array_equal(value2.value, numpy.array([1,100,3]), 'New array has changed')
+        assert_array_equal(value2.value, numpy.array([1, 100, 3]), 'New array has changed')
 
     def test_call_copy(self):
         """ Testing copy of EgadsData using call to self """
@@ -183,13 +183,13 @@ class EgadsValueAssignmentTestCase(unittest.TestCase):
         value2.units = 's'
 
         self.assertEqual(self.value1.units, 'm', ['Original units have changed to', self.value1.units])
-        assert_array_equal(self.value1.value, numpy.array([1,2,3]), 'Original array has changed')
+        assert_array_equal(self.value1.value, numpy.array([1, 2, 3]), 'Original array has changed')
 
         self.value1.units = 'cm'
         self.value1.value[1] = 200
 
         self.assertEqual(value2.units, 's', 'New units have changed')
-        assert_array_equal(value2.value, numpy.array([1,100,3]), 'New array has changed')
+        assert_array_equal(value2.value, numpy.array([1, 100, 3]), 'New array has changed')
 
 
 
