@@ -343,6 +343,8 @@ class VariableMetadata(Metadata):
         else:
             self._conventions = conventions
 
+
+
     def set_parent(self, parent_metadata_obj):
         """
         Sets parent object of VariableMetadata instance.
@@ -378,7 +380,7 @@ class AlgorithmMetadata(Metadata):
 
         """
 
-        Metadata.__init__(self, metadata_dict, conventions = 'EGADS Algorithm', metadata_list=ALG_ATTR_LIST)
+        Metadata.__init__(self, metadata_dict, conventions='EGADS Algorithm', metadata_list=ALG_ATTR_LIST)
 
         self.child_metadata = []
 
