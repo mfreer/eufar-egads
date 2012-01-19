@@ -20,12 +20,12 @@
 == Microphysics == 
 
 || *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
-|| diameter_mean_raf || X || || || ||
-|| number_conc_total_raf || X || || || ||
-|| sample_area_oap_all_in_raf || X || || || ||
-|| sample_area_oap_center_in_raf || X || || || ||
-|| sample_area_scattering_raf || X || || || ||
-|| sample_volume_general_raf || X || || || ||
+|| diameter_mean_raf || X || X || || ||
+|| number_conc_total_raf || X || X || || ||
+|| sample_area_oap_all_in_raf || X || X || || ||
+|| sample_area_oap_center_in_raf || X || X || || ||
+|| sample_area_scattering_raf || X || X || || ||
+|| sample_volume_general_raf || X || X || || ||
 
 == Transforms == 
 
