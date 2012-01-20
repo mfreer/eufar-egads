@@ -39,10 +39,10 @@ class TempPotentialCnrm(egads_core.EgadsAlgorithm):
         self.output_metadata = egads_metadata.VariableMetadata({'units':'K',
                                                                'long_name':'potential temperature',
                                                                'standard_name':'air_potential_temperature',
-                                                               'Category':['Thermodynamic','Atmos State']})
+                                                               'Category':['Thermodynamic', 'Atmos State']})
 
         self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_s', 'P_s', 'Racpa'],
-                                                          'InputUnits':['K','hPa',''],
+                                                          'InputUnits':['K', 'hPa', ''],
                                                           'Outputs':['theta'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
@@ -56,7 +56,7 @@ class TempPotentialCnrm(egads_core.EgadsAlgorithm):
 
     def _algorithm(self, T_s, P_s, Racpa):
 
-        theta = T_s * (1000.0/P_s) ** (Racpa)
+        theta = T_s * (1000.0 / P_s) ** (Racpa)
 
         return theta
 
