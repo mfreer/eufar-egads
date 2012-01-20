@@ -47,8 +47,13 @@ class EgadsData(pq.Quantity):
                 variable_metadata = units
             units = units.get('units', '')
 
+        if variable_metadata and (not units):
+            units = variable_metadata.get('units', '')
 
-        ret = pq.Quantity.__new__(cls, value, units)
+        if isinstance(value, pq.Quantity):
+            ret = pq.Quantity.__new__(cls, value, value.units)
+        else:
+            ret = pq.Quantity.__new__(cls, value, units)
 
         if variable_metadata:
             ret.metadata = metadata.VariableMetadata(variable_metadata)
@@ -89,20 +94,17 @@ class EgadsData(pq.Quantity):
     def value(self, value, indx=None):
 
         print value, indx
-#
-#    @property
-#    def units(self):
-#        try:
-#            return self.metadata['units'].symbol
-#        except KeyError:
-#            return ''
-#    @units.setter
-#    def units(self, units):
-#        if isinstance(units, str):
-#            self.metadata['units'] = unit_registry[units]
-#        elif isinstance(units, units.Unit):
-#            self.metadata['units'] = units
-#
+
+    @property
+    def units(self):
+        try:
+            return super(EgadsData, self).units.dimensionality.string
+        except KeyError:
+            return ''
+    @units.setter
+    def units(self, units):
+        print pq.Quantity.units.fset(self, units)
+#        super(EgadsData, self).units = units
 #    def __len__(self):
 #        return len(self.value)
 
@@ -110,9 +112,41 @@ class EgadsData(pq.Quantity):
 
     def __repr__(self):
         try:
-            return repr(['EgadsData', self.value, self.units])
+            return repr(['EgadsData', self.value, self.dimensionality.string])
         except AttributeError:
             return repr(None)
+
+    def __add__(self, other):
+        return super(EgadsData, self).__add__(other).view(EgadsData)
+
+    def __radd__(self, other):
+        return super(EgadsData, self).__radd__(other).view(EgadsData)
+
+    def __iadd__(self, other):
+        return super(EgadsData, self).__iadd__(other).view(EgadsData)
+
+    def __sub__(self, other):
+        return super(EgadsData, self).__sub__(other).view(EgadsData)
+
+    def __rsub__(self, other):
+        return super(EgadsData, self).__rsub__(other).view(EgadsData)
+
+    def __isub__(self, other):
+        return super(EgadsData, self).__isub__(other).view(EgadsData)
+
+    def __mod__(self, other):
+        return super(EgadsData, self).__mod__(other).view(EgadsData)
+
+    def __imod__(self, other):
+        return super(EgadsData, self).__imod__(other).view(EgadsData)
+
+    def __imul__(self, other):
+        return super(EgadsData, self).__imul__(other).view(EgadsData)
+
+    def __rmul__(self, other):
+        return super(EgadsData, self).__rmul__(other).view(EgadsData)
+
+
 #
 #
 #    def __add__(self, other):
@@ -245,12 +279,17 @@ class EgadsData(pq.Quantity):
         Generate and return a copy of the current EgadsData instance.
         """
 
-        var_copy = super(EgadsData, self).copy()
+        var_copy = EgadsData(super(EgadsData, self).copy())
         var_copy.__dict__ = self.__dict__.copy()
         var_copy.metadata = self.metadata.copy()
 
         return var_copy
 
+
+    def rescale(self, units):
+        #TODO: Add docstring
+
+        return super(EgadsData, self).rescale(units).view(EgadsData)
 
     def print_description(self):
         """
@@ -405,14 +444,20 @@ class EgadsAlgorithm(object):
 
         out_arg = []
 
-        for arg in args:
+        for i, arg in enumerate(args):
             if isinstance(arg, EgadsData):
+                required_units = self.metadata['InputUnits'][i]
+
+                arg_corr = arg.rescale(required_units)
+
                 #TODO Add unit checking
-                out_arg.append(arg.value)
+                out_arg.append(arg_corr.value)
             else:
                 out_arg.append(numpy.array(arg))
 
         result = self._algorithm(*out_arg)
+
+
 
         self.time_stamp()
 

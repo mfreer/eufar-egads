@@ -7,7 +7,6 @@ import numpy
 import unittest
 
 import egads
-from egads import *
 from egads.algorithms import thermodynamics
 
 
@@ -99,13 +98,13 @@ class  ThermodynamicsTestCase(unittest.TestCase):
                                     units='rad',
                                     long_name='sideslip')
 
-        self.array_test = egads.EgadsData(value=numpy.zeros(10) + 10)
+        self.array_test = numpy.zeros(10) + 10
 
         self.array_shape = self.array_test.shape
 
-        self.coeff_test = egads.EgadsData(value=1)
-        self.coeff2_test = egads.EgadsData(value=[1, 1])
-        self.coeff4_test = egads.EgadsData(value=[1, 1, 1, 1])
+        self.coeff_test = 1
+        self.coeff2_test = [1, 1]
+        self.coeff4_test = [1, 1, 1, 1]
 
     #def tearDown(self):
     #    self.foo.dispose()

@@ -49,28 +49,28 @@ class PressureAngleIncidenceCnrm(egads_core.EgadsAlgorithm):
         self.output_metadata.append(egads_metadata.VariableMetadata({'units':'hPa',
                                                                'long_name':'static pressure',
                                                                'standard_name':'air_pressure',
-                                                               'Category':['Thermodynamic','Atmos State']}))
+                                                               'Category':['Thermodynamic', 'Atmos State']}))
 
         self.output_metadata.append(egads_metadata.VariableMetadata({'units':'hPa',
                                                                'long_name':'dynamic pressure',
                                                                'standard_name':'',
-                                                               'Category':['Thermodynamic','Atmos State']}))
+                                                               'Category':['Thermodynamic', 'Atmos State']}))
 
 
         self.output_metadata.append(egads_metadata.VariableMetadata({'units':'rad',
                                                                'long_name':'angle of attack',
                                                                'standard_name':'',
-                                                               'Category':['Thermodynamic','Aircraft State']}))
+                                                               'Category':['Thermodynamic', 'Aircraft State']}))
 
 
         self.output_metadata.append(egads_metadata.VariableMetadata({'units':'rad',
                                                                'long_name':'static pressure',
                                                                'standard_name':'',
-                                                               'Category':['Thermodynamic','Aircraft State']}))
+                                                               'Category':['Thermodynamic', 'Aircraft State']}))
 
 
-        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_v', 'P_s', 'P_surface', 'R_a_g'],
-                                                          'InputUnits':['K','hPa','hPa',''],
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['P_sr', 'deltaP_r', 'deltaP_h', 'deltaP_v', 'C_alpha', 'C_beta', 'C_errstat'],
+                                                          'InputUnits':['hPa', 'hPa', 'hPa', 'hPa', '', '', ''],
                                                           'Outputs':['P_s', 'delta_P', 'alpha', 'beta'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
@@ -79,14 +79,14 @@ class PressureAngleIncidenceCnrm(egads_core.EgadsAlgorithm):
                                                           self.output_metadata)
 
     def run(self, P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha, C_beta, C_errstat):
-        
-        return egads_core.EgadsAlgorithm.run(self, P_sr, delta_P_r, delta_P_h, 
+
+        return egads_core.EgadsAlgorithm.run(self, P_sr, delta_P_r, delta_P_h,
                                              delta_P_v, C_alpha, C_beta, C_errstat)
 
     def _algorithm(self, P_sr, delta_P_r, delta_P_h, delta_P_v, C_alpha, C_beta,
                     C_errstat):
 
-        errstat25 = (C_errstat[0] + C_errstat[1] * 25 + C_errstat[2] * 25**2 +
+        errstat25 = (C_errstat[0] + C_errstat[1] * 25 + C_errstat[2] * 25 ** 2 +
                     C_errstat[3] * 25 ** 3)
 
         errstat = zeros(P_sr.shape)
@@ -96,7 +96,7 @@ class PressureAngleIncidenceCnrm(egads_core.EgadsAlgorithm):
                                     multiply(C_errstat[2], power(delta_P_r, 2)) +
                                     multiply(C_errstat[3], power(delta_P_r, 3)))
 
-        errstat[logical_and(delta_P_r > 0, delta_P_r <= 25)] = delta_P_r/25 * errstat25
+        errstat[logical_and(delta_P_r > 0, delta_P_r <= 25)] = delta_P_r / 25 * errstat25
 
         P_s = P_sr - errstat
 

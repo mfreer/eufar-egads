@@ -43,10 +43,10 @@ class VelocityTasCnrm(egads_core.EgadsAlgorithm):
         self.output_metadata = egads_metadata.VariableMetadata({'units':'m/s',
                                                                'long_name':'True Air Speed',
                                                                'standard_name':'platform_speed_wrt_air',
-                                                               'Category':['Thermodynamic','Aircraft State']})
+                                                               'Category':['Thermodynamic', 'Aircraft State']})
 
         self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_s', 'P_s', 'dP', 'cpa', 'Racpa'],
-                                                          'InputUnits':['K','hPa','hPa','J K-1 kg-1', ''],
+                                                          'InputUnits':['K', 'hPa', 'hPa', 'J/K/kg', ''],
                                                           'Outputs':['V_p'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
@@ -62,7 +62,7 @@ class VelocityTasCnrm(egads_core.EgadsAlgorithm):
     def _algorithm(self, T_s, P_s, dP, cpa, Racpa):
 
         V_p = (2 * cpa * T_s * ((1 + dP / P_s) ** Racpa
-                        -1)) ** .5
+                        - 1)) ** .5
 
         return V_p
 

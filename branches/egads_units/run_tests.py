@@ -5,8 +5,10 @@ Launcher to test EGADS functionality and installation of required libraries.
 """
 import sys
 
+import egads
 
 try:
+
     import numpy
 except:
     sys.stderr.write('Error: Numpy installation not found. You must install Numpy before EGADS can be used. See INSTALL.txt for more info. \n')
@@ -31,7 +33,6 @@ except:
     sys.stderr.write('NaPPy should have been installed with your EGADS installation, but it could not be found. You may need to install it independently. See INSTALL.txt fore more info. \n')
 
 
-import egads
 
 egads.test()
 
