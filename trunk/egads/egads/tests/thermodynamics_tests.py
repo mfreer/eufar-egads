@@ -7,7 +7,6 @@ import numpy
 import unittest
 
 import egads
-from egads import *
 from egads.algorithms import thermodynamics
 
 
@@ -17,13 +16,13 @@ class  ThermodynamicsTestCase(unittest.TestCase):
         self.Ucapf = egads.EgadsData(value=[10],
                                      units='Hz',
                                      long_name='output frequency of capacitive probe')
-        
+
         self.Racpa = egads.EgadsData(value=287.058 / 1003.5,
                                      units='',
                                      long_name='Air gas constant divided by specific heat cap')
 
         self.cpa = egads.EgadsData(value=1003.5,
-                                   units='J kg-1 K-1',
+                                   units='J/kg/K',
                                    long_name='specific heat of air at constant pressure')
 
 
@@ -48,10 +47,10 @@ class  ThermodynamicsTestCase(unittest.TestCase):
         self.delta_P_r = self.dP.copy()
 
         self.delta_P_v = self.dP.copy()
-        self.delta_P_v.value = self.delta_P_v.value * 0.1
+        self.delta_P_v = self.delta_P_v * 0.1
 
         self.delta_P_h = self.dP.copy()
-        self.delta_P_h.value = self.delta_P_h.value * 0.15
+        self.delta_P_h = self.delta_P_h * 0.15
 
         self.r = egads.EgadsData(value=1e-3, units='g/kg', long_name='water vapor mixing ratio')
 
@@ -66,7 +65,7 @@ class  ThermodynamicsTestCase(unittest.TestCase):
         self.theta = egads.EgadsData(value=288.76752,
                                      units='K',
                                      long_name='potential temperature')
-                                     
+
         self.P_surface = egads.EgadsData(value=[1013.25],
                                          units='hPa',
                                          long_name='surface pressure')
@@ -75,7 +74,7 @@ class  ThermodynamicsTestCase(unittest.TestCase):
                                      units='m/K',
                                      long_name='air gas constant divided by gravity')
 
-        self.C_t = egads.EgadsData(value=1, units='%/C', long_name='temperature correction coeff')
+        self.C_t = egads.EgadsData(value=1, units='%/degC', long_name='temperature correction coeff')
 
         self.Fmin = egads.EgadsData(value=2, units='Hz', long_name='minimum acceptible frequency')
 
@@ -99,13 +98,13 @@ class  ThermodynamicsTestCase(unittest.TestCase):
                                     units='rad',
                                     long_name='sideslip')
 
-        self.array_test = egads.EgadsData(value=numpy.zeros(10)+10)
+        self.array_test = numpy.zeros(10) + 10
 
         self.array_shape = self.array_test.shape
 
-        self.coeff_test = egads.EgadsData(value=1)
-        self.coeff2_test = egads.EgadsData(value = [1,1])
-        self.coeff4_test = egads.EgadsData(value = [1,1,1,1])
+        self.coeff_test = 1
+        self.coeff2_test = [1, 1]
+        self.coeff4_test = [1, 1, 1, 1]
 
     #def tearDown(self):
     #    self.foo.dispose()

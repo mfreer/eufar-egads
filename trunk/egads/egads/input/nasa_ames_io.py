@@ -5,7 +5,7 @@ __all__ = ["NasaAmes"]
 
 
 import egads
-import nappy as nappy
+import nappy
 import nappy.nc_interface.na_to_cdms
 
 from egads.input import FileCore

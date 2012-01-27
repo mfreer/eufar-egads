@@ -110,7 +110,7 @@ class NetCdfFileInputTestCase(unittest.TestCase):
         v1.Category = CATEGORY
         v1[:] = random_data
         v2[:] = random_mult_data
-        
+
         f.close()
 
 
@@ -158,16 +158,16 @@ class NetCdfFileInputTestCase(unittest.TestCase):
 
     def test_read_attribute(self):
         """ test reading attribute from file """
-        
+
         data = input.NetCdf(self.file)
-        self.assertEqual(data.get_attribute_value('units',VAR_NAME), VAR_UNITS, 
+        self.assertEqual(data.get_attribute_value('units', VAR_NAME), VAR_UNITS,
                         'Variable attributes do not match')
-        self.assertEqual(data.get_attribute_value('attribute'),GLOBAL_ATTRIBUTE,
+        self.assertEqual(data.get_attribute_value('attribute'), GLOBAL_ATTRIBUTE,
                          'Global attributes do not match')
-    
+
     def test_read_dimensions(self):
         """ test reading dimensions from file """
-        
+
         data = input.NetCdf(self.file)
         dimdict = {DIM1_NAME : DIM1_LEN, DIM2_NAME : DIM2_LEN}
         self.assertEqual(data.get_dimension_list(), dimdict,
@@ -196,8 +196,8 @@ class NetCdfFileInputTestCase(unittest.TestCase):
 
     def test_read_range_1d(self):
         """ test reading subset of data"""
-        data = input.NetCdf(self.file).read_variable(VAR_NAME, input_range=(0, DIM1_LEN-2))
-        assert_array_equal(data, random_data[:DIM1_LEN-2])
+        data = input.NetCdf(self.file).read_variable(VAR_NAME, input_range=(0, DIM1_LEN - 2))
+        assert_array_equal(data, random_data[:DIM1_LEN - 2])
 
         data = input.NetCdf(self.file).read_variable(VAR_NAME, input_range=(-1, DIM1_LEN))
         assert_array_equal(data, random_data[-1:DIM1_LEN])
@@ -211,27 +211,27 @@ class NetCdfFileInputTestCase(unittest.TestCase):
     def test_read_range_2d(self):
         """ test reading subset of data in 2d"""
 
-        data = input.NetCdf(self.file).read_variable(VAR_MULT_NAME, input_range=(0, DIM1_LEN-2))
-        assert_array_equal(data, random_mult_data[:DIM1_LEN-2, :],)
-    
-        data = input.NetCdf(self.file).read_variable(VAR_MULT_NAME, input_range=(None, None, 0, DIM1_LEN-2))
-        assert_array_equal(data, random_mult_data[:, :DIM1_LEN-2])
+        data = input.NetCdf(self.file).read_variable(VAR_MULT_NAME, input_range=(0, DIM1_LEN - 2))
+        assert_array_equal(data, random_mult_data[:DIM1_LEN - 2, :],)
+
+        data = input.NetCdf(self.file).read_variable(VAR_MULT_NAME, input_range=(None, None, 0, DIM1_LEN - 2))
+        assert_array_equal(data, random_mult_data[:, :DIM1_LEN - 2])
 
     def test_read_n6sp_data(self):
         """ test reading in data using N6SP formatted NetCDF """
 
         infile = input.EgadsNetCdf(self.file)
 
-        
+
         self.assertEqual(infile.file_metadata['title'], TITLE, 'NetCDF title attribute doesnt match')
 
         data = infile.read_variable(VAR_NAME)
-
+        print data.units
         assert_array_equal(data.value, random_data)
         self.assertEqual(data.units, VAR_UNITS, 'EgadsData units attribute doesnt match')
         self.assertEqual(data.metadata['units'], VAR_UNITS, 'EgadsData units attribute doesnt match')
         self.assertEqual(data.metadata['long_name'], VAR_LONG_NAME, 'EgadsData long name attribute doesnt match')
-        self.assertEqual(data.metadata['standard_name'], VAR_STD_NAME,'EgadsData standard name attribute doesnt match')
+        self.assertEqual(data.metadata['standard_name'], VAR_STD_NAME, 'EgadsData standard name attribute doesnt match')
 
 
 
@@ -247,7 +247,7 @@ class NetCdfFileOutputTestCase(unittest.TestCase):
         f.add_dim(DIM1_NAME, DIM1_LEN)
         f.add_dim(DIM2_NAME, DIM2_LEN)
 
-        f.write_variable(random_data, VAR_NAME,(DIM1_NAME,),'double')
+        f.write_variable(random_data, VAR_NAME, (DIM1_NAME,), 'double')
         f.write_variable(random_mult_data, VAR_MULT_NAME, (DIM1_NAME, DIM2_NAME,),
                         'double')
 
@@ -271,7 +271,7 @@ class NetCdfFileOutputTestCase(unittest.TestCase):
 
     def tearDown(self):
         os.remove(self.file)
-    
+
 
     def test_dimension_creation(self):
         """ test creation of dimensions in file """
@@ -289,7 +289,7 @@ class NetCdfFileOutputTestCase(unittest.TestCase):
 
     def test_1d_variable_creation(self):
         """ test creation of 1d variable in file """
-        
+
         f = netCDF4.Dataset(self.file, 'r')
 
         varin = f.variables[VAR_NAME]
@@ -305,7 +305,7 @@ class NetCdfFileOutputTestCase(unittest.TestCase):
 
         varin = f.variables[VAR_MULT_NAME]
 
-        self.assertEqual(varin.shape, (DIM1_LEN,DIM2_LEN), 'Variable dimensions dont match')
+        self.assertEqual(varin.shape, (DIM1_LEN, DIM2_LEN), 'Variable dimensions dont match')
         self.assertEqual(varin.units, VAR_MULT_UNITS, 'Variable units dont match')
         assert_array_equal(varin[:], random_mult_data)
 
@@ -315,14 +315,14 @@ class EgadsFileInputTestCase(unittest.TestCase):
         self.filename = tempfile.mktemp('.txt')
         self.strdata1ln = 'testtesttest\n'
         self.strdata2ln = 'testtesttest\n testtesttest\n'
-        f = open(self.filename,'w')
+        f = open(self.filename, 'w')
         f.write(self.strdata2ln)
         f.close()
 
     def test_open_file(self):
         """ Test opening of file """
 
-        f = input.EgadsFile(self.filename,'r')
+        f = input.EgadsFile(self.filename, 'r')
 
         self.assertEqual(f.filename, self.filename, 'Filenames do not match')
 
@@ -336,14 +336,14 @@ class EgadsFileInputTestCase(unittest.TestCase):
     def test_read_data(self):
         """ Test reading data from file """
 
-        f = input.EgadsFile(self.filename,'r')
+        f = input.EgadsFile(self.filename, 'r')
 
         data = f.read()
 
         self.assertEqual(self.strdata2ln, data, 'Data read in does not match')
-        
+
         f.reset()
-        
+
         data = f.read(4)
         self.assertEqual(self.strdata2ln[0:4], data, 'Characters read in do not match')
 
@@ -354,7 +354,7 @@ class EgadsFileInputTestCase(unittest.TestCase):
     def test_read_data_one_line(self):
         """ Test reading one line of data from file """
 
-        f = input.EgadsFile(self.filename,'r')
+        f = input.EgadsFile(self.filename, 'r')
 
         data = f.read_line()
 
@@ -366,7 +366,7 @@ class EgadsFileInputTestCase(unittest.TestCase):
     def test_seek_file(self):
         """ Test file seek function """
 
-        f = input.EgadsFile(self.filename,'r')
+        f = input.EgadsFile(self.filename, 'r')
 
         f.seek(3)
 
@@ -375,7 +375,7 @@ class EgadsFileInputTestCase(unittest.TestCase):
         self.assertEqual(4, f.pos, 'Positions do not match')
         self.assertEqual(self.strdata2ln[3], data, 'Data from pos 3 does not match')
 
-        f.seek(3,'c')
+        f.seek(3, 'c')
 
         data = f.read(1)
 
@@ -397,12 +397,12 @@ class EgadsFileOutputTestCase(unittest.TestCase):
 
     def setUp(self):
         self.filename = tempfile.mktemp('.txt')
-        self.f = input.EgadsFile(self.filename,'w')
+        self.f = input.EgadsFile(self.filename, 'w')
 
 
         self.strdata1ln = 'testtesttest\n'
         self.strdata2ln = 'testtesttest\n testtesttest\n'
-        self.intdata = [123,456]
+        self.intdata = [123, 456]
 
     def tearDown(self):
 
@@ -456,19 +456,19 @@ class EgadsCsvInputTestCase(unittest.TestCase):
                      ['2', 1, 0, 1.5],
                      ['3', 2, -1, 1.7]]
 
-        self.times = ['1','2','3']
-        self.lats = [0,1,2]
-        self.lons = [1,0,-1]
+        self.times = ['1', '2', '3']
+        self.lats = [0, 1, 2]
+        self.lons = [1, 0, -1]
         self.alts = [0.3, 1.5, 1.7]
 
-        self.data_as_str = [['1','2','3'],
-                            ['0','1','2'],
-                            ['1','0','-1'],
-                            ['0.3','1.5','1.7']]
+        self.data_as_str = [['1', '2', '3'],
+                            ['0', '1', '2'],
+                            ['1', '0', '-1'],
+                            ['0.3', '1.5', '1.7']]
 
-        self.format = ['s','i','i','f']
+        self.format = ['s', 'i', 'i', 'f']
 
-        f = open(self.filename,'w')
+        f = open(self.filename, 'w')
         writer = csv.writer(f)
 
         writer.writerow(self.titles)
@@ -501,7 +501,7 @@ class EgadsCsvInputTestCase(unittest.TestCase):
 
         title = self.f.read(1)
 
-        time, lat, lon, alt = self.f.read(format = self.format)
+        time, lat, lon, alt = self.f.read(format=self.format)
 
         self.f.reset()
 
@@ -510,7 +510,7 @@ class EgadsCsvInputTestCase(unittest.TestCase):
         data_str = self.f.read()
 
         self.assertEqual(title, self.titles, 'Titles do not match')
-    
+
         assert_array_equal(time, self.times, 'Values do not match')
         assert_array_equal(lat, self.lats, 'Values do not match')
         assert_array_equal(lon, self.lons, 'Values do not match')
@@ -532,9 +532,9 @@ class EgadsCsvOutputTestCase(unittest.TestCase):
                      ['2', '1', '0', '1.5'],
                      ['3', '2', '-1', '1.7']]
 
-        self.format = ['s','i','i','f']
+        self.format = ['s', 'i', 'i', 'f']
 
-        f = input.EgadsCsv(self.filename,'w')
+        f = input.EgadsCsv(self.filename, 'w')
 
         f.write(self.titles)
         f.writerows(self.data)
@@ -677,7 +677,7 @@ def suite():
     convert_format_suite = unittest.TestLoader().loadTestsFromTestCase(ConvertFormatTestCase)
 
 
-    return unittest.TestSuite([netcdf_in_suite, netcdf_out_suite, text_in_suite, 
+    return unittest.TestSuite([netcdf_in_suite, netcdf_out_suite, text_in_suite,
                                text_out_suite, csv_in_suite, csv_out_suite, na_in_suite,
                                convert_format_suite])
 

@@ -12,8 +12,8 @@ Welcome to EGADS's documentation!
    intro
    install
    tutorial
+   alg_development
    egadsapi
-
 
 Indices and tables
 ==================

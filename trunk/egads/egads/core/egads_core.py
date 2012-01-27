@@ -7,41 +7,65 @@ from collections import defaultdict
 import types
 import weakref
 import datetime
+import re
+import warnings
 from functools import wraps
 
-import metadata
 import numpy
+import quantities as pq
+
+import metadata
 
 
-class EgadsData(object):
+class EgadsData(pq.Quantity):
     """
     This class is designed using the EUFAR N6SP data and metadata recommendations.
     Its purpose is to store related data and metadata and allow them to be
     passed between functions and algorithms in a consistent manner.
-
-    **Constructor Variables**
-
-    :param value: Optional -
-        Scalar or array of values to initialize EgadsData object.
-    :param VariableMetadata variable_metadata: Optional -
-        VariableMetadata dictionary object containing relevant metadata
-        for the current EgadsData instance.
-    :param **attrs: Optional -
-        Keyword/value pairs of additional metadata which will be added into
-        the existing variable_metadata object.
 
 
     """
 
     __refs__ = defaultdict(list)
 
-    def __init__(self, value=None, variable_metadata=None, **attrs):
-        """
-        Initializes EgadsData instance with standard attributes. If no attributes
-        are provided, all standard attributes are set to None.
+    def __new__(cls, value, units='', variable_metadata={}, dtype='float64', **attrs):
+        if isinstance(units, metadata.VariableMetadata):
+            if not variable_metadata:
+                variable_metadata = units
+            units = units.get('units', '')
 
-        :param value: Optional -
+        if variable_metadata and (not units):
+            units = variable_metadata.get('units', '')
+
+
+
+        units = _validate_units(units)
+
+
+        if isinstance(value, pq.Quantity):
+            ret = pq.Quantity.__new__(cls, value, value.units, dtype=dtype)
+        else:
+            ret = pq.Quantity.__new__(cls, value, units, dtype=dtype)
+
+        if isinstance(variable_metadata, metadata.VariableMetadata):
+            ret.metadata = variable_metadata
+        else:
+            ret.metadata = metadata.VariableMetadata(variable_metadata)
+
+
+        return ret
+
+
+    def __init__(self, value, units='', variable_metadata=None, dtype='float64', **attrs):
+        """
+        
+        **Constructor Variables**
+    
+        :param value: 
             Scalar or array of values to initialize EgadsData object.
+        :param string units: Optional -
+            String representation of units to be used for current EgadsData instance, e.g.
+            'm/s', 'kg', 'g/cm^3', etc.            
         :param VariableMetadata variable_metadata: Optional -
             VariableMetadata dictionary object containing relevant metadata
             for the current EgadsData instance.
@@ -51,22 +75,7 @@ class EgadsData(object):
 
         """
 
-        if isinstance(value, EgadsData):
-            self.__dict__ = value.__dict__.copy()
-            self.metadata = value.metadata.copy()
-            self.value = value.value.copy()
-        else:
-            if isinstance(value, numpy.ndarray):
-                self.value = value.copy()
-            elif value is None:
-                self.value = numpy.array([])
-            else:
-                self.value = numpy.array(value)
 
-            if variable_metadata is None:
-                self.metadata = metadata.VariableMetadata({})
-            else:
-                self.metadata = variable_metadata
 
         for key, val in attrs.iteritems():
             self.metadata[key] = val
@@ -74,146 +83,65 @@ class EgadsData(object):
         self.__refs__[self.__class__].append(weakref.ref(self))
 
 
-    def __len__(self):
+    @property
+    def value(self):
+        return self.view(type=numpy.ndarray)
+    @value.setter
+    def value(self, value, indx=None):
 
-        return len(self.value)
+        print value, indx
+
+    @property
+    def units(self):
+        try:
+            return super(EgadsData, self).units.dimensionality.string
+        except KeyError:
+            return ''
+    @units.setter
+    def units(self, units):
+        pq.Quantity.units.fset(self, units)
+
+
+#    def __len__(self):
+#        return len(self.value)
+
 
 
     def __repr__(self):
         try:
-            return repr(['EgadsData', self.value])
+            return repr(['EgadsData', self.value, self.dimensionality.string])
         except AttributeError:
             return repr(None)
 
-
     def __add__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value + other.value, self.units)
-            return data
-        else:
-            data = EgadsData(self.value + other, self.units)
-            return data
+        return super(EgadsData, self).__add__(other).view(EgadsData)
 
+    def __radd__(self, other):
+        return super(EgadsData, self).__radd__(other).view(EgadsData)
 
-    def __radd__(self, other): #TODO: fix radd to work with other classes
-        return self.__add__(other)
-
+    def __iadd__(self, other):
+        return super(EgadsData, self).__iadd__(other).view(EgadsData)
 
     def __sub__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value - other.value, self.units)
-            return data
-        else:
-            data = EgadsData(self.value - other, self.units)
-            return data
-
+        return super(EgadsData, self).__sub__(other).view(EgadsData)
 
     def __rsub__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(other.value - self.value, self.units)
-            return data
-        else:
-            data = EgadsData(other - self.value, self.units)
-            return data
+        return super(EgadsData, self).__rsub__(other).view(EgadsData)
 
+    def __isub__(self, other):
+        return super(EgadsData, self).__isub__(other).view(EgadsData)
 
-    def __mul__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value * other.value)
-            return data
-        else:
-            data = EgadsData(self.value * other)
-            return data
+    def __mod__(self, other):
+        return super(EgadsData, self).__mod__(other).view(EgadsData)
 
+    def __imod__(self, other):
+        return super(EgadsData, self).__imod__(other).view(EgadsData)
+
+    def __imul__(self, other):
+        return super(EgadsData, self).__imul__(other).view(EgadsData)
 
     def __rmul__(self, other):
-        return self.__mul__(other)
-
-
-    def __div__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value / other.value)
-            return data
-        else:
-            data = EgadsData(self.value / other)
-            return data
-
-
-    def __rdiv__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(other.value / self.value)
-            return data
-        else:
-            data = EgadsData(other / self.value)
-            return data
-
-
-    def __pow__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(self.value ** other.value)
-            return data
-        else:
-            data = EgadsData(self.value ** other)
-            return data
-
-
-    def __rpow__(self, other):
-        if isinstance(other, EgadsData):
-            data = EgadsData(other.value ** self.value)
-            return data
-        else:
-            data = EgadsData(other ** self.value)
-            return data
-
-
-    def __neg__(self):
-        data = self
-        data.value = -data.value
-        return data
-
-
-    def __eq__(self, other):
-        if isinstance(other, EgadsData):
-            return numpy.array_equal(self.value, other.value)
-        else:
-            return numpy.array_equal(self.value, other)
-
-
-    def __ne__(self, other):
-        if isinstance(other, EgadsData):
-            return self.value != other.value
-        else:
-            return self.value != other
-    
-
-    def __getattr__(self, name):
-        if name is "shape":
-            return self.value.shape
-        elif name is "units":
-            return self.metadata.get('units')
-
-        else:
-            raise AttributeError
-
-
-    def __setattr__(self, name, value):
-        if name is "value":
-            if isinstance(value, EgadsData):
-                self.__dict__ = value.__dict__.copy()
-                self.__dict__[name] = value.value.copy()
-            else:
-                if isinstance(value, numpy.ndarray):
-                    self.__dict__[name] = value.copy()
-                else:
-                    self.__dict__[name] = numpy.array(value)
-        elif name is "units":
-            self.metadata['units'] = value
-        else:
-            if name is "__dict__":
-                for key, attr in value.iteritems():
-                    self.__dict__[key] = attr
-            else:
-                self.__dict__[name] = value
+        return super(EgadsData, self).__rmul__(other).view(EgadsData)
 
 
     def copy(self):
@@ -221,13 +149,22 @@ class EgadsData(object):
         Generate and return a copy of the current EgadsData instance.
         """
 
-        var_copy = EgadsData()
+        var_copy = EgadsData(super(EgadsData, self).copy())
         var_copy.__dict__ = self.__dict__.copy()
         var_copy.metadata = self.metadata.copy()
-        var_copy.value = self.value.copy()
 
         return var_copy
 
+
+    def rescale(self, units):
+        """
+        Return a copy of the variable rescaled to the provided units.
+        
+        :param string units:
+            String representation of desired units.
+        """
+        units = _validate_units(units)
+        return super(EgadsData, self).rescale(units).view(EgadsData)
 
     def print_description(self):
         """
@@ -292,20 +229,13 @@ class EgadsData(object):
 
 
 
+
 class EgadsAlgorithm(object):
     """
     EGADS algorithm base class. All egads algorithms should inherit this class.
 
     The EgadsAlgorithm class provides base methods for algorithms in EGADS and
     initializes algorithm attributes.
-
-    **Constructor Variables**
-
-    :param bool return_Egads: Optional - 
-        Flag used to configure which object type will be returned by the current
-        EgadsAlgorithm. If ``true`` an :class: EgadsData instance with relevant
-        metadata will be returned by the algorithm, otherwise an array or
-        scalar will be returned.
 
     """
 
@@ -314,7 +244,9 @@ class EgadsAlgorithm(object):
         Initializes EgadsAlgorithm instance with None values for all standard
         attributes.
 
-        :param bool return_Egads: Optional -
+        **Constructor Variables**
+    
+        :param bool return_Egads: Optional - 
             Flag used to configure which object type will be returned by the current
             EgadsAlgorithm. If ``true`` an :class: EgadsData instance with relevant
             metadata will be returned by the algorithm, otherwise an array or
@@ -339,18 +271,22 @@ class EgadsAlgorithm(object):
     def run(self, *args):
         """
         Basic run method. This method should be called from EgadsAlgorithm children,
-        passsing along the correct inputs to the _call_algorithm method.
+        passing along the correct inputs to the _call_algorithm method.
+        
+        :param *args:
+            Parameters to pass into algorithm in order specified in algorithm metadata.
 
         """
 
         output = self._call_algorithm(*args)
-
         if len(self.metadata['Outputs']) > 1:
             result = []
             for i, value in enumerate(output):
+                self.output_metadata[i].set_parent(self.metadata)
                 result.append(self._return_result(value, self.output_metadata[i]))
             result = tuple(result)
         else:
+            self.output_metadata.set_parent(self.metadata)
             result = self._return_result(output, self.output_metadata)
 
 
@@ -382,14 +318,43 @@ class EgadsAlgorithm(object):
 
         out_arg = []
 
-        for arg in args:
+        for i, arg in enumerate(args):
             if isinstance(arg, EgadsData):
-                #TODO Add unit checking
-                out_arg.append(arg.value)
+                required_units = self.metadata['InputUnits'][i]
+                required_units = _validate_units(required_units)
+
+                to_dims = pq.quantity.validate_dimensionality(required_units)
+                to_temps = []
+                for to_unit in to_dims.iterkeys():
+                    if isinstance(to_unit, pq.UnitTemperature):
+                        to_temps.append(to_unit)
+
+                from_temps = []
+                for from_unit in arg._dimensionality.iterkeys():
+                    if isinstance(from_unit, pq.UnitTemperature):
+                        from_temps.append(from_unit)
+
+                for from_temp, to_temp in zip(from_temps, to_temps):
+                    if from_temp._dimensionality != to_temp._dimensionality:
+                        warnings.warn("Unsupported conversion between temperature types." +
+                                         "'%s' given, '%s' expected."
+                                         % (from_temp._dimensionality.string, to_temp._dimensionality.string),
+                                         UserWarning)
+#                        raise ValueError("Unsupported conversion between temperature types." +
+#                                         "'%s' given, '%s' expected."
+#                                         % (from_temp._dimensionality.string, to_temp._dimensionality.string)
+#                                         ) #TODO Define error for temperature mismatch
+
+                arg_corr = arg.rescale(required_units)
+
+
+                out_arg.append(arg_corr.value)
             else:
                 out_arg.append(numpy.array(arg))
 
         result = self._algorithm(*out_arg)
+
+
 
         self.time_stamp()
 
@@ -405,11 +370,17 @@ class EgadsAlgorithm(object):
 
 
     def get_info(self):
-        #TODO: Add docstring
+        """
+        Print docstring of algorithm to standard output. 
+        
+        """
+
         print self.__doc__
 
     def time_stamp(self):
-        #TODO: Add docstring
+        """
+        Calculate and set date processed for all output variables.
+        """
 
         if len(self.metadata['Outputs']) > 1:
             for output in self.output_metadata:
@@ -418,8 +389,11 @@ class EgadsAlgorithm(object):
             self.output_metadata['DateProcessed'] = self.now()
 
     def now(self):
+        """
+        Calculate and return current date/time in ISO 8601 format.
+        """
 
-        return str(datetime.datetime.today())
+        return datetime.datetime.isoformat(datetime.datetime.today())
 
     def _populate_data_object(self, value, metadata):
         """
@@ -436,4 +410,27 @@ class EgadsAlgorithm(object):
 
 
         return result
+
+def _validate_units(units):
+    """
+    Function to pre-validate units to be passed into Quantities for comprehension.
+    
+    Corrects string units which are written without carets or multiplication symbols:
+    'kg m-3' becomes 'kg*m^-3'
+     
+    """
+
+    if isinstance(units, str):
+        regex = re.compile('(?<=[A-Za-z])[0-9-]')
+
+        match = regex.search(units)
+        while match is not None:
+            units = units[:match.start()] + "^" + units[match.start():]
+            match = regex.search(units)
+
+        regex_space = re.compile('[ ]+')
+
+        units = regex_space.sub('*', units)
+
+    return units
 
