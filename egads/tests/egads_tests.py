@@ -26,7 +26,7 @@ UNITS2 = 's'
 class EgadsDataScalarTestCase(unittest.TestCase):
     """ Test EgadsData class with scalar values """
     def setUp(self):
-        self.value1 = 1
+        self.value1 = 1.0
         self.value2 = 5
 
 
@@ -37,10 +37,6 @@ class EgadsDataScalarTestCase(unittest.TestCase):
 
         assert_array_equal(self.value1, egadstest.value, 'Scalar assignment not equal')
 
-        egadstest2 = egads.EgadsData()
-        egadstest2.value = self.value2
-
-        assert_array_equal(self.value2, egadstest2.value, 'Scalar assignment not equal')
 
     def test_egads_to_egads_calcs(self):
         """test scalar operations between multiple egads parameters """
@@ -77,7 +73,7 @@ class EgadsDataVectorTestCase(unittest.TestCase):
     """ Test EgadsData class with vector values """
 
     def setUp(self):
-        self.value1 = numpy.array([1, 2, 3, 4, 5])
+        self.value1 = numpy.array([1.0, 2.0, 3.0, 4.0, 5.0])
         self.value2 = numpy.array([2, 2, 2, 2, 2])
         self.scalar = 5
 
@@ -88,10 +84,6 @@ class EgadsDataVectorTestCase(unittest.TestCase):
 
         assert_array_equal(self.value1, egadstest.value, 'Vector assignment not equal')
 
-        egadstest2 = egads.EgadsData()
-        egadstest2.value = self.value2
-
-        assert_array_equal(self.value2, egadstest2.value, 'Vector assignment not equal')
 
     def test_egads_to_egads_calcs(self):
         """test vector operations between multiple egads parameters """
@@ -129,7 +121,7 @@ class EgadsDataVectorTestCase(unittest.TestCase):
     def test_other_to_egads_calcs(self):
         """ test vector operations between other vector and egads class"""
         egadstest2 = egads.EgadsData(self.value2, units='')
-        print egadstest2, self.value1
+
         add = self.value1 + egadstest2
         #print type(add), self.value2
         subtract = self.value1 - egadstest2
