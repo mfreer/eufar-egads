@@ -32,17 +32,17 @@ class AltitudePressureCnrm(egads_core.EgadsAlgorithm):
 
     REFERENCES
     """
-    
+
     def __init__(self, return_Egads=True):
         egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
         self.output_metadata = egads_metadata.VariableMetadata({'units':'m',
                                                                'long_name':'pressure altitude',
                                                                'standard_name':'',
-                                                               'Category':['Thermodynamic','Aircraft State']})
+                                                               'Category':['Thermodynamic', 'Aircraft State']})
 
         self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['T_v', 'P_s', 'P_surface', 'R_a_g'],
-                                                          'InputUnits':['K','hPa','hPa',''],
+                                                          'InputUnits':['K', 'hPa', 'hPa', 'm/K'],
                                                           'Outputs':['alt_p'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,

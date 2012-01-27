@@ -47,10 +47,10 @@ class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
         self.output_metadata = egads_metadata.VariableMetadata({'units':'%',
                                                                'long_name':'relative humidity',
                                                                'standard_name':'relative_humidity',
-                                                               'Category':['Thermodynamic','Atmos State']})
+                                                               'Category':['Thermodynamic', 'Atmos State']})
 
         self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['Ucapf', 'T_s', 'P_s', 'dP', 'C_t', 'Fmin', 'C_0', 'C_1', 'C_2'],
-                                                          'InputUnits':['Hz','K','hPa','hPa', '%/C', 'Hz', '', '', ''],
+                                                          'InputUnits':['Hz', 'K', 'hPa', 'hPa', '%/degC', 'Hz', '', '', ''],
                                                           'Outputs':['H_u'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
@@ -60,10 +60,10 @@ class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
 
 
     def run(self, Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
-        
-        return egads_core.EgadsAlgorithm.run(self, Ucapf, T_s, P_s, dP, C_t, 
+
+        return egads_core.EgadsAlgorithm.run(self, Ucapf, T_s, P_s, dP, C_t,
                                              Fmin, C_0, C_1, C_2)
-                                             
+
     def _algorithm(self, Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
 
         tempUcapf = scipy.array(Ucapf)
@@ -71,7 +71,7 @@ class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
         Ucapf = tempUcapf.tolist()
 
 
-        temp_factor = 273.15+20
+        temp_factor = 273.15 + 20
 
 
         H_u = P_s / (P_s + dP) * (C_0 + multiply(C_1, Ucapf) +

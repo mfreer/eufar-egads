@@ -569,7 +569,7 @@ class EgadsNetCdf(NetCdf):
         Writes/creates varible in currently opened NetCDF file.
 
 
-        :param gadsData data:
+        :param EgadsData data:
             Instance of EgadsData object to write out to file.
             All data and attributes will be written out to the file.
 
