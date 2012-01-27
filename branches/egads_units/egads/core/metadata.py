@@ -136,7 +136,7 @@ class Metadata(dict):
 
     """
 
-    def __init__(self, metadata_dict, conventions=None, metadata_list=None):
+    def __init__(self, metadata_dict={}, conventions=None, metadata_list=None):
         """
         Initialize Metadata instance with given metadata in dict form.
 
@@ -222,32 +222,33 @@ class Metadata(dict):
 
             param_missing_list = self._parse_metadata_compliance(convention_num)
 
-
-        def _parse_metadata_compliance(self, convention_num):
-            """ 
-            Private method to parse through a metadata parameter list to determine
-            compliance with standard.
-            
-            :param int convention_num:
-                Number specifying which convention standard to use in comparison.
-                
-            """
-            use_table = None
-            if isinstance(self, FileMetadata):
-                use_table = METADATA_GLOBAL_CONVERT_TABLE
-
-            if isinstance(self, VariableMetadata):
-                use_table = METADATA_VARIABLE_CONVERT_TABLE
-
-            if use_table is None:
-                raise AttributeError #TODO: Add specific error type for wrong class
-
-            param_missing_list = []
-            for parameter in use_table:
-                if parameter[convention_num] not in self and parameter[convention_num] is not '':
-                    param_missing_list.append(parameter[convention_num])
-
             return param_missing_list
+
+    def _parse_metadata_compliance(self, convention_num):
+        """ 
+        Private method to parse through a metadata parameter list to determine
+        compliance with standard.
+        
+        :param int convention_num:
+            Number specifying which convention standard to use in comparison.
+            
+        """
+        use_table = None
+        if isinstance(self, FileMetadata):
+            use_table = METADATA_GLOBAL_CONVERT_TABLE
+
+        if isinstance(self, VariableMetadata):
+            use_table = METADATA_VARIABLE_CONVERT_TABLE
+
+        if use_table is None:
+            raise AttributeError #TODO: Add specific error type for wrong class
+
+        param_missing_list = []
+        for parameter in use_table:
+            if parameter[convention_num] not in self and parameter[convention_num] is not '':
+                param_missing_list.append(parameter[convention_num])
+
+        return param_missing_list
 
 
 class FileMetadata(Metadata):
@@ -257,7 +258,7 @@ class FileMetadata(Metadata):
 
     """
 
-    def __init__(self, metadata_dict, filename, conventions_keyword='Conventions', conventions=None):
+    def __init__(self, metadata_dict, filename, conventions_keyword='Conventions', conventions=[]):
         """
         Initialize Metadata instance with given metadata in dict form. Tries to
         determine which conventions are used by the metadata. The user can optionally
@@ -275,11 +276,11 @@ class FileMetadata(Metadata):
         """
 
 
-        if conventions is None:
+        if not conventions:
             try:
                 conventions = [s.strip() for s in metadata_dict[conventions_keyword].split(',')]
             except KeyError:
-                conventions = None
+                conventions = []
 
         Metadata.__init__(self, metadata_dict, conventions,
                           metadata_list=FILE_ATTR_LIST)
@@ -331,8 +332,6 @@ class VariableMetadata(Metadata):
 
         Metadata.__init__(self, metadata_dict, metadata_list=VAR_ATTR_LIST)
 
-        self.origin = parent_metadata_obj
-
         if conventions is None:
             if parent_metadata_obj is None:
                 self._conventions = None
@@ -357,6 +356,16 @@ class VariableMetadata(Metadata):
         self.parent = parent_metadata_obj
 
 
+    def compliance_check(self, conventions=None):
+        #TODO Add docstring
+
+        if conventions is None:
+            conventions = self.parent.get("Conventions", None)
+
+
+        return super(VariableMetadata, self).compliance_check(conventions)
+
+
 
     def parse_dictionary_objs(self):
         pass
@@ -379,6 +388,21 @@ class AlgorithmMetadata(Metadata):
             List containing VariableMetadata
 
         """
+        if 'ProcessorDate' in metadata_dict:
+            replace_dic = {'$':'', '#':'', 'Date::':''}
+            processor_date_value = metadata_dict['ProcessorDate']
+            for i, j in replace_dic.iteritems():
+                processor_date_value = processor_date_value.replace(i, j)
+
+            metadata_dict['ProcessorDate'] = processor_date_value.strip()
+
+        if 'ProcessorVersion' in metadata_dict:
+            replace_dic = {'$':'', 'Revision::':''}
+            processor_version_value = metadata_dict['ProcessorVersion']
+            for i, j in replace_dic.iteritems():
+                processor_version_value = processor_version_value.replace(i, j)
+
+            metadata_dict['ProcessorVersion'] = processor_version_value.strip()
 
         Metadata.__init__(self, metadata_dict, conventions='EGADS Algorithm', metadata_list=ALG_ATTR_LIST)
 
@@ -389,6 +413,8 @@ class AlgorithmMetadata(Metadata):
                 self.assign_children(child)
         elif child_variable_metadata is not None:
             self.assign_children(child_variable_metadata)
+
+
 
 
     def assign_children(self, child):

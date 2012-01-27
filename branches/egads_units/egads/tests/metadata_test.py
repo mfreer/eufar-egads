@@ -85,10 +85,54 @@ class MetadataCreationTestCase(unittest.TestCase):
 
 
 class MetadataConventionComplianceTestCase(unittest.TestCase):
-    """ Test working of compliance checker in metadata cases. """
+    """ Test compliance checker functionality in metadata cases. """
 
     def setUp(self):
-        var_metadata_dict =
+        cf_var_metadata_dict = {'_FillValue':'',
+                                'valid_min':'',
+                                'valid_max':'',
+                                'valid_range':'',
+                                'scale_factor':'',
+                                'add_offset':'',
+                                'units':'',
+                                'long_name':'',
+                                'standard_name':'',
+                                'ancillary_variables':'',
+                                'flag_values':'',
+                                'flag_masks':'',
+                                'flag_meanings':''
+                                }
+        raf_var_metadata_dict = {'_FillValue':'',
+                                'units':'',
+                                'long_name':'',
+                                'standard_name':'',
+                                'SampledRate':'',
+                                'CalibrationCoefficients':'',
+                                'Category':'',
+                                'Dependencies':''
+                                }
+        iwgadts_var_metadata_dict = {'':'',
+                                     '':'',
+                                     '':'',
+                                     '':'',
+                                     '':'',
+                                     '':'',
+                                     '':''
+                                     }
+        n6sp_var_metadata_dict = {'':'',
+                                  '':'',
+                                  '':'',
+                                  '':'',
+                                  '':'',
+                                  '':'',
+                                  '':'',
+                                  }
+        nasa_ames_var_metadata_dict = {'':'',
+                                       '':'',
+                                       '':'',
+                                       '':'',
+                                       '':'',
+                                       }
 
         var_metadata = metadata.VariableMetadata();
 

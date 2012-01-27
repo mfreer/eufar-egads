@@ -22,6 +22,7 @@ site.addsitedir(thirdparty)
 
 import quantities as units
 
+units.hPa = units.UnitQuantity('hectopascal',units.Pa * 100, symbol='hPa')
 
 import core
 import core.metadata
