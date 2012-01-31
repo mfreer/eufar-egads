@@ -139,7 +139,11 @@ This document contains descriptions of algorithms contained in the \egads toolbo
 \item \textbf{References} -- any references to literature, journals or documents with more information on the current algorithm
 \end{itemize}
 
-To aid in algorithm usage, there is a general naming scheme for \egads algorithms. Generally, algorithm names are composed as follows: |{general calculation}_{specific calculation}_{source}|. So, for example, an algorithm provided by CNRM to calculate the density of dry air would be named |density_dry_air_cnrm|.
+To aid in algorithm usage and discovery, there is a general naming scheme for \egads algorithms. Generally, algorithm names are composed as follows: 
+
+|{measurement}_{context/detail/instrument}_{source}| 
+
+So, for example, an algorithm provided by CNRM to calculate the density of dry air would be named |density_dry_air_cnrm|.
 
 
 %\chapter{Spatial Transformations}
@@ -192,6 +196,10 @@ To aid in algorithm usage, there is a general naming scheme for \egads algorithm
 
 \include{algorithms/microphysics/sample_volume_general_raf}
 
+
+\chapter{Corrections}
+
+\include{algorithms/corrections/correction_spike_simple_cnrm}
 
 
 \chapter{Biophysics}
@@ -254,6 +262,8 @@ To aid in algorithm usage, there is a general naming scheme for \egads algorithm
 \include{algorithms/quality_control/nav_chk}
 
 \include{algorithms/quality_control/nav_const}
+
+
 
 \printindex
 
