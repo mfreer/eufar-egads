@@ -9,7 +9,7 @@ Exploring EGADS
 ****************
 
 The simplest way to start working with EGADS is to run it from the Python command line. 
-To load egads into the Python namespace, simply import it:
+To load EGADS into the Python name-space, simply import it:
 
     >>> import egads
 
@@ -50,7 +50,7 @@ The :class:`~.EgadsData` class
 
 At the core of the EGADS package is a data class intended to handle data and associated metadata
 in a consistent way between files, algorithms and within the framework. This ensures that important
-metadata is not lost when combining with data form various sources in EGADS.
+metadata is not lost when combining data form various sources in EGADS.
 
 Additionally, by subclassing the Quantities and Numpy packages, EgadsData 
 incorporates unit comprehension to reduce unit-conversion errors during calculation, and
@@ -95,31 +95,32 @@ with a units property, this will then be used to define the EgadsData units:
 Metadata
 ---------
 
-The metadata object used by EgadsData is an instance
+The metadata object used by EgadsData is an instance 
 of :class:`~.VariableMetadata`, a dictionary object containing 
 methods to recognize, convert and validate known metadata types. It can reference
-parent metadata objects, such as those from an algorithm or data file, to enable users to track
-the source of a particular variable. 
+parent metadata objects, such as those from an algorithm or data file, to enable 
+users to track the source of a particular variable. 
 
-When reading in data from a supported file type (NetCDF, NASA Ames), or outputing data from an
-EGADS algorithm, EGADS will automatically populate the associated metadata and assign it 
-to the input variable. However, when creating an EgadsData instance manually, the metadata
+When reading in data from a supported file type (NetCDF, NASA Ames), or doing calculations with
+an EGADS algorithm, EGADS will automatically populate the associated metadata and assign it 
+to the output variable. However, when creating an EgadsData instance manually, the metadata
 must be user-defined.
 
-As a dictionary object, all metadata are stored as keyword:value pairs. Thus, to create metadata
-manually, simply pass in a dictionary object containing the desired metadata:
+As mentioned, :class:`~.VariableMetadata` is a dictionary object, thus all metadata 
+are stored as keyword:value pairs. To create metadata manually, simply pass in 
+a dictionary object containing the desired metadata:
 
    >>> var_metadata_dict = {'long_name':'test metadata object',
                             '_FillValue':-9999}
    >>> var_metadata = egads.core.metadata.VariableMetadata(var_metadata_dict)
 
-To take advantage of its metadata recognition capabilites, a ``conventions`` keyword can be
+To take advantage of its metadata recognition capabilities, a ``conventions`` keyword can be
 passed with the variable metadata to give a context to these metadata. 
 
    >>> var_metadata = egads.core.metadata.VariableMetadata(var_metadata_dict, conventions='CF-1.0')
 
 If a particular VariableMetadata object comes from a file or algorithm, the class attempts to assign the 
-``conventions`` automatically. If reading from a file, for examule, the class attempts to 
+``conventions`` automatically. While reading from a file, for example, the class attempts to 
 discover the conventions used based on the "Conventions" keyword, if present.
 
 
@@ -130,10 +131,10 @@ Working with units
 
 :class:`~.EgadsData` subclasses Quantities, thus all of the latter's unit comprehension methods are available
 when using :class:`~.EgadsData`. This section will outline the basics of unit comprehension. A
-more detailed tutorial can be found at http://packages.python.org/quantities/
+more detailed tutorial of the unit comprehension capabilities can be found at 
+http://packages.python.org/quantities/
 
-As mentioned in the previous section, units are assigned to EgadsData instances when they are
-being created. 
+In general, units are assigned to EgadsData instances when they are being created. 
 
    >>> a = egads.EgadsData([1,2,3], 'm')
    >>> b = egads.EgadsData([4,5,6], 'meters/second')

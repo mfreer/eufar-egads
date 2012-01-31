@@ -6,9 +6,9 @@ The latest version of EGADS can be obtained from http://eufar-egads.googlecode.c
 
 Prerequisites
 **************
-Building EGADS requires the following packages:
+Use of EGADS requires the following packages:
 
-* Python 2.5 or newer. Available at http://www.python.org/
+* Python 2.6 or newer. Available at http://www.python.org/
 * numpy 1.3.0 or newer. Available at http://numpy.scipy.org/
 * scipy 0.6.0 or newer. Available at http://www.scipy.org/
 * Python netCDF4 libraries 0.8.2. Available at http://code.google.com/p/netcdf4-python/
