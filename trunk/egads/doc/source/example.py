@@ -6,7 +6,7 @@ import egads
 import egads.algorithms.thermodynamics as thermo
 
 # get list of all NetCDF files in 'data' directory
-filenames = egads.get_file_list('data/*.nc')
+filenames = egads.input.get_file_list('data/*.nc')
 
 f = egads.input.EgadsNetCdf()   # create EgadsNetCdf instance
 

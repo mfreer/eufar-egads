@@ -110,7 +110,7 @@ class EgadsFile(FileCore): #TODO: add error handling to EgadsFile.
 
         self.f.seek(location, from_val)
         self.pos = self.f.tell()
-        
+
 
     def write(self, data):  #TODO: make write method more robust
         """
@@ -229,7 +229,7 @@ class EgadsCsv(EgadsFile):
         else:
             quotechar = self.quotechar
 
-        self._open_file(filename, perms, delimiter, quotechar)
+        self._open_file(filename, perms)
 
     def display_file(self):
         """
@@ -334,9 +334,9 @@ class EgadsCsv(EgadsFile):
 
         self.writer.writerows(data_arr)
 
-    
 
-        
+
+
 
 
     def _open_file(self, filename, perms):
@@ -396,13 +396,13 @@ def parse_string_array(data, format):
 
 
     format_array_dict = {'i': 'i4', 'f': 'f8', 'l':'f8', 's':'a20'}
-    
+
 
     parsed_data = list(data)
- 
+
     i = 0
 
-    
+
     for row in parsed_data:
         fmt_count = i % len(format)
         parsed_data[i] = numpy.asarray(row, dtype=format_array_dict[format[fmt_count]])
