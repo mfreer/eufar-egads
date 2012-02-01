@@ -18,7 +18,7 @@ class NetCdf(FileCore):
 
     """
 
-    TYPE_DICT = {'char':'s1',
+    TYPE_DICT = {'char':'c',
         'byte':'b',
         'short':'i2',
         'int':'i4',
@@ -183,7 +183,10 @@ class NetCdf(FileCore):
             try:
                 varout = self.f.variables[varname]
             except KeyError:
-                varout = self.f.createVariable(varname, self.TYPE_DICT[type.lower()], dims)
+                try:
+                    varout = self.f.createVariable(varname, self.TYPE_DICT[type], dims)
+                except KeyError:
+                    varout = self.f.createVariable(varname, type, dims)
 
             varout[:] = value
 

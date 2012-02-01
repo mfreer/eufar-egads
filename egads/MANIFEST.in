@@ -3,6 +3,6 @@ include LICENSE.txt
 include INSTALL.txt
 include THANKS.txt
 include run_tests.py
-recursive-include *.py
-recursive-include LICENSE.txt
+recursive-include * *.py
+recursive-include * LICENSE.txt
 

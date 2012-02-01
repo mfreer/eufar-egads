@@ -121,7 +121,7 @@ class NetCdfFileInputTestCase(unittest.TestCase):
     def test_bad_file_name(self):
         """test handling of missing file """
 
-        self.assertRaises(RuntimeError, input.NetCdf, 'test.nc')
+        self.assertRaises(RuntimeError, input.NetCdf, 'test12345.nc')
 
     def test_open_file(self):
         """ test opening of file using open method """
