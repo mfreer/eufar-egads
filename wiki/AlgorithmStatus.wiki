@@ -21,6 +21,7 @@
 
 || *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
 || diameter_mean_raf || X || X || || ||
+|| diameter_median_volume_dmt || || X || || ||
 || effective_radius_dmt || || X || || ||
 || extinction_dmt || || || || ||
 || extinction_coeff_dmt || || || || ||
