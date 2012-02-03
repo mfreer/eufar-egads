@@ -1,0 +1,35 @@
+%% $Date$
+%% $Revision$
+\index{effective\_radius\_dmt}
+\algdesc{Effective radius}
+{ %%%%%% Algorithm name %%%%%%
+effective\_radius\_dmt
+}
+{ %%%%%% Algorithm summary %%%%%%
+Calculates effective radius of a size distribution. In general, this definition is only meaningful
+for water clouds, and another form must be used when in ice clouds.  
+}
+{ %%%%%% Category %%%%%%
+Microphysics
+}
+{ %%%%%% Inputs %%%%%%
+$n_i$ & Array[time, bins] & Number concentration of hydrometeors in size category $i$ [cm$^{-3}$] \\
+$d_i$ & Vector[bins] & Average diameter in size category $i$ [$\mu$m]
+}
+{ %%%%%% Outputs %%%%%%
+$R_e$ & Vector[time] & Effective radius [$\mu$m]
+}
+{ %%%%%% Formula %%%%%%
+\begin{displaymath}
+ R_e = \frac{3 \sum\limits_{i=1}^m n_i d_i^3}{4 \sum\limits_{i=1}^{m} n_i d_i^2}
+\end{displaymath}
+}
+{ %%%%%% Author %%%%%%
+
+}
+{ %%%%%% References %%%%%% 
+    "Data Analysis User's Guide", Droplet Measurement Technologies, 2009, 44 pp.
+
+}
+
+
