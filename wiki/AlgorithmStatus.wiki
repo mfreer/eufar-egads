@@ -23,12 +23,11 @@
 || diameter_mean_raf || X || X || || ||
 || diameter_median_volume_dmt || || X || || ||
 || effective_radius_dmt || || X || || ||
-|| extinction_coeff_dmt || || || || ||
+|| extinction_coeff_dmt || || X || || ||
 || liquid_water_content_dmt || || || || ||
 || mass_conc_dmt || || X || || ||
 || number_conc_dmt || || X || || || 
 || number_conc_total_raf || X || X || || ||
-|| phase_function_dmt || || || || ||
 || sample_area_oap_all_in_raf || X || X || || ||
 || sample_area_oap_center_in_raf || X || X || || ||
 || sample_area_scattering_raf || X || X || || ||
