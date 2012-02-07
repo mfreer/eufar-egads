@@ -12,9 +12,9 @@
 || temp_potential_equiv_cnrm || X || X || || X ||
 || temp_static_cnrm || X || X || || X ||
 || temp_virtual_cnrm || X || X || || X ||
-|| velocity_mach_raf || X || X || || || 
+|| velocity_mach_raf || X || X || || X || 
 || velocity_tas_cnrm || X || X || || X ||
-|| velocity_tas_raf || X || X || || || 
+|| velocity_tas_raf || X || X || || X || 
 || velocity_tas_longitudinal_cnrm || X || X || || X ||
 
 == Microphysics == 
