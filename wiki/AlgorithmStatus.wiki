@@ -23,7 +23,7 @@
 || diameter_effective_dmt || X || X || || ||
 || diameter_mean_raf || X || X || || ||
 || diameter_median_volume_dmt || X || X || || ||
-|| extinction_coeff_dmt || || X || || ||
+|| extinction_coeff_dmt || X || X || || ||
 || liquid_water_content_dmt || || || || ||
 || mass_conc_dmt || X || X || || ||
 || number_conc_total_dmt || X || X || || || 
