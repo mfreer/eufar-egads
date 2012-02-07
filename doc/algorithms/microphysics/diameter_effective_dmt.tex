@@ -1,29 +1,28 @@
 %% $Date$
 %% $Revision$
-\index{surface\_area\_conc\_dmt}
-\algdesc{Surface Area Concentration}
+\index{diameter\_effective\_dmt}
+\algdesc{Effective diameter}
 { %%%%%% Algorithm name %%%%%%
-surface\_area\_conc\_dmt
+diameter\_effective\_dmt
 }
 { %%%%%% Algorithm summary %%%%%%
-Calculation of surface area concentration given size distribution from particle probe.
+Calculates effective diameter of a size distribution. In general, this definition is only meaningful
+for water clouds, and another form must be used when in ice clouds.  
 }
 { %%%%%% Category %%%%%%
 Microphysics
 }
 { %%%%%% Inputs %%%%%%
 $c_i$ & Array[time, bins] & Number concentration of hydrometeors in size category $i$ [cm$^{-3}$] \\
-$d_i$ & Vector[bins] & Average diameter of size category $i$ [$\mu$m] \\
-$s_i$ & Array[time, bins] & Shape factor of hydrometeor in size category $i$, to account for asphericity
+$d_i$ & Vector[bins] & Average diameter in size category $i$ [$\mu$m]
 }
 { %%%%%% Outputs %%%%%%
-$S$ & Vector[time] & Surface area concentration [$\mu$m$^2$ cm$^{-3}$]
+$R_e$ & Vector[time] & Effective diameter [$\mu$m]
 }
 { %%%%%% Formula %%%%%%
 \begin{displaymath}
-  S = \pi \sum\limits_{i=1}^m s_i c_i d_i^2
+ D_e = \frac{\sum\limits_{i=1}^m c_i d_i^3}{\sum\limits_{i=1}^{m} c_i d_i^2}
 \end{displaymath}
-
 }
 { %%%%%% Author %%%%%%
 

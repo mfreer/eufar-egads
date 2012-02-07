@@ -186,15 +186,18 @@ So, for example, an algorithm provided by CNRM to calculate the density of dry a
 
 \chapter{Microphysics}
 
+
+\include{algorithms/microphysics/diameter_effective_dmt}
+
 \include{algorithms/microphysics/diameter_mean_raf}
 
 \include{algorithms/microphysics/diameter_median_volume_dmt}
 
-\include{algorithms/microphysics/effective_radius_dmt}
+\include{algorithms/microphysics/extinction_coeff_dmt}
 
 \include{algorithms/microphysics/mass_conc_dmt}
 
-\include{algorithms/microphysics/number_conc_dmt}
+\include{algorithms/microphysics/number_conc_total_dmt}
 
 \include{algorithms/microphysics/number_conc_total_raf}
 
@@ -291,16 +294,35 @@ So, for example, an algorithm provided by CNRM to calculate the density of dry a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\newpage\addcontentsline{toc}{section}{Bibliography and references}
-%\begin{thebibliography}{5}
-%\bibitem{Vahdat et al., 2002} Vahdat A., Yocum K., Walsh K., Mahadevan P., Kosti\c{c} D., Chase J., and Becker D. (2002). Scalability and Accuracy in a Large-Scale Network Emulator. \emph{Proceedings of 5th Symposium on Operating Systems Design and Implementation (OSDI)}
-%\bibitem{Modelnet} Modelnet. http://issg.cs.duke.edu/modelnet.html.
-%\bibitem{ModelNetRelease} Modelnet release page. http://sysnet.ecsd.edu/modelnet/realease.html.
-%\bibitem{ModelNetHowto} Modelnet Howto. http://sysnet.ucsd.edu/modelnet/howto.html.
-%\bibitem{Holenstein, 2005} Holenstein R. (2005). Scalability and Accuracy in a Large-Scale Network Emulator - CPSC 538A - Paper Presentation
-%\bibitem{Harpin, 2001} Harpin, T. (2001). Using java.lang.reflect.Proxy to Interpose on Java Class Methods. \emph{Sun Developer Network (SDN)}. http://java.sun.com/developer/technicalArticles/JavaLP/Interposing/.
-%\bibitem{Kostic, 2006} Kostic D. (2005). Modelnet notes. http://resolute.ucsd.edu/dokuwiki/notes:modelnet.
-%\end{thebibliography}
+\newpage\addcontentsline{toc}{section}{Bibliography and references}
+\begin{thebibliography}{5}
+
+\bibitem{Bellec} Bellec, H. and G.~Duverneuil. Appareils de mesure de 
+l'hygrom\'etrie sur le Merlin IV.  Note de Centre 9, M\'et\'eo-France 
+CNRM/CAM, July 1996.
+
+\bibitem{Candel} Candel, S. \emph{M\'echanique des fluides}. Dunod, 1990.
+
+\bibitem{DMT1} Droplet Measurement Technologies, Inc. ``Data Analysis User's Guide Chapter I:
+Single Particle Light Scattering.'' DOC-0222, Rev A (2009). Accessed February 2, 2012. 
+\href{http://dropletmeasurement.com/manuals/Data\%20Analysis\%20Guide/DOC-0222\%20Rev\%20A\%20Data\%20Analysis\%20Guide\%20Ch\%201.pdf}{http://dropletmeasurement.com/manuals/Data Analysis Guide/DOC-0222 Rev A Data Analysis Guide Ch 1.pdf}
+
+\bibitem{DMT2} Droplet Measurement Technologies, Inc. ``Data Analysis User's Guide Chapter II:
+Single Particle Imaging.'' DOC-0223, Rev A (2009). Accessed February 2, 2012. 
+\href{http://dropletmeasurement.com/manuals/Data\%20Analysis\%20Guide/DOC-0223\%20Rev\%20A\%20Data\%20Analysis\%20Guide\%20Ch\%202.pdf}{http://dropletmeasurement.com/manuals/Data Analysis Guide/DOC-0223 Rev A Data Analysis Guide Ch 2.pdf}
+
+\bibitem{NCAR23} Lenschow, D.H. and P.~Spyers-Duran. \emph{Measurement Techniques: Air Motion Sensing}.
+NCAR Bulletin No. 23, 1989. Accessed June 23, 2010.
+\href{http://www.eol.ucar.edu/raf/Bulletins/bulletin23.html}{http://www.eol.ucar.edu/raf/Bulletins/bulletin23.html}
+
+\bibitem{NCAR24} Barmgardner, Darrel. \emph{Airborne Measurements for Cloud Microphysics}. 
+NCAR Bulletin No. 24, 1989. Accessed June 23, 2010.  \href{http://www.eol.ucar.edu/raf/Bulletins/bulletin24.html}{http://www.eol.ucar.edu/raf/Bulletins/bulletin24.html}
+
+\bibitem{Triplet} Triplet, J.P. and G.~Roche. \emph{M\'et\'eorolgie G\'en\'erale}. M\'et\'eo-France, 1971.
+
+
+\end{thebibliography}
+
 
 
 \end{document}

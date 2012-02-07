@@ -13,7 +13,7 @@ is the size of droplet below which 50\% of the total water volume resides.
 Microphysics
 }
 { %%%%%% Inputs %%%%%%
-$n_i$ & Array[time, bins] & Number concentration of hydrometeors in size category $i$ [cm$^{-3}$] \\
+$c_i$ & Array[time, bins] & Number concentration of hydrometeors in size category $i$ [cm$^{-3}$] \\
 $d_i$ & Vector[bins] & Average diameter of size category $i$ [$\mu$m] \\
 $\rho_i$ & Vector[bins],Optional & Density of hydrometeor in size category $i$ [g cm$^{-3}$]. Default is $\rho_w$ = 1.0 g cm$^-3$
 }
@@ -24,7 +24,7 @@ $D_{mvd}$ & Vector[time] & Median volume diameter [$\mu$m]
 Step 1: Compute liquid water content
 %
 \begin{displaymath}
- W = \frac{\pi \rho_w}{6} \sum \limits_{i=1}^m n_i d_i^3
+ W = \frac{\pi \rho_w}{6} \sum \limits_{i=1}^m c_i d_i^3
 \end{displaymath}
 
 Step 2: Beginning at the first size channel, calculate the accumulated mass $S_n = w_1 + w_2 + ... w_n$
@@ -43,8 +43,7 @@ that bracket where the accumulated mass exceeded the total LWC:
 
 }
 { %%%%%% References %%%%%% 
-"Data Analysis User's Guide", Droplet Measurement Technologies, 2009, 44 pp.
-
+    ``Data Analysis User's Guide Chapter I: Single Particle Light Scattering,`` Droplet Measurement Technologies, 33. \cite{DMT1}
 }
 
 
