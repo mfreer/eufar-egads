@@ -22,13 +22,13 @@ class SampleAreaOapAllInRaf(egads_core.EgadsAlgorithm):
                 the 2DP, CIP, etc. The sample area varies by the number of shadowed
                 diodes. This routine calculates a sample area per bin.
 
-    INPUT       Lambda      coeff.  nm      Laser wavelength
-                D_arms      coeff.  mm      Distance between probe arms
-                dD          coeff.  um      Diode diameter
-                M           coeff.  ()      Probe magnification factor
-                N           coeff.  ()      Number of diodes in array
+    INPUT       Lambda      coeff.          nm      Laser wavelength
+                D_arms      coeff.          mm      Distance between probe arms
+                dD          coeff.          um      Diode diameter
+                M           coeff.          _       Probe magnification factor
+                N           coeff.          _       Number of diodes in array
 
-    OUTPUT      SA          Vector  m2      Sample area
+    OUTPUT      SA          Vector[bins]    m2      Sample area
 
     SOURCE      NCAR-RAF
 
@@ -40,7 +40,7 @@ class SampleAreaOapAllInRaf(egads_core.EgadsAlgorithm):
     def __init__(self, return_Egads=True):
         egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-        self.output_metadata = egads_metadata.VariableMetadata({'units':'m2',
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m^2',
                                                                'long_name':'sample area, all in',
                                                                'standard_name':'',
                                                                'Category':['PMS Probe']})
@@ -68,13 +68,13 @@ class SampleAreaOapAllInRaf(egads_core.EgadsAlgorithm):
         dD_mm = dD * 1e-3                         # convert diameter to mm
 
         for i in range(N):
-            X = i+1
-            R = X * dD_mm/2.0
+            X = i + 1
+            R = X * dD_mm / 2.0
             DOF = 6 * R ** 2 / (Lambda_mm)
             if DOF > D_arms:
                 DOF = D_arms
 
-            ESW = dD_mm * (N * X - 1)/M
+            ESW = dD_mm * (N * X - 1) / M
 
             SA = numpy.append(SA, DOF * ESW * 1e-6)              # convert mm2 to m2
 

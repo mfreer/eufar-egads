@@ -74,6 +74,10 @@ class  ThermodynamicsTestCase(unittest.TestCase):
                                      units='m/K',
                                      long_name='air gas constant divided by gravity')
 
+        self.M = egads.EgadsData(0.5081, units='', long_name='mach number')
+
+        self.e = egads.EgadsData(1, units='', long_name='thermometer recovery factor')
+
         self.C_t = egads.EgadsData(value=1, units='%/degC', long_name='temperature correction coeff')
 
         self.Fmin = egads.EgadsData(value=2, units='Hz', long_name='minimum acceptible frequency')
@@ -207,6 +211,15 @@ class  ThermodynamicsTestCase(unittest.TestCase):
 
         self.assertEqual(T_v.shape, self.array_shape, 'Virtual temp array shapes dont match')
 
+    def test_velocity_mach_raf(self):
+        M = thermodynamics.VelocityMachRaf().run(self.dP, self.P_s)
+
+        self.assertAlmostEqual(M.value, 0.5081, 3, "Mach numbers don't match")
+
+        M = thermodynamics.VelocityMachRaf().run(self.array_test, self.array_test)
+        print M
+        self.assertEqual(M.shape, self.array_shape, "Mach number array shapes dont match")
+
     def test_velocity_tas_cnrm(self):
         V_p = thermodynamics.VelocityTasCnrm().run(self.T_s, self.P_s, self.dP, self.cpa, self.Racpa)
 
@@ -228,6 +241,16 @@ class  ThermodynamicsTestCase(unittest.TestCase):
                                                              self.array_test)
 
         self.assertEqual(V_tx.shape, self.array_shape, 'Longitudinal TAS array shapes dont match')
+
+    def test_velocity_tas_raf(self):
+        V_t = thermodynamics.VelocityTasRaf().run(self.T_s, self.M, self.e)
+
+        self.assertAlmostEqual(V_t.value, 171.502, 3, "TAS(RAF) doesnt match")
+
+        V_t = thermodynamics.VelocityTasRaf().run(self.array_test, self.array_test, self.coeff_test)
+
+        self.assertEqual(V_t.shape, self.array_shape, "TAS(RAF) array shapes dont match")
+
 
 
 

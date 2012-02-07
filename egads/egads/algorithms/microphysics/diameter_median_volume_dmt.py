@@ -80,7 +80,7 @@ class DiameterMedianVolumeDmt(egads_core.EgadsAlgorithm):
         S_n = numpy.zeros(len(n_i))
         i = 0
         while S_n < 0.5 * LWC_total and i <= len(d_i):
-            LWC_i.append(LWC_alg.run(n_i[:][i], d_i[i], rho_i[i]))
+            LWC_i.append(LWC_alg.run(n_i[:, i], d_i[i], rho_i[i]))
             S_n += LWC_i[i]
             i = i + 1
 

@@ -3,6 +3,8 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ['DiameterMeanRaf']
 
+import numpy
+
 import egads.core.egads_core as egads_core
 import egads.core.metadata as egads_metadata
 
@@ -23,10 +25,10 @@ class DiameterMeanRaf(egads_core.EgadsAlgorithm):
                 counts and a vector of their corresponding sizes, using the methods
                 given in the NCAR RAF Bulletin #24
 
-    INPUT       n_i     array[time, bins]   ()  Particle counts in each bin over time
+    INPUT       n_i     array[time, bins]   _   Particle counts in each bin over time
                 d_i     vector[bins]        um  Diameter of each channel
 
-    OUTPUT      D_bar       vector[time]        um  Mean diameter
+    OUTPUT      D_bar   vector[time]        um  Mean diameter
 
     SOURCE      NCAR-RAF
 
@@ -59,14 +61,6 @@ class DiameterMeanRaf(egads_core.EgadsAlgorithm):
 
     def _algorithm(self, n_i, d_i):
 
-        N_t = n_i.sum(1)
+        D_bar = numpy.sum(n_i * d_i, axis=1) / numpy.sum(n_i, axis=1)
 
-        n_shape = n_i.shape
-
-        time = n_shape[0]
-
-        D_bar = []
-
-        for t in xrange(time):
-            D_bar[t] = sum(n_i[t, :] * d_i[:]) / (N_t[t])
-
+        return D_bar
