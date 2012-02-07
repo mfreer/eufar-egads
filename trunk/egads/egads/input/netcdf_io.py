@@ -560,6 +560,7 @@ class EgadsNetCdf(NetCdf):
 
         variable_attrs = self.get_attribute_list(varname)
 
+        variable_attrs['cdf_name'] = varname
         variable_metadata = egads.core.metadata.VariableMetadata(variable_attrs,
                                                                  self.file_metadata)
 

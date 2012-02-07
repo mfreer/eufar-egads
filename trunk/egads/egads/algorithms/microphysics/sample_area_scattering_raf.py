@@ -35,13 +35,13 @@ class SampleAreaScattingRaf(egads_core.EgadsAlgorithm):
     def __init__(self, return_Egads=True):
         egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-        self.output_metadata = egads_metadata.VariableMetadata({'units':'m2',
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m^2',
                                                                'long_name':'sample area',
                                                                'standard_name':'',
                                                                'Category':['PMS Probe']})
 
         self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['DOF', 'BD'],
-                                                          'InputUnits':['m','m'],
+                                                          'InputUnits':['m', 'm'],
                                                           'Outputs':['SA'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,

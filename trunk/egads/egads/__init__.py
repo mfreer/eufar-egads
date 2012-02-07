@@ -22,13 +22,13 @@ site.addsitedir(thirdparty)
 
 import quantities as units
 
-units.hPa = units.UnitQuantity('hectopascal',units.Pa * 100, symbol='hPa')
+units.hPa = units.UnitQuantity('hectopascal', units.Pa * 100, symbol='hPa')
 
 import core
 import core.metadata
 import algorithms
 import input
-
+from input import get_file_list
 
 from core.egads_core import *
 

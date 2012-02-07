@@ -7,6 +7,5 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 
 
-
 import egads.algorithms.microphysics
 import egads.algorithms.transforms

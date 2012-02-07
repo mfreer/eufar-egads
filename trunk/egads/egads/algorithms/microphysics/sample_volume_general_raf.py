@@ -3,6 +3,8 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ['SampleVolumeGeneralRaf']
 
+import numpy
+
 import egads.core.egads_core as egads_core
 import egads.core.metadata as egads_metadata
 
@@ -31,17 +33,17 @@ class SampleVolumeGeneralRaf(egads_core.EgadsAlgorithm):
     REFERENCES  NCAR-RAF Bulletin No. 24
 
     """
-    
+
     def __init__(self, return_Egads=True):
         egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-        self.output_metadata = egads_metadata.VariableMetadata({'units':'m3',
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'m^3',
                                                                'long_name':'sample volume',
                                                                'standard_name':'',
                                                                'Category':['PMS Probe']})
 
-        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['V_t','SA','t_s'],
-                                                          'InputUnits':['m/s','m2', 's'],
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['V_t', 'SA', 't_s'],
+                                                          'InputUnits':['m/s', 'm^2', 's'],
                                                           'Outputs':['SV'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
@@ -54,10 +56,13 @@ class SampleVolumeGeneralRaf(egads_core.EgadsAlgorithm):
     def run(self, V_t, SA, t_s):
 
         return egads_core.EgadsAlgorithm.run(self, V_t, SA, t_s)
-    
+
 
     def _algorithm(self, V_t, SA, t_s):
 
-        SV = V_t * SA.transpose() * t_s
+        SV = numpy.zeros([len(V_t), len(SA)])
+
+        for i, SA_bin in enumerate(SA):
+            SV[:, i] = V_t * SA_bin * t_s
 
         return SV
