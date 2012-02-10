@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:: 2012-02-03 17:40#$"
-__version__ = "$Revision:: 118       $"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ['ExtinctionCoeffDmt']
 
 import numpy
@@ -15,7 +15,7 @@ class ExtinctionCoeffDmt(egads_core.EgadsAlgorithm):
     """
     FILE        extinction_coeff_dmt.py
 
-    VERSION     $Revision: 118 $
+    VERSION     $Revision$
 
     CATEGORY    Microphysics
 
