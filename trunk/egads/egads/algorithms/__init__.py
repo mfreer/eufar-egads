@@ -9,3 +9,4 @@ __version__ = "$Revision::           $"
 
 import egads.algorithms.microphysics
 import egads.algorithms.transforms
+import egads.algorithms.radiation
