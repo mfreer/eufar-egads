@@ -3,3 +3,4 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 
 
+from solar_vector_blanco import *
