@@ -12,6 +12,7 @@
 \usepackage{hyperref}
 \usepackage{fancyvrb}
 \usepackage{paralist}
+\usepackage{amsmath}
 \usepackage{makeidx}
 \usepackage{color,calc}
 \definecolor{shade}{gray}{0.8}
@@ -28,6 +29,8 @@
 \newcommand{\mf}{M\'et\'eoFrance}
 
 \renewcommand{\deg}{$^{\circ}$}
+
+\newcommand{\multvar}[1]{\text{\sl #1}}
 
 \newcommand{\algdesc}[9]{
 \section{#1}\bigskip
@@ -180,10 +183,6 @@ So, for example, an algorithm provided by CNRM to calculate the density of dry a
 
 
 
-
-
-
-
 \chapter{Microphysics}
 
 
@@ -210,6 +209,12 @@ So, for example, an algorithm provided by CNRM to calculate the density of dry a
 \include{algorithms/microphysics/sample_volume_general_raf}
 
 \include{algorithms/microphysics/surface_area_conc_dmt}
+
+\chapter{Radiation}
+
+\include{algorithms/radiation/solar_vector_blanco}
+
+\include{algorithms/radiation/solar_vector_reda}
 
 \chapter{Corrections}
 
@@ -320,6 +325,8 @@ NCAR Bulletin No. 23, 1989. Accessed June 23, 2010.
 
 \bibitem{NCAR24} Barmgardner, Darrel. \emph{Airborne Measurements for Cloud Microphysics}. 
 NCAR Bulletin No. 24, 1989. Accessed June 23, 2010.  \href{http://www.eol.ucar.edu/raf/Bulletins/bulletin24.html}{http://www.eol.ucar.edu/raf/Bulletins/bulletin24.html}
+
+  \bibitem{Reda} Reda, Ibrahim and Afshin Andreas. ``Solar Position Algorithm for Solar Radiation Applications.'' National Renewable Energy Laboratory. Revised 2008. Last accessed February 14, 2012. \href{http://www.nrel.gov/docs/fy08osti/34302.pdf}{http://www.nrel.gov/docs/fy08osti/34302.pdf}.
 
 \bibitem{Triplet} Triplet, J.P. and G.~Roche. \emph{M\'et\'eorolgie G\'en\'erale}. M\'et\'eo-France, 1971.
 
