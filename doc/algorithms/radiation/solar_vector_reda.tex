@@ -24,10 +24,8 @@ $P$ & Vector, Optional & Local pressure [hPa] \\
 $T$ & Vector, Optional & Local temperature [$^{\circ}$C] 
 }
 { %%%%%% Outputs %%%%%%
-$ra$ & Vector & Right ascension [radians] \\
-$\delta$ & Vector & Delcination [radians] \\
-$\theta_z$ & Vector & Solar Zenith [radians] \\
-$\gamma$ & Vector & Solar Azimuth [radians] 
+$\theta$ & Vector & Solar Zenith [degrees] \\
+$\Phi$ & Vector & Solar Azimuth [degrees] 
 }
 { %%%%%% Formula %%%%%%
 \begin{enumerate}
@@ -92,9 +90,9 @@ $\gamma$ & Vector & Solar Azimuth [radians]
     \item Convert $L$ to degrees and limit between 0$^\circ$ and 360$^\circ$.
 
     \item Calculate the Earth heliocentric latitude $B$ by using table A4.2 and repeating
-    these steps using the appropriate values. Note that there are no $B2$ through $B5$.
+    steps (a)-(c) using the appropriate values. Then convert $B$ to degrees. Note that there are no $B2$ through $B5$.
 
-    \item Calculate the Earth radius vector $R$ (in AU) in a similar manner by repeating these steps
+    \item Calculate the Earth radius vector $R$ (in AU) in a similar manner by repeating steps (a)-(c)
     and using the appropriate values from table A4.2.
 
   \end{enumerate}
@@ -161,7 +159,7 @@ Where $\Theta$ must be limited between 0$^\circ$ and 360$^\circ$.
 \begin{align*}
 U &= JME / 10 \\
 \epsilon_0 &= 84381.448 - 4680.93 U - 1.55 U^2 + 1999.25 U^3 - 51.38 U^4 \\
-           & \qquad {} - 249.67 U^5 - 39.05 U^6 -7.12 U^7 + 27.87 U^8 + 5.79 U^9 + 2.45 U^{10} \\
+           & \qquad {} - 249.67 U^5 - 39.05 U^6 + 7.12 U^7 + 27.87 U^8 + 5.79 U^9 + 2.45 U^{10} \\
 \epsilon &= \epsilon_0 / 3600 + \Delta \epsilon
 \end{gather*}
 
@@ -203,7 +201,7 @@ Limit $H$ from 0$^\circ$ to 360$^\circ$, and note that in this algorithm $H$ is 
   \begin{enumerate}
   \item Calculate the equatorial horizontal parallax of the sun (in degrees):
       \begin{displaymath}
-      \zeta = \frac{8.794}{3600 R}
+      \xi = \frac{8.794}{3600 R}
       \end{displaymath}
   \item Calculate the terms $u$ (in radians), $x$ and $y$:
       \begin{gather*}
@@ -213,28 +211,28 @@ Limit $H$ from 0$^\circ$ to 360$^\circ$, and note that in this algorithm $H$ is 
       \end{gather*}
     \item Calculate the parallax in the sun right ascension (in degrees):
       \begin{displaymath}
-      \Delta \alpha = \frac{180}{\pi} \tan^{-1}\left(\frac{-x \sin{\zeta} \sin{H}}{\cos{\delta} - x \sin{\zeta} \cos{H}} \right)
+      \Delta \alpha = \frac{180}{\pi} \tan^{-1}\left(\frac{-x \sin{\xi} \sin{H}}{\cos{\delta} - x \sin{\xi} \cos{H}} \right)
       \end{displaymath}
 
     \item Calculate the topocentric sun right ascension and declination (in degrees):
       \begin{gather*}
       \alpha' = \alpha + \Delta \alpha \\
-      \delta' = \tan^{-1} \left( \frac{(\sin{\delta} - y \sin{\zeta}) \cos{\Delta \alpha}}{\cos{\delta} - x \sin{\zeta} \cos{H}} \right)
+      \delta' = \tan^{-1} \left( \frac{(\sin{\delta} - y \sin{\xi}) \cos{\Delta \alpha}}{\cos{\delta} - x \sin{\xi} \cos{H}} \right)
       \end{gather*}
   \end{enumerate}
 
 \item Calculate the topocentric local hour angle (in degrees):
 \begin{displaymath}
-H` = H - \Delta \alpha
+H' = H - \Delta \alpha
 \end{displaymath}
 
 \item Calculate the topocentric zenith angle (in degrees):
   \begin{enumerate}
 
 
-    \item Calculate the topocentric elevation angle without atmospheric correction (in radians):
+    \item Calculate the topocentric elevation angle without atmospheric correction (in degrees):
     \begin{displaymath}
-    e_0 = \sin^{-1} (\sin{lat} \sin{\delta'} + \cos{lat} \cos{\delta'} \cos{H'})
+    e_0 = \frac{180}{\pi} \sin^{-1} (\sin{lat} \sin{\delta'} + \cos{lat} \cos{\delta'} \cos{H'})
     \end{displaymath}
     
     \item Calculate the atmospheric refraction correction (in degrees):
@@ -242,16 +240,17 @@ H` = H - \Delta \alpha
     \Delta e = \frac{P}{1010} \frac{283}{(T + 273)} \frac{1.02}{60 \tan{\left(e_0 + \frac{10.3}{e_0 + 5.11}\right)}}
     \end{displaymath}
 
-    Note that this step is skipped if temperature and pressure are not provided by the user.
+    Note that this step is skipped if temperature and pressure are not provided by the user. Also note that the argument for the
+    tangent is computed in degrees. A conversion to radians may be needed if required by your computer or calculator. 
 
     \item Calculate the topocentric elevation angle (in degrees):
     \begin{displaymath}
-    e = \frac{180}{\pi} e_0 + \Delta e
+    e = e_0 + \Delta e
     \end{displaymath}
 
     \item Calculate the topocentric zenith angle (in degrees):
     \begin{displaymath}
-    \Theta = 90 - e
+    \theta = 90 - e
     \end{displaymath}
 
   \end{enumerate}
