@@ -4,3 +4,4 @@ __version__ = "$Revision::           $"
 
 
 from solar_vector_blanco import *
+from solar_vector_reda import *
