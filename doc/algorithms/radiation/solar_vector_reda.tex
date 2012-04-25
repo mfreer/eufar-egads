@@ -29,7 +29,7 @@ $\Phi$ & Vector & Solar Azimuth [degrees]
 }
 { %%%%%% Formula %%%%%%
 \begin{enumerate}
-\item Calculate Julian and Julian Ephemeris Day, Century and Millenuim:
+\item Calculate Julian and Julian Ephemeris Day, Century and Millennium:
 \begin{enumerate}
   \item Calculate Julian Day ($JD$):
   \begin{displaymath}
@@ -59,7 +59,7 @@ $\Phi$ & Vector & Solar Azimuth [degrees]
   \multvar{JCE} = \frac{\multvar{JDE} - 2451545}{36525}
   \end{gather*}
 
-  \item Calculate the Julian Ephemeris Millenium ($JME$) for the 2000 standard epoch:
+  \item Calculate the Julian Ephemeris Millennium ($JME$) for the 2000 standard epoch:
   \begin{displaymath}
   \multvar{JME} = \frac{\multvar{JCE}}{10}
   \end{displaymath}
@@ -81,10 +81,10 @@ $\Phi$ & Vector & Solar Azimuth [degrees]
     \item Calculate the terms L1, L2, L3, L4 and L5 by using these same equations, but using the
     appropriate terms from the table.
 
-    \item Calculate the Earth heleocentric longitude (in radians):
+    \item Calculate the Earth heliocentric longitude (in radians):
     %
     \begin{displaymath}
-    L = 10^{-8} (L0 + L1 \times \multvar{JME} + L2 \times \multval{JME}^2 + L3 \times \multvar{JME}^3 + L4 \times \multvar{JME}^4 + L5 \times \multvar{JME}^5)
+    L = 10^{-8} (L0 + L1 \times \multvar{JME} + L2 \times \multvar{JME}^2 + L3 \times \multvar{JME}^3 + L4 \times \multvar{JME}^4 + L5 \times \multvar{JME}^5)
     \end{displaymath}
 
     \item Convert $L$ to degrees and limit between 0$^\circ$ and 360$^\circ$.
@@ -106,7 +106,7 @@ $\Phi$ & Vector & Solar Azimuth [degrees]
 %
 Where $\Theta$ must be limited between 0$^\circ$ and 360$^\circ$.
 
-\item Calculate the nutation in logitude and obliquity ($\Delta \psi$ and $\Delta \epsilon$):
+\item Calculate the nutation in longitude and obliquity ($\Delta \psi$ and $\Delta \epsilon$):
   \begin{enumerate}
   \item Calculate the mean elongation of the moon from the sun (in degrees):
       \begin{displaymath}
@@ -128,7 +128,7 @@ Where $\Theta$ must be limited between 0$^\circ$ and 360$^\circ$.
       X_3 = 93.27191 + 483202.017538 \multvar{JCE} - 0.0036825 \multvar{JCE}^2 + \frac{\multvar{JCE}^3}{327270}
       \end{displaymath}
 
-    \item Caluclate the longitude of the ascending node of the moon's mean orbit on the ecliptic,
+    \item Calculate the longitude of the ascending node of the moon's mean orbit on the ecliptic,
 	  measured from the mean equinox of the date (in degrees):
 	\begin{displaymath}
 	X_4 = 125.04452 - 1934.136261 \multvar{JCE} + 0.0020708 \multvar{JCE}^2 + \frac{\multvar{JCE}^3}{450000}
@@ -161,7 +161,7 @@ U &= JME / 10 \\
 \epsilon_0 &= 84381.448 - 4680.93 U - 1.55 U^2 + 1999.25 U^3 - 51.38 U^4 \\
            & \qquad {} - 249.67 U^5 - 39.05 U^6 + 7.12 U^7 + 27.87 U^8 + 5.79 U^9 + 2.45 U^{10} \\
 \epsilon &= \epsilon_0 / 3600 + \Delta \epsilon
-\end{gather*}
+\end{align*}
 
 \item Calculate the aberration correction (in degrees):
 \begin{displaymath}
@@ -264,6 +264,7 @@ Limit $\Phi$ from 0$^\circ$ to 360$^\circ$. Note that $\Phi$ is measured eastwar
 \end{enumerate}
 }
 { %%%%%% Author %%%%%%
+
 
 }
 { %%%%%% References %%%%%% 
