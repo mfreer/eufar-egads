@@ -44,7 +44,7 @@ class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
     def __init__(self, return_Egads=True):
         egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-        self.output_metadata = egads_metadata.VariableMetadata({'units':'%',
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'',
                                                                'long_name':'relative humidity',
                                                                'standard_name':'relative_humidity',
                                                                'Category':['Thermodynamic', 'Atmos State']})

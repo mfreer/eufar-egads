@@ -321,34 +321,35 @@ class EgadsAlgorithm(object):
         for i, arg in enumerate(args):
             if isinstance(arg, EgadsData):
                 required_units = self.metadata['InputUnits'][i]
-                required_units = _validate_units(required_units)
+                if required_units is not None:
+                    required_units = _validate_units(required_units)
 
-                to_dims = pq.quantity.validate_dimensionality(required_units)
-                to_temps = []
-                for to_unit in to_dims.iterkeys():
-                    if isinstance(to_unit, pq.UnitTemperature):
-                        to_temps.append(to_unit)
+                    to_dims = pq.quantity.validate_dimensionality(required_units)
+                    to_temps = []
+                    for to_unit in to_dims.iterkeys():
+                        if isinstance(to_unit, pq.UnitTemperature):
+                            to_temps.append(to_unit)
 
-                from_temps = []
-                for from_unit in arg._dimensionality.iterkeys():
-                    if isinstance(from_unit, pq.UnitTemperature):
-                        from_temps.append(from_unit)
+                    from_temps = []
+                    for from_unit in arg._dimensionality.iterkeys():
+                        if isinstance(from_unit, pq.UnitTemperature):
+                            from_temps.append(from_unit)
 
-                for from_temp, to_temp in zip(from_temps, to_temps):
-                    if from_temp._dimensionality != to_temp._dimensionality:
-                        warnings.warn("Unsupported conversion between temperature types." +
-                                         "'%s' given, '%s' expected."
-                                         % (from_temp._dimensionality.string, to_temp._dimensionality.string),
-                                         UserWarning)
-#                        raise ValueError("Unsupported conversion between temperature types." +
-#                                         "'%s' given, '%s' expected."
-#                                         % (from_temp._dimensionality.string, to_temp._dimensionality.string)
-#                                         ) #TODO Define error for temperature mismatch
+                    for from_temp, to_temp in zip(from_temps, to_temps):
+                        if from_temp._dimensionality != to_temp._dimensionality:
+                            warnings.warn("Unsupported conversion between temperature types." +
+                                             "'%s' given, '%s' expected."
+                                             % (from_temp._dimensionality.string, to_temp._dimensionality.string),
+                                             UserWarning)
+    #                        raise ValueError("Unsupported conversion between temperature types." +
+    #                                         "'%s' given, '%s' expected."
+    #                                         % (from_temp._dimensionality.string, to_temp._dimensionality.string)
+    #                                         ) #TODO Define error for temperature mismatch
 
-                arg_corr = arg.rescale(required_units)
+                    arg_corr = arg.rescale(required_units)
 
 
-                out_arg.append(arg_corr.value)
+                    out_arg.append(arg_corr.value)
             else:
                 out_arg.append(numpy.array(arg))
 
@@ -417,6 +418,10 @@ def _validate_units(units):
     
     Corrects string units which are written without carets or multiplication symbols:
     'kg m-3' becomes 'kg*m^-3'
+    
+    In quantities 0.10.1, the '%' symbol is not correctly recognized. Thus corrects
+    the '%' symbol to 'percent'.
+    
      
     """
 
@@ -431,6 +436,9 @@ def _validate_units(units):
         regex_space = re.compile('[ ]+')
 
         units = regex_space.sub('*', units)
+
+        if '%' in units: units = units.replace('%', 'percent')
+
 
     return units
 

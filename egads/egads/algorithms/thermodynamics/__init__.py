@@ -20,3 +20,4 @@ from velocity_mach_raf import *
 from velocity_tas_cnrm import *
 from velocity_tas_longitudinal_cnrm import *
 from velocity_tas_raf import *
+from wind_vector_3d_raf import *
