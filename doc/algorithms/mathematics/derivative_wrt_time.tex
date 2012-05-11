@@ -1,5 +1,5 @@
-%% $Date: 2010-09-22 14:13:50 +0200 (Wed, 22 Sep 2010) $
-%% $Revision: 26 $
+%% $Date$
+%% $Revision$
 \index{derivative\_wrt\_time}
 \algdesc{Time Derivative}
 { %%%%%% Algorithm name %%%%%%
@@ -17,12 +17,14 @@ $x$ & Vector & Parameter to calculate first derivative \\
 $t$ & Vector & Time signal [hhmmss] 
 }
 { %%%%%% Outputs %%%%%%
-$\dot{x}$ & Vector & First derivative of x [units of x / sec]
+$\dot{x}$ & Vector & First derivative of $x$ [units of $x$ / sec]
 }
 { %%%%%% Formula %%%%%%
 \begin{displaymath}
 \dot{x_{i}} = \frac{x_{i+1} - x_{i-1}}{t_{i+1} - t_{i-1}}
 \end{displaymath}
+
+
 
 }
 { %%%%%% Author %%%%%%

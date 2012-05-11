@@ -146,18 +146,29 @@ To aid in algorithm usage and discovery, there is a general naming scheme for \e
 
 |{measurement}_{context/detail/instrument}_{source}| 
 
-So, for example, an algorithm provided by CNRM to calculate the density of dry air would be named |density_dry_air_cnrm|.
+For example, an algorithm provided by CNRM to calculate the density of dry air would be named |density_dry_air_cnrm|.
 
 
 %\chapter{Spatial Transformations}
 
 %\chapter{Temporal Transformations}
 
-\part{Atmospheric}
+\part{General Algorithms}
 
 \chapter{Mathematics}
 
 \include{algorithms/mathematics/derivative_wrt_time}
+
+\chapter{Corrections}
+
+\include{algorithms/corrections/correction_spike_simple_cnrm}
+
+\chapter{Transforms}
+
+\include{algorithms/transforms/interpolate_linear}
+
+
+\part{Atmospheric Algorithms}
 
 \chapter{Thermodynamics}
 
@@ -221,11 +232,8 @@ So, for example, an algorithm provided by CNRM to calculate the density of dry a
 
 \include{algorithms/radiation/solar_vector_reda}
 
-\chapter{Corrections}
 
-\include{algorithms/corrections/correction_spike_simple_cnrm}
-
-\part{Hyperspectral}
+\part{Hyperspectral Algorithms}
 
 \chapter{Biophysics}
 
