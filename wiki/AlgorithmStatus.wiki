@@ -38,9 +38,15 @@
 == Transforms == 
 
 || *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
+|| interpolation_linear || || || || ||
+|| interpolation_linear_wrt_time || || || || ||
+|| subsample_regular || || || || ||
+|| subsample_wrt_time_signal || || || || ||
+|| subsample_|| || || || ||
 || || || || || ||
 
 == Radiation ==
 
 || *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
-|| || || || || ||
+|| solar_vector_blanco || X || X || || ||
+|| solar_vector_reda || X || X || || ||
