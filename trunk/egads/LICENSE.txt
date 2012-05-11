@@ -1,4 +1,4 @@
-Copyright (c) 2009-2011, EUFAR.
+Copyright (c) 2009-2012, EUFAR.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
