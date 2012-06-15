@@ -278,6 +278,12 @@ class EgadsAlgorithm(object):
 
         """
 
+        if not isinstance(self.output_metadata, list):
+            output_metadata = self.output_metadata
+            self.output_metadata = []
+            self.output_metadata.append(output_metadata)
+
+
         output = self._call_algorithm(*args)
         if len(self.metadata['Outputs']) > 1:
             result = []
@@ -286,15 +292,25 @@ class EgadsAlgorithm(object):
                 result.append(self._return_result(value, self.output_metadata[i]))
             result = tuple(result)
         else:
-            self.output_metadata.set_parent(self.metadata)
-            result = self._return_result(output, self.output_metadata)
+            self.output_metadata[0].set_parent(self.metadata)
+            result = self._return_result(output, self.output_metadata[0])
 
 
         return result
 
+    def _none_units_check(self, *args):
+
+        try:
+            for i, value in enumerate(self.output_metadata):
+                if self.output_metadata[i]['units'] is None:
+                    self.output_metadata[i]['units'] = args[i].get('units', '')
+        except TypeError:
+            if self.output_metadata['units'] is None:
+                self.output_metadata[i]['units'] = args.get('units', '')
+
+
 
     def _return_result(self, value, metadata):
-
 
         if self.return_Egads is True:
             result = EgadsData(value, metadata)
@@ -383,11 +399,8 @@ class EgadsAlgorithm(object):
         Calculate and set date processed for all output variables.
         """
 
-        if len(self.metadata['Outputs']) > 1:
-            for output in self.output_metadata:
+        for output in self.output_metadata:
                 output['DateProcessed'] = self.now()
-        else:
-            self.output_metadata['DateProcessed'] = self.now()
 
     def now(self):
         """
