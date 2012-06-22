@@ -6,7 +6,7 @@
 
 == Corrections ==
 || *Name* || *Python implementation* ||  *Documentation* || *EWG Validation* || *Unit Testing* ||
-|| correction_spike_simple_cnrm ||  || X || || ||
+|| correction_spike_simple_cnrm || X || X || || ||
 
 
 
