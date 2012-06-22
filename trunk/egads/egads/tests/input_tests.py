@@ -583,7 +583,7 @@ class NAInputTestCase(unittest.TestCase):
 
         var1_intcall = f.read_variable(1)
 
-        self.assertEqual(self.units[1], var1_intcall.metadata['units'], 'Var 1 units do not match')
+        self.assertEqual(self.units[1], var1_intcall.metadata['units'], 'Var 1 units do not match; {0} expected, {1} returned'.format(self.units[1], var1_intcall.metadata['units']))
         self.assertEqual(self.miss_vals[1], var1_intcall.metadata['_FillValue'], 'Var 1 missing values do not match')
         self.assertEqual(self.GPS_LON_max, var1_intcall.value[-1], 'Var 1 max values do not match')
         self.assertEqual(self.GPS_LON_min, var1_intcall.value[0], 'Var 1 min values do not match')

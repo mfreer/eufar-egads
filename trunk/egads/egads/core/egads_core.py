@@ -42,6 +42,7 @@ class EgadsData(pq.Quantity):
         units = _validate_units(units)
 
 
+
         if isinstance(value, pq.Quantity):
             ret = pq.Quantity.__new__(cls, value, value.units, dtype=dtype)
         else:
@@ -52,6 +53,7 @@ class EgadsData(pq.Quantity):
         else:
             ret.metadata = metadata.VariableMetadata(variable_metadata)
 
+        ret.metadata['units'] = units
 
         return ret
 
@@ -274,7 +276,7 @@ class EgadsAlgorithm(object):
         passing along the correct inputs to the _call_algorithm method.
         
         :param *args:
-            Parameters to pass into algorithm in order specified in algorithm metadata.
+            Parameters to pass into algorithm in the order specified in algorithm metadata.
 
         """
 
@@ -283,6 +285,21 @@ class EgadsAlgorithm(object):
             self.output_metadata = []
             self.output_metadata.append(output_metadata)
 
+        for metadata in self.output_metadata:
+            for key, value in metadata.iteritems():
+                try:
+                    match = re.compile('input[0-9]+').search(value)
+                except TypeError:
+                    match = None
+                if match:
+                    input = metadata.get(key)[match.start():match.end()]
+                    input_index = int(input.strip('input'))
+
+
+                    if isinstance(args[input_index], EgadsData):
+                        metadata[key] = metadata[key].replace(input, args[input_index].metadata.get(key, ''))
+                    else:
+                        metadata[key] = metadata[key].replace(input, '')
 
         output = self._call_algorithm(*args)
         if len(self.metadata['Outputs']) > 1:
@@ -366,6 +383,8 @@ class EgadsAlgorithm(object):
 
 
                     out_arg.append(arg_corr.value)
+                else:
+                    out_arg.append(arg.value)
             else:
                 out_arg.append(numpy.array(arg))
 
