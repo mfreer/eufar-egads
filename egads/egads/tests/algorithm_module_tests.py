@@ -6,8 +6,8 @@ Creates a dummy algorithm following the EGADS algorithm template, and tests for 
 """
 
 __author__ = "mfreer"
-__date__ = "$Date:: 2012-02-01 16:54#$"
-__version__ = "$Revision:: 111       $"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 
 import unittest
 
@@ -43,7 +43,9 @@ class AlgorithmModuleTestCase(unittest.TestCase):
 
         self.double_alg = TestAlgorithmDualIO()
 
-        self.single_noneunits_alg = TestAlgorithmSingleIONoneUnits()
+        self.single_passunits_alg = TestAlgorithmSingleIOPassUnits()
+
+        self.single_set_units_alg = TestAlgorithmSingleIOSetUnits()
 
     def test_alg_single_input_output(self):
         """ Test sample algorithm with single input and output"""
@@ -96,16 +98,13 @@ class AlgorithmModuleTestCase(unittest.TestCase):
 
     def test_alg_pass_units(self):
         """ Test sample algorithm passing input units"""
-        out1 = self.single_noneunits_alg.run(IN1)
+        out1 = self.single_passunits_alg.run(IN1)
 
 
         self.assertEqual(out1, OUT1, "Single algorithm passing units value not equal")
 
-        self.assertEqual(out1.units, IN_UNITS1, "Single algorithm passing units output units not equal")
+        self.assertEqual(out1.units, 'dimensionless', "Single algorithm passing units output units not equal")
 
-        self.assertEqual(out1.metadata.parent['Processor'], "TestAlgorithmSingleIO", "Single algorithm passing units processor name does not match")
-        self.assertEqual(out1.metadata.parent['ProcessorDate'], __date__, "Single algorithm passing processed date does not match")
-        self.assertEqual(out1.metadata.parent['ProcessorVersion'], __version__, "Single algorithm passing units processor version does not match")
 
     def test_alg_pass_other_units(self):
         """ Test sample algorithm auto-conversion"""
@@ -121,6 +120,19 @@ class AlgorithmModuleTestCase(unittest.TestCase):
         self.assertEqual(out1.metadata.parent['Processor'], "TestAlgorithmSingleIO", "Single algorithm auto-conversion processor name does not match")
         self.assertEqual(out1.metadata.parent['ProcessorDate'], DATE, "Single algorithm auto-conversion processed date does not match")
         self.assertEqual(out1.metadata.parent['ProcessorVersion'], VERSION, "Single algorithm processor auto-conversion version does not match")
+
+    def test_alg_set_other_units(self):
+        """ Test sample algorithm modifying passed input units """
+
+        in_egads = egads.EgadsData(IN1, IN_UNITS1, {'long_name':LONG_NAME1})
+
+        out1 = self.single_set_units_alg.run(in_egads)
+
+        self.assertEqual(out1, OUT1, "Single algorithm setting units value not equal")
+
+        self.assertEqual(out1.units, IN_UNITS1 + '/s', "Single algorithm setting units output units not equal, returned {0}".format(out1.units))
+
+        self.assertEqual(out1.metadata['long_name'], 'first derivative of ' + LONG_NAME1, 'Single algorithm setting units output long name not equal, returned {0}'.format(out1.metadata['long_name']))
 
 
 class TestAlgorithmSingleIO(egads_core.EgadsAlgorithm):
@@ -220,6 +232,38 @@ class TestAlgorithmSingleIOPassUnits(egads_core.EgadsAlgorithm):
         result = x * 1e-5
 
         return result
+
+
+class TestAlgorithmSingleIOSetUnits(egads_core.EgadsAlgorithm):
+
+
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
+
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'input0/sec',
+                                                               'long_name':'first derivative of input0',
+                                                               'standard_name':'',
+                                                               'Category':['']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':[LONG_NAME1],
+                                                          'InputUnits':[None],
+                                                          'Outputs':[LONG_NAME1],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
+
+    def run(self, x):
+
+        return egads_core.EgadsAlgorithm.run(self, x)
+
+    def _algorithm(self, x):
+
+        result = x * 1e-5
+
+        return result
+
 
 
 def suite():

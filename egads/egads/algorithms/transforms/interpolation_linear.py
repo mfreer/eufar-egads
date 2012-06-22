@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:: 2012-02-03 17:40#$"
-__version__ = "$Revision:: 118       $"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ['InterpolationLinear']
 
 import egads.core.egads_core as egads_core
@@ -11,7 +11,7 @@ class InterpolationLinear(egads_core.EgadsAlgorithm):
 
     FILE        interpolation_linear.py
 
-    VERSION     $Revision: 118 $
+    VERSION     $Revision$
 
     CATEGORY    Transforms
 
@@ -41,35 +41,52 @@ class InterpolationLinear(egads_core.EgadsAlgorithm):
 
         egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-        self.output_metadata = egads_metadata.VariableMetadata({'units':'%',
-                                                               'long_name':'template',
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'input0',
+                                                               'long_name':'',
                                                                'standard_name':'',
                                                                'Category':['']})
 
-        # 3 cont. Complete metadata with parameters specific to algorithm, including
-        #         a list of inputs, a corresponding list of units, and the list of 
-        #         outputs.
-        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':[''],
-                                                          'InputUnits':[''],
-                                                          'Outputs':['template'],
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['x', 'f', 'x_interp', 'f_left', 'f_right'],
+                                                          'InputUnits':[None, None, None, None, None],
+                                                          'Outputs':['interpolated values of f'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
                                                           'ProcessorVersion':__version__,
                                                           'DateProcessed':self.now()},
                                                           self.output_metadata)
 
-    # 4. Replace the 'inputs' parameter in the three instances below with the list
-    #    of input parameters to be used in the algorithm.
-    def run(self, inputs):
+    def run(self, x, f, x_interp, f_left=None, f_right=None):
 
-        return egads_core.EgadsAlgorithm.run(self, inputs)
+        return egads_core.EgadsAlgorithm.run(self, x, f, x_interp, f_left, f_right)
 
-    # 5. Implement algorithm in this section.
-    def _algorithm(self, inputs):
+    def _algorithm(self, x, f, x_interp, f_left, f_right):
 
-        ## Do processing here:
+        if not f_left:
+            f_left = f[0]
+
+        if not f_right:
+            f_right = f[-1]
+
+        f_interp = []
+
+        for x_val in x_interp:
+            if x_val < x[0]:
+                f_interp.append(f_left)
+            elif x_val > x[-1]:
+                f_interp.append(f_right)
+            else:
+                lower_x = x[x <= x_val][0]
+                lower_f = f[x <= x_val][0]
+
+                upper_x = x[x >= x_val][0]
+                upper_f = f[x >= x_val][0]
+
+                f_val = lower_f + (x_val - lower_x) * (upper_f - lower_f) / (upper_x - lower_x)
+
+                f_interp.append(f_val)
 
 
-        return result
+
+        return f_interp
 
 

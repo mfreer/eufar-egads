@@ -1,6 +1,6 @@
 __author__ = "mfreer"
-__date__ = "$Date:: 2012-02-03 17:40#$"
-__version__ = "$Revision:: 118       $"
+__date__ = "$Date::                  $"
+__version__ = "$Revision::           $"
 __all__ = ['WindVector3dRaf']
 
 import numpy
@@ -14,7 +14,7 @@ class WindVector3dRaf(egads_core.EgadsAlgorithm):
 
     FILE        wind_vector_3d_raf.py
 
-    VERSION     $Revision: 118 $
+    VERSION     $Revision$
 
     CATEGORY    Thermodynamics
 

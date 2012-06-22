@@ -161,7 +161,7 @@ class Metadata(dict):
             Dictionary object containing metadata names and values.
         """
 
-        for key, var in metadata_dict:
+        for key, var in metadata_dict.iteritems():
             self[key] = var
 
         return
