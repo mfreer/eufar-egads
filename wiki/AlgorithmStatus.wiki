@@ -1,5 +1,14 @@
 #summary This page describes the implementation, validation and unit test status of EGADS algorithms.
 
+== Mathematics ==
+|| *Name* || *Python implementation* ||  *Documentation* || *EWG Validation* || *Unit Testing* ||
+|| derivative_wrt_time || X || X || || ||
+
+== Corrections ==
+|| *Name* || *Python implementation* ||  *Documentation* || *EWG Validation* || *Unit Testing* ||
+|| correction_spike_simple_cnrm ||  || X || || ||
+
+
 
 == Thermodynamics ==
 
@@ -16,6 +25,8 @@
 || velocity_tas_cnrm || X || X || || X ||
 || velocity_tas_raf || X || X || || X || 
 || velocity_tas_longitudinal_cnrm || X || X || || X ||
+|| wind_vector_3d_raf || X || X || || ||
+
 
 == Microphysics == 
 
@@ -38,12 +49,10 @@
 == Transforms == 
 
 || *Name* || *Python implementation* || *Documentation* || *EWG Validation* || *Unit Testing* ||
-|| interpolation_linear || || || || ||
+|| interpolation_linear || X || X || || ||
 || interpolation_linear_wrt_time || || || || ||
 || subsample_regular || || || || ||
 || subsample_wrt_time_signal || || || || ||
-|| subsample_|| || || || ||
-|| || || || || ||
 
 == Radiation ==
 
