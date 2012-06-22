@@ -21,7 +21,7 @@ $S_{0}$ & Coeff & Spike detection threshold (same units as $X$, and must be posi
 $X_{c}$ & Vector & Parameter with corrections applied
 }
 { %%%%%% Formula %%%%%%
-The $i$th term is considered a spike if:
+The $i$th term is considered a spike if the following are all true:
 \begin{eqnarray}
 \|X[i] - X[i - 1]\| > S_{0} \\
 \|X[i] - X[i + 1]\| > S_{0} \\
