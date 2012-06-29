@@ -47,6 +47,8 @@ class AlgorithmModuleTestCase(unittest.TestCase):
 
         self.single_set_units_alg = TestAlgorithmSingleIOSetUnits()
 
+        self.dual_set_units_alg = TestAlgorithmDualIOSetUnits()
+
     def test_alg_single_input_output(self):
         """ Test sample algorithm with single input and output"""
         out1 = self.single_alg.run(IN1)
@@ -134,6 +136,15 @@ class AlgorithmModuleTestCase(unittest.TestCase):
 
         self.assertEqual(out1.metadata['long_name'], 'first derivative of ' + LONG_NAME1, 'Single algorithm setting units output long name not equal, returned {0}'.format(out1.metadata['long_name']))
 
+    def test_alg_set_dual_other_units(self):
+        """ Test sample algorithm modifying dual passed input units"""
+
+        in_egads1 = egads.EgadsData(IN1, IN_UNITS1, {'long_name':LONG_NAME1})
+        in_egads2 = egads.EgadsData(IN2, IN_UNITS2, {'long_name':LONG_NAME2})
+
+        out1 = self.dual_set_units_alg.run(in_egads2, in_egads1)
+
+        self.assertEqual(out1.units, IN_UNITS1 + '/' + IN_UNITS2, "Dual algorithm setting units output units not equal, expected {0}, received {1}".format(IN_UNITS1 + '/' + IN_UNITS2, out1.units))
 
 class TestAlgorithmSingleIO(egads_core.EgadsAlgorithm):
 
@@ -263,6 +274,37 @@ class TestAlgorithmSingleIOSetUnits(egads_core.EgadsAlgorithm):
         result = x * 1e-5
 
         return result
+
+class TestAlgorithmDualIOSetUnits(egads_core.EgadsAlgorithm):
+
+
+    def __init__(self, return_Egads=True):
+        egads_core.EgadsAlgorithm.__init__(self, return_Egads)
+
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'input1/input0',
+                                                               'long_name':'first derivative of input0',
+                                                               'standard_name':'',
+                                                               'Category':['']})
+
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':[LONG_NAME2, LONG_NAME1],
+                                                          'InputUnits':[IN_UNITS2, None],
+                                                          'Outputs':[LONG_NAME1],
+                                                          'Processor':self.name,
+                                                          'ProcessorDate':__date__,
+                                                          'ProcessorVersion':__version__,
+                                                          'DateProcessed':self.now()},
+                                                          self.output_metadata)
+
+    def run(self, t, x):
+
+        return egads_core.EgadsAlgorithm.run(self, t, x)
+
+    def _algorithm(self, t, x):
+
+        result = x / t
+
+        return result
+
 
 
 
