@@ -54,6 +54,12 @@ can be usable as an EGADS algorithm:
    and units of the inputs and names of the outputs need to be altered. The other parameters (name,
    date and version of the processor; date processed) are populated automatically.
 
+   **Note** -- for algorithms in which the output units depend on the input units (i.e. a purely mathematical
+   transform, derivative, etc), there is a specific methodology to tell EGADS how to set the output units.
+   To do this, set the appropriate 'units' parameter of output_metadata to 'inputn' where *n* is the
+   number of the input parameter from which to get units (starting at 0). The units on the input parameter 
+   from which the output is to be derived should be set to 'None'.
+
 4. Definition of parameters
    In both the run and _algorithm methods, the local names intended for inputs need to be included. There
    are three locations where the same list must be added (marked in bold):
@@ -63,7 +69,7 @@ can be usable as an EGADS algorithm:
    * def _algorithm(self, **inputs**)
    
 5. Implementation of algorithm
-   The algorithm itself gets written in the _algorithm module and uses variables passed in by the user.
+   The algorithm itself gets written in the _algorithm method and uses variables passed in by the user.
    The variables which arrive here are simply scalar or arrays, and if the source is an instance of 
    EgadsData, the variables will be converted to the units you specified in the InputUnits of the 
    algorithm metadata. 

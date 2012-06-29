@@ -65,8 +65,8 @@ Time_np (seconds after midnight)
 -9900
 -9900
 -9900
-GPS LAT (degrees +-90)
-GPS LON (degrees +-180)
+GPS LAT (degrees)
+GPS LON (degrees)
 Height above sea level (m)
 Time (seconds after midnight)
   1
@@ -559,7 +559,7 @@ class NAInputTestCase(unittest.TestCase):
         self.org = 'EUFAR'
         self.scom = ['This is a test file for verifying the status of the EGADS NASA Ames functionality.']
         self.var_names = ['GPS LAT', 'GPS LON', 'Height above sea level', 'Time']
-        self.units = ['degrees +-90', 'degrees +-180', 'm', 'seconds after midnight']
+        self.units = ['degrees', 'degrees', 'm', 'seconds after midnight']
         self.miss_vals = [-9900.0, -9900.0, -9900.0, -9900.0]
         self.time_max = 51147.42
         self.time_min = 51143.42

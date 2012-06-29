@@ -287,19 +287,20 @@ class EgadsAlgorithm(object):
 
         for metadata in self.output_metadata:
             for key, value in metadata.iteritems():
-                try:
-                    match = re.compile('input[0-9]+').search(value)
-                except TypeError:
-                    match = None
-                if match:
-                    input = metadata.get(key)[match.start():match.end()]
-                    input_index = int(input.strip('input'))
+                    try:
+                        match = re.compile('input[0-9]+').search(value)
+                        while match:
+                            input = metadata.get(key)[match.start():match.end()]
+                            input_index = int(input.strip('input'))
 
+                            if isinstance(args[input_index], EgadsData):
+                                metadata[key] = metadata[key].replace(input, args[input_index].metadata.get(key, ''))
+                            else:
+                                metadata[key] = metadata[key].replace(input, '')
 
-                    if isinstance(args[input_index], EgadsData):
-                        metadata[key] = metadata[key].replace(input, args[input_index].metadata.get(key, ''))
-                    else:
-                        metadata[key] = metadata[key].replace(input, '')
+                            match = re.compile('input[0-9]+').search(metadata[key ])
+                    except TypeError:
+                        match = None
 
         output = self._call_algorithm(*args)
         if len(self.metadata['Outputs']) > 1:
