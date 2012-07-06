@@ -28,7 +28,7 @@ class EgadsData(pq.Quantity):
 
     __refs__ = defaultdict(list)
 
-    def __new__(cls, value, units='', variable_metadata={}, dtype='float64', **attrs):
+    def __new__(cls, value, units='', variable_metadata={}, dtype=None, **attrs):
         if isinstance(units, metadata.VariableMetadata):
             if not variable_metadata:
                 variable_metadata = units
