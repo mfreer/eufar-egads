@@ -144,9 +144,9 @@ This document contains descriptions of algorithms contained in the \egads toolbo
 
 To aid in algorithm usage and discovery, there is a general naming scheme for \egads algorithms. Generally, algorithm names are composed as follows: 
 
-\blankline
+
 |{measurement}_{context/detail/instrument}_{source}| 
-\blankline
+
 
 For example, an algorithm provided by CNRM to calculate the density of dry air would be named |density_dry_air_cnrm|.
 
@@ -171,6 +171,12 @@ to the \egads documentation which can be found at \href{http://eufar-egads.googl
 \chapter{Transforms}
 
 \include{algorithms/transforms/interpolate_linear}
+
+\include{algorithms/transforms/isotime_to_elements}
+
+\include{algorithms/transforms/isotime_to_seconds}
+
+\include{algorithms/transforms/seconds_to_isotime}
 
 
 \part{Atmospheric Algorithms}
@@ -301,8 +307,7 @@ to the \egads documentation which can be found at \href{http://eufar-egads.googl
 
 \include{algorithms/quality_control/nav_const}
 
-
-
+\newpage\addcontentsline{toc}{chapter}{Index}
 \printindex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -317,7 +322,7 @@ to the \egads documentation which can be found at \href{http://eufar-egads.googl
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage\addcontentsline{toc}{section}{Bibliography and references}
+\newpage\addcontentsline{toc}{chapter}{Bibliography and references}
 \begin{thebibliography}{5}
 
 \bibitem{Bellec} Bellec, H. and G.~Duverneuil. Appareils de mesure de 
