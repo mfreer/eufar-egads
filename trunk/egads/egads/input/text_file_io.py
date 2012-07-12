@@ -325,11 +325,11 @@ class EgadsCsv(EgadsFile):
 
         """
 
-        data_arr = numpy.array(data)
 
-        data_arr = data_arr.transpose()
 
-        print data_arr
+        data_arr = numpy.column_stack(tuple(data))
+
+#        data_arr = data_arr.transpose()
 
 
         self.writer.writerows(data_arr)

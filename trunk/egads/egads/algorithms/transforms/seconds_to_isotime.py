@@ -23,7 +23,7 @@ class SecondsToIsotime(egads_core.EgadsAlgorithm):
     PURPOSE     Converts an elapsed seconds parameter into ISO 8601 formatted time string 
 
     DESCRIPTION Given a vector of seconds elapsed and a reference time, this algorithm
-                calculates a series of ISO 8601 strings using the Python datetime module.
+                calculates  a series of ISO 8601 strings using the Python datetime module.
                 ISO 8601 string formats can be controlled by the optional format string, 
                 default is yyyymmddTHHMMss.
 
