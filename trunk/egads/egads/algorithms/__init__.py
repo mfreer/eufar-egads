@@ -7,6 +7,7 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 
 
+import egads.algorithms.comparisons
 import egads.algorithms.corrections
 import egads.algorithms.mathematics
 import egads.algorithms.microphysics
