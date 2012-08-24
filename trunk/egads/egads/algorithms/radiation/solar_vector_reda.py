@@ -11,6 +11,7 @@ import dateutil.parser as dateparser
 import egads
 import egads.core.egads_core as egads_core
 import egads.core.metadata as egads_metadata
+import egads.algorithms.mathematics
 
 
 class SolarVectorReda(egads_core.EgadsAlgorithm):
@@ -741,13 +742,8 @@ def limit_angle_range(angle):
     
     """
 
-    angle_div = angle / 360.0
-
-    angle_fraction = abs(angle_div - numpy.int0(angle_div))
-
-    angle_result = numpy.zeros(len(angle))
-
-    angle_result[angle >= 0] = 360 * angle_fraction[angle >= 0]
-    angle_result[angle < 0] = 360 - 360 * angle_fraction[angle < 0]
+    angle_result = egads.algorithms.mathematics.LimitAngleRange().run(angle)
 
     return angle_result
+
+
