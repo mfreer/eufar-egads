@@ -80,8 +80,8 @@ class CameraViewingAngles(egads_core.EgadsAlgorithm):
                 y = (j - n_y / 2.) / n_y * l_y
                 d = numpy.sqrt(x ** 2 + y ** 2)
 
-                theta_c[i, j] = 2 * numpy.arctan(d / (2 * f)) * 180 / numpy.pi
-                phi_c[i, j] = 360 - numpy.arctan2(y, x) * 180 / numpy.pi
+                theta_c[i, j] = 2 * numpy.arctan(d / (2. * f)) * 180.0 / numpy.pi
+                phi_c[i, j] = 360 - numpy.arctan2(y, x) * 180.0 / numpy.pi
 
 
 
