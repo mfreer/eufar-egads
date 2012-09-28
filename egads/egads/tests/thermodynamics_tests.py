@@ -115,12 +115,11 @@ class  ThermodynamicsTestCase(unittest.TestCase):
     #    self.foo = None
 
     def test_altitude_pressure_cnrm(self):
-        alt_p = thermodynamics.AltitudePressureCnrm().run(self.T_v, self.P_s, self.P_surface, self.R_a_g)
+        alt_p = thermodynamics.AltitudePressureRaf().run(self.P_s)
 
-        self.assertAlmostEqual(alt_p.value, 82.0105, 3, 'Altitudes dont match')
+        self.assertAlmostEqual(alt_p.value, 806.8736, 3, 'Altitudes dont match')
 
-        alt_p = thermodynamics.AltitudePressureCnrm().run(self.array_test, self.array_test,
-                                                      self.coeff_test, self.coeff_test)
+        alt_p = thermodynamics.AltitudePressureRaf().run(self.array_test)
 
         self.assertEqual(alt_p.shape, self.array_shape, 'Altitude pressure array shapes dont match')
 
@@ -180,16 +179,6 @@ class  ThermodynamicsTestCase(unittest.TestCase):
 
         self.assertEqual(theta.shape, self.array_shape, 'Potential temp array shapes dont match')
 
-    def test_temp_potential_equiv_cnrm(self):
-        theta_e = thermodynamics.TempPotentialEquivCnrm().run(self.T_s, self.theta,
-                                                           self.r, self.cpa)
-
-        self.assertAlmostEqual(theta_e.value, 288.7698, 3, 'Equivalent potential temp doesnt match')
-
-        theta_e = thermodynamics.TempPotentialEquivCnrm().run(self.array_test, self.array_test,
-                                                           self.array_test, self.coeff_test)
-
-        self.assertEqual(theta_e.shape, self.array_shape, 'Equiv potential temp array shapes dont match')
 
     def test_temp_static_cnrm(self):
         T_s = thermodynamics.TempStaticCnrm().run(self.T_t, self.dP, self.P_s, self.r_f, self.Racpa)
