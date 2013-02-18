@@ -68,7 +68,7 @@ Time_np (seconds after midnight)
 GPS LAT (degrees)
 GPS LON (degrees)
 Height above sea level (m)
-Time (seconds after midnight)
+Time1 (seconds after midnight)
   1
 This is a test file for verifying the status of the EGADS NASA Ames functionality.
   1
@@ -558,7 +558,7 @@ class NAInputTestCase(unittest.TestCase):
         self.originator = 'M.Freer; email: eufarsp@eufar.net'
         self.org = 'EUFAR'
         self.scom = ['This is a test file for verifying the status of the EGADS NASA Ames functionality.']
-        self.var_names = ['GPS LAT', 'GPS LON', 'Height above sea level', 'Time']
+        self.var_names = ['GPS LAT', 'GPS LON', 'Height above sea level', 'Time1']
         self.units = ['degrees', 'degrees', 'm', 'seconds after midnight']
         self.miss_vals = [-9900.0, -9900.0, -9900.0, -9900.0]
         self.time_max = 51147.42
