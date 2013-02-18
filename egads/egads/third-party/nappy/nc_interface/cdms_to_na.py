@@ -24,7 +24,7 @@ import nappy.na_file.na_core
 import nappy.nc_interface.na_content_collector
 
 # Import external packages (if available)
-if sys.platform.find("win") > -1:
+if sys.platform.find("win") > -1 and sys.platform.lower().find('darwin') == -1:
     raise na_error.NAPlatformError("Windows does not support CDMS. CDMS is required to convert to CDMS objects and NetCDF.")
 try:
     import cdms2 as cdms
@@ -55,7 +55,7 @@ class CDMSToNA:
                  only_return_file_names=False, requested_ffi=None,
                  ):
         """
-        Sets up instance variables.      
+        Sets up instance variables.
         """
         self.cdms_variables = cdms_variables
         self.global_attributes = global_attributes
@@ -73,7 +73,7 @@ class CDMSToNA:
         Returns [(na_dict, var_ids), (na_dict, var_ids), ....]
         All these na_dict dictionaries can be readily written to a NA File object.
 
-        Note that NASA Ames is not as flexible as NetCDF so you cannot just send any 
+        Note that NASA Ames is not as flexible as NetCDF so you cannot just send any
         set of variables to write to a NASA Ames file. Essentially there is one
         multi-dimensional structure and all variables must be defined against it.
 
@@ -89,7 +89,7 @@ class CDMSToNA:
         # Re-order variables if they have the attribute "nasa_ames_var_number" which means they came from a NASA Ames file originally
         variables = self._reorderVars(variables)
 
-        # Make first call to collector class that creates NA dict from CDMS variables and global atts list 
+        # Make first call to collector class that creates NA dict from CDMS variables and global atts list
         collector = nappy.nc_interface.na_content_collector.NAContentCollector(variables,
                                         self.global_attributes, requested_ffi=self.requested_ffi,
                                         )
@@ -129,7 +129,7 @@ class CDMSToNA:
 
     def _convertSingletonVars(self, variables):
         """
-        Loops through variables to convert singleton variables (i.e. Masked Arrays/Numeric Arrays) 
+        Loops through variables to convert singleton variables (i.e. Masked Arrays/Numeric Arrays)
         to proper CDMS variables. Then code won't break when asking for rank attribute later.
         Returns a list of CDMS variable objects
         """
@@ -153,7 +153,7 @@ class CDMSToNA:
 
     def _reorderVars(self, variables):
         """
-        Returns a reordered list of variables. Any that have the attribute 
+        Returns a reordered list of variables. Any that have the attribute
         "nasa_ames_var_number" get ordered first in the list (according to numbering).
         """
         # Set up a long list (longer than number of vars)

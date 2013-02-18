@@ -7,7 +7,7 @@ import egads.core.egads_core as egads_core
 import egads.core.metadata as egads_metadata
 
 from numpy import multiply, power
-import scipy
+import numpy
 
 class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
     """
@@ -28,7 +28,7 @@ class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
                 P_s         vector  hPa     static pressure
                 dP          vector  hPa     dynamic pressure
                 C_t         coeff.  %/C     temperature correction coefficient
-                Fmin        coeff.  Hz      minimal acceptible frequency
+                Fmin        coeff.  Hz      minimal acceptable frequency
                 C_0         coeff.  ()      calibration law 0th degree coefficient
                 C_1         coeff.  ()      calibration law 1st degree coefficient
                 C_2         coeff.  ()      calibration law 2nd degree coefficient
@@ -66,7 +66,7 @@ class HumRelCapacitiveCnrm(egads_core.EgadsAlgorithm):
 
     def _algorithm(self, Ucapf, T_s, P_s, dP, C_t, Fmin, C_0, C_1, C_2):
 
-        tempUcapf = scipy.array(Ucapf)
+        tempUcapf = numpy.array(Ucapf)
         tempUcapf[tempUcapf < Fmin] = Fmin
         Ucapf = tempUcapf.tolist()
 

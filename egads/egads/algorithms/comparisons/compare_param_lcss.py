@@ -11,56 +11,68 @@ import numpy
 class CompareParamLcss(egads_core.EgadsAlgorithm):
 
     """
-    This file provides a template for creation of EGADS algorithms.
-
-    FILE        algorithm_template.py
+    
+    FILE        compare_param_lcss.py
 
     VERSION     $Revision$
 
-    CATEGORY    None
+    CATEGORY    Comparisons
 
-    PURPOSE     Template for EGADS algorithm files
+    PURPOSE     This algorithm computes a similarity factor between two timeseries using
+                the Longest Common Subsequence (LCSS) method. 
 
-    DESCRIPTION ...
+    DESCRIPTION This algorithm uses the Morse-Patel method to evaluate the Longest
+                Common Subsequence for two timeseries. The timeseries compared can be
+                multi-dimensional. The returned value represents the longest common
+                subsequence length, i.e. the number of corresponding points.
 
-    INPUT       inputs    var_type      units   description
+    INPUT       R        vector        _        first timeseries to compare
+                S        vector        _        second timeseries for comparison
+                epsilon  coeff         _        matching criteria
 
-    OUTPUT      outputs   var_type      units   description
+    OUTPUT      max      coeff         _        maximum common subsequence length
 
-    SOURCE      sources
+    SOURCE      
 
-    REFERENCES
+    REFERENCES  Morse, M. and J. M. Patel, 2007: An Efficient and Accurate Method
+                for Evaluating Time Series Similarity. SIGMOD'07, June 11-14 2007,
+                Beijing, China.
 
     """
 
     def __init__(self, return_Egads=True):
         egads_core.EgadsAlgorithm.__init__(self, return_Egads)
 
-        self.output_metadata = egads_metadata.VariableMetadata({'units':'%',
-                                                               'long_name':'template',
+        self.output_metadata = egads_metadata.VariableMetadata({'units':'',
+                                                               'long_name':'maximum commen subsequence length',
                                                                'standard_name':'',
                                                                'Category':['']})
 
-        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':[''],
-                                                          'InputUnits':[''],
-                                                          'Outputs':['template'],
+        self.metadata = egads_metadata.AlgorithmMetadata({'Inputs':['R','S'],
+                                                          'InputUnits':[None, None],
+                                                          'Outputs':['max'],
                                                           'Processor':self.name,
                                                           'ProcessorDate':__date__,
                                                           'ProcessorVersion':__version__,
                                                           'DateProcessed':self.now()},
                                                           self.output_metadata)
 
-    def run(self, R, S, epsilon):
+    def run(self, R, S, epsilon, norm=True):
 
-        return egads_core.EgadsAlgorithm.run(self, R, S, epsilon)
+        return egads_core.EgadsAlgorithm.run(self, R, S, epsilon, norm)
 
-    def _algorithm(self, R, S, epsilon):
+    def _algorithm(self, R, S, epsilon, norm):
+        
+        # normalize S and R using standard deviation and mean if desired
+        if norm:
+            R = (R-numpy.mean(R))/numpy.std(R)
+            S = (S-numpy.mean(S))/numpy.std(S)
 
         m = len(R)
         n = len(S)
         d = R.ndim
 
-
+        # Find range of data for each dimension to build correspondance grid G
         if R.min(0) < S.min(0):
             data_min = R.min(0)
         else:
@@ -71,6 +83,8 @@ class CompareParamLcss(egads_core.EgadsAlgorithm):
         else:
             data_max = S.max(0)
 
+        
+        # Define properties of correspondance grid G and initialize G
         if d > 1:
             G_shape = []
             G_coords = []
@@ -86,12 +100,10 @@ class CompareParamLcss(egads_core.EgadsAlgorithm):
             G = numpy.ndarray(G_shape, dtype=list)
 
 
-
-
         for item, data in numpy.ndenumerate(G): G[item] = []
 
 
-#        M = numpy.zeros(R.shape)
+        # Populate G with lists of intersections from R (using R +/- epsilon in all dimensions)
         for i in range(m):
 
 
@@ -118,12 +130,13 @@ class CompareParamLcss(egads_core.EgadsAlgorithm):
                 G[nearest_idx_up].append(i)
                 G[nearest_idx_down].append(i)
 
-
-
+        
         L = numpy.ndarray(n, dtype=list)
         for item, data in numpy.ndenumerate(L): L[item] = []
 
-
+        # Determine matches between R and S using correspondance matrix G and store matches in 
+        # L. All dimensions must match with maximum difference of epsilon in order to be stored
+        # in L.
         for i in range(n):
             if d > 1:
                 nearest_idx = []
@@ -158,7 +171,9 @@ class CompareParamLcss(egads_core.EgadsAlgorithm):
         matches[0] = 0
 
         max = 0
-
+        
+        
+        # Find longest sequence of matches between R and S using matching list L.
         for j in range(n):
             c = 0
             temp = matches[0]

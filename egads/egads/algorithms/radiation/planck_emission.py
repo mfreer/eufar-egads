@@ -53,7 +53,7 @@ class PlanckEmission(egads_core.EgadsAlgorithm):
 
     def _algorithm(self, T, Lambda):
 
-        h = 6.6262e-34
+        h = 6.62606957e-34  # J s
         kb = 1.3806e-23
         c = 2.997925e8
 

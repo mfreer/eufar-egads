@@ -13,10 +13,10 @@ try:
 except:
     sys.stderr.write('Error: Numpy installation not found. You must install Numpy before EGADS can be used. See INSTALL.txt for more info. \n')
 
-try:
-    import scipy
-except:
-    sys.stderr.write('Error: Scipy installation not found. You must install Scipy before EGADS can be used. See INSTALL.txt for more info. \n')
+# try:
+#    import scipy
+# except:
+#    sys.stderr.write('Error: Scipy installation not found. You must install Scipy before EGADS can be used. See INSTALL.txt for more info. \n')
 
 min_version_netCDF4 = '0.8.2'
 try:

@@ -92,8 +92,7 @@ class SolarVectorBlanco(egads_core.EgadsAlgorithm):
         month = numpy.array([], 'i')
         day = numpy.array([], 'i')
         hour = numpy.array([])
-
-        print date_time, date_time.__class__
+        idx = numpy.array([], 'i')
 
         for element in date_time.flat:
             date_time_sep = dateparser.parse(str(element))
@@ -101,6 +100,10 @@ class SolarVectorBlanco(egads_core.EgadsAlgorithm):
             year = numpy.append(year, date_time_sep.year)
             month = numpy.append(month, date_time_sep.month)
             day = numpy.append(day, date_time_sep.day)
+            if (date_time_sep.month <= 2):
+                idx = numpy.append(idx, -1)
+            else:
+                idx = numpy.append(idx, 0)
             hour = numpy.append(hour,
                                 date_time_sep.hour +
                                 date_time_sep.minute / 60.0 +
@@ -108,16 +111,16 @@ class SolarVectorBlanco(egads_core.EgadsAlgorithm):
 
         print year, month, day, hour
 
-        EARTH_MEAN_RADIUS = 6371.01     # km
-        AU = 149597890.0                  # km
+        EARTH_MEAN_RADIUS = 6371.01  # km
+        AU = 149597890.0  # km
 
         # Calculate Julian Day
-        jd = ((1461 * (year + 4800 + (month - 14) / 12)) / 4 +
-              (367 * (month - 2 - 12 * ((month - 14) / 12))) / 12 -
-              (3 * ((year + 4900 + (month - 14) / 12) / 100)) / 4 +
-              day - 32075 - 0.5 + hour / 24.0)
+        jd = ((1461 * (year + 4800 + idx)) / 4 +
+              (367 * (month - 2 - 12 * idx)) / 12 -
+              (3 * ((year + 4900 + idx) / 100)) / 4 +
+              day - 32075)
 
-        n = jd - 2451545.0
+        n = jd - 0.5 + hour / 24.0 - 2451545.0
 
         print jd, n
         # Calculate ecliptic coordinates of the sun
