@@ -15,6 +15,7 @@ Microphysics
 { %%%%%% Inputs %%%%%%
 $c_i$ & Array[time, bins] & Number concentration of hydrometeors in size category $i$ [cm$^{-3}$] \\
 $d_i$ & Vector[bins] & Average diameter of size category $i$ [$\mu$m] \\
+$s_i$ & Array[time, bins],Optional & Shape factor of the hydrometeor of size category $i$ to account for asphericity \\
 $\rho_i$ & Vector[bins],Optional & Density of hydrometeor in size category $i$ [g cm$^{-3}$]. Default is $\rho_w$ = 1.0 g cm$^-3$
 }
 { %%%%%% Outputs %%%%%%
