@@ -524,7 +524,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         # Calcluate Julian Day, Ephemeris Day, Century and Millenium
         JD = numpy.int0(365.25 * (year + 4716)) + numpy.int0(30.6001 * (month + 1)) + day + B - 1524.5
 
-        del_T = 67 # TODO: change to real value
+        del_T = 67  # TODO: change to real value
 
         JDE = JD + del_T / 86400.0
 
@@ -652,7 +652,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
         nu = nu_0 + delta_psi * numpy.cos(epsilon * DEG_TO_RAD)
 
-        print 'nu =', nu
+#        print 'nu =', nu
 
         # Calculate geocentric sun right ascension
 
@@ -662,7 +662,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
         alpha = limit_angle_range(alpha)
 
-        print 'alpha = ', alpha
+#        print 'alpha = ', alpha
 
         # Calculate geocentric sun declination
 
@@ -676,7 +676,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         print 'H before = ', H
         H = limit_angle_range(H)
 
-        print 'H = ', H
+#        print 'H = ', H
 
         # Calculate the topocentric sun right ascension
 
@@ -703,7 +703,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
         H_prime = H - delta_alpha
 
-        # Calculate the topographic zenith angle 
+        # Calculate the topographic zenith angle
 
         e_0 = numpy.arcsin(numpy.sin(lat * DEG_TO_RAD) * numpy.sin(delta_prime * DEG_TO_RAD) +
                            numpy.cos(lat * DEG_TO_RAD) * numpy.cos(delta_prime * DEG_TO_RAD) *
@@ -744,6 +744,6 @@ def limit_angle_range(angle):
 
     angle_result = egads.algorithms.mathematics.LimitAngleRange().run(angle)
 
-    return angle_result
+    return angle_result.value
 
 

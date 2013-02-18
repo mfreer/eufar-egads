@@ -3,10 +3,12 @@ __date__ = "$Date:: 2012-02-03 17:40#$"
 __version__ = "$Revision:: 118       $"
 __all__ = ['RotateSolarVectorToAircraftFrame']
 
+
 import egads.core.egads_core as egads_core
 import egads.core.metadata as egads_metadata
 
 import numpy
+import egads
 
 class RotateSolarVectorToAircraftFrame(egads_core.EgadsAlgorithm):
     """
@@ -96,7 +98,7 @@ class RotateSolarVectorToAircraftFrame(egads_core.EgadsAlgorithm):
         theta_new = numpy.arccos(zz / numpy.sqrt(xx ** 2 + yy ** 2 + zz ** 2)) * rad2deg
         phi_new = numpy.arctan(yy / xx) * rad2deg
 
-        phi_new = 360 - egads.algorithms.mathematics.LimitAngleRange().run(phi_new)
+        phi_new = 360 * egads.units.deg - egads.algorithms.mathematics.LimitAngleRange().run(phi_new)
 
 
 

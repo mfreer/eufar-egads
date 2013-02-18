@@ -3,8 +3,10 @@ __date__ = "$Date::                  $"
 __version__ = "$Revision::           $"
 __all__ = ['CameraViewingAngles']
 
+import egads
 import egads.core.egads_core as egads_core
 import egads.core.metadata as egads_metadata
+
 
 import numpy
 
@@ -69,6 +71,8 @@ class CameraViewingAngles(egads_core.EgadsAlgorithm):
 
     def _algorithm(self, n_x, n_y, l_x, l_y, f):
 
+        AngleLimit = egads.algorithms.mathematics.LimitAngleRange
+
         theta_c = numpy.zeros([n_x, n_y])
         phi_c = numpy.zeros([n_x, n_y])
 
@@ -80,8 +84,8 @@ class CameraViewingAngles(egads_core.EgadsAlgorithm):
                 y = (j - n_y / 2.) / n_y * l_y
                 d = numpy.sqrt(x ** 2 + y ** 2)
 
-                theta_c[i, j] = 2 * numpy.arctan(d / (2. * f)) * 180.0 / numpy.pi
-                phi_c[i, j] = 360 - numpy.arctan2(y, x) * 180.0 / numpy.pi
+                theta_c[i, j] = AngleLimit().run(2 * numpy.arctan(d / (2. * f)) * 180.0 / numpy.pi)
+                phi_c[i, j] = AngleLimit().run(360 - numpy.arctan2(y, x) * 180.0 / numpy.pi)
 
 
 

@@ -60,9 +60,14 @@ class SampleVolumeGeneralRaf(egads_core.EgadsAlgorithm):
 
     def _algorithm(self, V_t, SA, t_s):
 
-        SV = numpy.zeros([len(V_t), len(SA)])
+        SA = numpy.array(SA)
 
-        for i, SA_bin in enumerate(SA):
-            SV[:, i] = V_t * SA_bin * t_s
+        if SA.ndim == 0:
+            SV = V_t * SA * t_s
+        else:
+            SV = numpy.zeros([len(V_t), len(SA)])
+
+            for i, SA_bin in enumerate(SA):
+                SV[:, i] = V_t * SA_bin * t_s
 
         return SV

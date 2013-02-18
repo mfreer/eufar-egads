@@ -64,8 +64,8 @@ class SampleAreaOapAllInRaf(egads_core.EgadsAlgorithm):
     def _algorithm(self, Lambda, D_arms, dD, M, N):
 
         SA = numpy.array([])
-        Lambda_mm = Lambda * 1e-6                 # convert wavelength to mm
-        dD_mm = dD * 1e-3                         # convert diameter to mm
+        Lambda_mm = Lambda * 1e-6  # convert wavelength to mm
+        dD_mm = dD * 1e-3  # convert diameter to mm
 
         for i in range(N):
             X = i + 1
@@ -74,8 +74,8 @@ class SampleAreaOapAllInRaf(egads_core.EgadsAlgorithm):
             if DOF > D_arms:
                 DOF = D_arms
 
-            ESW = dD_mm * (N * X - 1) / M
+            ESW = dD_mm * (N - X - 1) / M
 
-            SA = numpy.append(SA, DOF * ESW * 1e-6)              # convert mm2 to m2
+            SA = numpy.append(SA, DOF * ESW * 1e-6)  # convert mm2 to m2
 
         return SA

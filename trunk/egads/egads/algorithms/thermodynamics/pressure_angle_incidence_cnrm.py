@@ -92,11 +92,11 @@ class PressureAngleIncidenceCnrm(egads_core.EgadsAlgorithm):
         errstat = zeros(P_sr.shape)
 
 
-        errstat[delta_P_r > 25] = (C_errstat[0] + multiply(C_errstat[1], delta_P_r) +
-                                    multiply(C_errstat[2], power(delta_P_r, 2)) +
-                                    multiply(C_errstat[3], power(delta_P_r, 3)))
+        errstat[delta_P_r > 25] = (C_errstat[0] + multiply(C_errstat[1], delta_P_r[delta_P_r > 25]) +
+                                    multiply(C_errstat[2], power(delta_P_r[delta_P_r > 25], 2)) +
+                                    multiply(C_errstat[3], power(delta_P_r[delta_P_r > 25], 3)))
 
-        errstat[logical_and(delta_P_r > 0, delta_P_r <= 25)] = delta_P_r / 25 * errstat25
+        errstat[logical_and(delta_P_r > 0, delta_P_r <= 25)] = delta_P_r[logical_and(delta_P_r > 0, delta_P_r <= 25)] / 25 * errstat25
 
         P_s = P_sr - errstat
 

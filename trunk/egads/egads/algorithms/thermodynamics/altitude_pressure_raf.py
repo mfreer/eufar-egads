@@ -58,15 +58,15 @@ class AltitudePressureRaf(egads_core.EgadsAlgorithm):
 
     def _algorithm(self, P_s):
 
-        P_0 = 1013.25 # hPa
+        P_0 = 1013.25  # hPa
         T_0 = 288.15  # K
-        R_a = 287.0531 # J/kg/K
-        g = 9.80665 # m/s2
-        L = 0.0065 # K/m
+        R_a = 287.0531  # J/kg/K
+        g = 9.80665  # m/s2
+        L = 0.0065  # K/m
 
-        P_1 = 226.3206 # hPa
-        T_1 = 216.65 # K
-        H_1 = 11000.0 # m
+        P_1 = 226.3206  # hPa
+        T_1 = 216.65  # K
+        H_1 = 11000.0  # m
 
         if P_s.size == 1:
             if P_s >= P_1:
@@ -77,7 +77,7 @@ class AltitudePressureRaf(egads_core.EgadsAlgorithm):
         else:
             H = numpy.zeros(P_s.size)
 
-            H[P_s >= P_1] = T_0 / L * (1 - P_s[P_s >= 226.3206] / P_0) ** (R_a * L / g)
+            H[P_s >= P_1] = T_0 / L * (1 - (P_s[P_s >= P_1] / P_0) ** (R_a * L / g))
             H[P_s < P_1] = H_1 + R_a * T_1 / g * numpy.log(P_1 / P_s[P_s < P_1])
 
         return H

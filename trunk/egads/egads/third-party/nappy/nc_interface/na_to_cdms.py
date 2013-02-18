@@ -28,7 +28,7 @@ header_partitions = config_dict["header_partitions"]
 hp = header_partitions
 
 # Import external packages (if available)
-if sys.platform.find("win") > -1:
+if sys.platform.find("win") > -1 and sys.platform.lower().find('dar') == -1 :
     raise na_error.NAPlatformError("Windows does not support CDMS. CDMS is required to convert to CDMS objects and NetCDF.")
 
 try:
@@ -49,21 +49,21 @@ max_id_length = 40
 special_comment_known_strings = (hp["sc_start"], hp["sc_end"], hp["addl_vatts"],
                                   hp["addl_globals"], "\n")
 
-normal_comment_known_strings = (hp["nc_start"], hp["nc_end"], hp["data_next"], 
+normal_comment_known_strings = (hp["nc_start"], hp["nc_end"], hp["data_next"],
 			          hp["addl_vatts"], hp["addl_globals"], "\n")
 
 time_units_warning_message = """\nWARNING: Could not recognise time units. For true NetCDF compability
 please insert the correct time unit string below in the format:
-    
+
     <units> since <YYYY>-<MM>-<DD> <hh>-<mm>-<ss>
-    
+
 Where:
     <units> is a known time interval such as years, months, days, etc.
     <YYYY> is the year, <MM> is the month, <DD> is the day,
     <hh> is the hour, <mm> is minutes, <ss> is seconds.
 """
 
-DEBUG = nappy.utils.getDebug() 
+DEBUG = nappy.utils.getDebug()
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -72,15 +72,15 @@ class NADictToCdmsObjects:
     """
     Converts a NA File instance to a tuple of CDMS objects.
     """
-    
+
     def __init__(self, na_file_obj, variables="all", aux_variables="all",
                  global_attributes=[("Conventions", "CF-1.0")],
-                 time_units=None, time_warning=True, 
+                 time_units=None, time_warning=True,
                  rename_variables={}):
         """
         Sets up instance variables.
         """
-        self.na_file_obj = na_file_obj	   
+        self.na_file_obj = na_file_obj
         self.variables = variables
         self.aux_variables = aux_variables
         self.global_attributes = global_attributes
@@ -89,7 +89,7 @@ class NADictToCdmsObjects:
         self.rename_variables = rename_variables
 
         # Check if we have capability to convert this FFI
-        if self.na_file_obj.FFI in (2110, 2160, 2310): 
+        if self.na_file_obj.FFI in (2110, 2160, 2310):
 	        raise Exception("Cannot convert NASA Ames File Format Index (FFI) " + `self.na_file_obj.FFI` + " to CDMS objects. No mapping implemented yet.")
 
         self.output_message = []  # for output displaying message
@@ -118,22 +118,22 @@ class NADictToCdmsObjects:
 
         # Then do auxiliary variables
         if hasattr(self.na_file_obj, "NAUXV") and (type(self.na_file_obj.NAUXV) == type(1) and self.na_file_obj.NAUXV > 0):   # Are there any auxiliary variables?
-            if not hasattr(self, 'cdms_aux_variables'):  
+            if not hasattr(self, 'cdms_aux_variables'):
                 self._convertCdmsAuxVariables()
         else:
             self.cdms_aux_variables = []
-            
+
         self.converted = True
         return (self.cdms_variables, self.cdms_aux_variables, self.global_attributes)
 
 
     def _mapNACommentsToGlobalAttributes(self):
         """
-        Maps the NASA Ames comments section to global attributes and append them to the 
+        Maps the NASA Ames comments section to global attributes and append them to the
         self.global_attributes list.
         """
         glob_atts = dict(self.global_attributes)
-        
+
         for key in na_to_nc_map.keys():
 
             if type(key) == type((1,2)):
@@ -146,18 +146,18 @@ class NADictToCdmsObjects:
                     if self.na_file_obj.NSCOML > 0:
                         comment_line += (hp["sc_start"] + "\n")
 
-                        for i in self.na_file_obj.SCOM: 
-			    
+                        for i in self.na_file_obj.SCOM:
+
                             if i.strip() not in special_comment_known_strings:
                                 comment_line += ("\n" + i)
-                            
+
                         comment_line += ("\n" + hp["sc_end"] + "\n")
 
                     # Now add normal comments
                     if self.na_file_obj.NNCOML > 0:
                         comment_line += (hp["nc_start"] + "\n")
 
-                        for i in self.na_file_obj.NCOM: 
+                        for i in self.na_file_obj.NCOM:
                             if i.strip() not in normal_comment_known_strings:
                                 comment_line += ("\n" + i)
 
@@ -189,7 +189,7 @@ class NADictToCdmsObjects:
                 hist = "%s\n%s - Converted to CDMS (NetCDF) format using nappy-%s." % (hist, time_string, version)
                 # self.cdms_file.history = hist
                 log.debug("No history mapping from na so added it here from global attributes.")
-                glob_atts["history"] = hist           
+                glob_atts["history"] = hist
             else:
                 # Anything else just needs to be stored as a global attribute
                 glob_atts[na_to_nc_map[key]] = getattr(self.na_file_obj, key)
@@ -213,14 +213,14 @@ class NADictToCdmsObjects:
         """
         self.cdms_variables = []
 
-        if self.variables in (None, "all"):    
+        if self.variables in (None, "all"):
             for var_number in range(self.na_file_obj.NV):
                 self.cdms_variables.append(self._convertNAToCdmsVariable(var_number))
         else:
             if type(self.variables[0]) == type(1) or re.match("\d+", str(self.variables[0])): # They are integers = indices
                 for var_number in self.variables:
                     vn = int(var_number)
-                    self.cdms_variables.append(self._convertNAToCdmsVariable(vn))   
+                    self.cdms_variables.append(self._convertNAToCdmsVariable(vn))
             elif type(self.variables[0]) == type("string"):  # Vars are strings
                 for var_name in self.variables:
                     if var_name in self.na_file_obj.VNAME:
@@ -249,17 +249,17 @@ class NADictToCdmsObjects:
 
         # Sort units etc
         if units:   var.units=units
-	
+
         # Add the best variable name
         if len(var_name) < max_id_length:
             var.id=safe_nc_id.sub("_", var_name).lower()
         else:
             var.id="naVariable_%s" % (var_number)
-        
+
 	     # Check if mapping provided for renaming this variable
         if var_name in self.rename_variables.keys():
             var_name = self.rename_variables[var_name]
-	    
+
         var.long_name = var.name = var.title = var_name
 
         # Add a NASA Ames variable number (for mapping correctly back to NASA Ames)
@@ -278,15 +278,15 @@ class NADictToCdmsObjects:
         else:
             if type(self.aux_variables[0]) == type(1): # They are integers = indices
                 for avar_number in self.aux_variables:
-                    self.cdms_aux_variables.append(self._convertNAAuxToCdmsVariable(avar_number))   
+                    self.cdms_aux_variables.append(self._convertNAAuxToCdmsVariable(avar_number))
 
             elif type(self.aux_variables[0]) == type("string"): # They are strings
                 for avar_name in self.aux_variables:
                     if avar_name in self.na_file_obj.ANAME:
                         avar_number = self.na_file_obj.ANAME.index(avar_name)
-                        self.cdms_aux_variables.append(self._convertNAAuxToCdmsVariable(avar_number)) 
+                        self.cdms_aux_variables.append(self._convertNAAuxToCdmsVariable(avar_number))
             else:
-                raise Exception("Auxiliary variable name not known: " + avar_name)	    
+                raise Exception("Auxiliary variable name not known: " + avar_name)
 
     def _convertNAAuxToCdmsVariable(self, avar_number, attributes={}):
         """
@@ -305,7 +305,7 @@ class NADictToCdmsObjects:
             self._convertCdmsAxes()
 
         # Set up variable
-        var = cdms.createVariable(array, axes=[self.cdms_axes[0]], fill_value=miss, 
+        var = cdms.createVariable(array, axes=[self.cdms_axes[0]], fill_value=miss,
                                   attributes=attributes)
 
         # Sort units etc
@@ -323,13 +323,13 @@ class NADictToCdmsObjects:
 
         # Add a NASA Ames auxiliary variable number (for mapping correctly back to NASA Ames)
         var.nasa_ames_aux_var_number = avar_number
-        return var        
+        return var
 
-    def _convertCdmsAxes(self): 
+    def _convertCdmsAxes(self):
         """
         Creates cdms axes from information provided in the NASA Ames dictionary.
         """
-        if not hasattr(self, 'cdms_axes'):        
+        if not hasattr(self, 'cdms_axes'):
             self.cdms_axes = []
 
         for ivar_number in range(self.na_file_obj.NIV):
@@ -350,7 +350,7 @@ class NADictToCdmsObjects:
         axis = cdms.createAxis(array)
         axis.id = axis.name = axis.long_name = self.na_file_obj.XNAME[ivar_number]
         (var_name, units) = self.na_file_obj.getIndependentVariable(ivar_number)
-	
+
         # Sort units etc
         if units:   axis.units = units
         if len(var_name) < max_id_length:
@@ -374,11 +374,11 @@ class NADictToCdmsObjects:
                 time_units_input = "I WON'T MATCH"
 
                 while time_units_input != "" and not time_units_pattn.match(time_units_input):
-                    message = time_units_warning_message			    
+                    message = time_units_warning_message
                     if self.time_warning == True:
                         log.debug(message)
                         time_units_input = raw_input("Please insert your time unit string here (or leave blank):").strip()
-                    else: 
+                    else:
                         time_units_input = ""
 
                 self.output_message.append(message)
@@ -387,9 +387,9 @@ class NADictToCdmsObjects:
 	    axis.units = self.time_units
             axis.long_name = axis.name = "time (%s)" % self.time_units
 
-        if not hasattr(axis, "units") or axis.units == None:  
+        if not hasattr(axis, "units") or axis.units == None:
             if units:
-                axis.units = units	
+                axis.units = units
             else:
                 axis.units = "Not known"
 

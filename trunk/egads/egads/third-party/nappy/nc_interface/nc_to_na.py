@@ -24,7 +24,7 @@ import nappy.nc_interface.cdms_to_na
 import nappy.nc_interface.na_content_collector
 
 # Import external packages (if available)
-if sys.platform.find("win") > -1:
+if sys.platform.find("win") > -1 and sys.platform.lower().find('darwin') == -1:
     raise na_error.NAPlatformError("Windows does not support CDMS. CDMS is required to convert to CDMS objects and NetCDF.")
 
 try:
@@ -35,10 +35,10 @@ except:
     except:
         raise Exception("Could not import third-party software. Nappy requires the CDMS and Numeric packages to be installed to convert to CDMS and NetCDF.")
 
-cdms.setAutoBounds("off") 
+cdms.setAutoBounds("off")
 
 # Define global variables
-DEBUG = nappy.utils.getDebug() 
+DEBUG = nappy.utils.getDebug()
 default_delimiter = nappy.utils.getDefault("default_delimiter")
 default_float_format = nappy.utils.getDefault("default_float_format")
 comment_override_rule = nappy.utils.getDefault("comment_override_rule")
@@ -61,7 +61,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
     Converts a NetCDF file to one or more NASA Ames files.
     """
 
-    def __init__(self, nc_file, var_ids=None, na_items_to_override={}, 
+    def __init__(self, nc_file, var_ids=None, na_items_to_override={},
             only_return_file_names=False, exclude_vars=[],
             requested_ffi=None,
             ):
@@ -69,23 +69,23 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
         Sets up instance variables.
         Typical usage is:
         >>>    import nappy.nc_interface.nc_to_na as nc_to_na
-        >>>    c = nc_to_na.NCToNA("old_file.nc") 
+        >>>    c = nc_to_na.NCToNA("old_file.nc")
         >>>    c.convert()
-        >>>    c.writeNAFiles("new_file.na", delimiter=",") 
+        >>>    c.writeNAFiles("new_file.na", delimiter=",")
 
         OR:
-        >>>    c = nc_to_na.NCToNA("old_file.nc") 
-        >>>    file_names = c.constructNAFileNames() 
+        >>>    c = nc_to_na.NCToNA("old_file.nc")
+        >>>    file_names = c.constructNAFileNames()
         """
         self.nc_file = nc_file
 
         # Now need to read CDMS file so parent class methods are compatible
         (cdms_variables, global_attributes) = self._readCDMSFile(var_ids, exclude_vars)
-        nappy.nc_interface.cdms_to_na.CDMSToNA.__init__(self, cdms_variables, global_attributes=global_attributes, 
-                                                        na_items_to_override=na_items_to_override, 
+        nappy.nc_interface.cdms_to_na.CDMSToNA.__init__(self, cdms_variables, global_attributes=global_attributes,
+                                                        na_items_to_override=na_items_to_override,
                                                         only_return_file_names=only_return_file_names,
                                                         requested_ffi=requested_ffi)
- 
+
 
     def _readCDMSFile(self, var_ids=None, exclude_vars=[]):
         """
@@ -106,11 +106,11 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
                     cdms_variables.append(fin(var_id))
 
         globals = fin.attributes.items()
-        return (cdms_variables, globals) 
+        return (cdms_variables, globals)
 
     def constructNAFileNames(self, na_file=None):
         """
-        Works out what the file names of the output NA files will be and 
+        Works out what the file names of the output NA files will be and
         returns a list of them.
         """
         self.convert()
@@ -132,11 +132,11 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
                 suffix = "_%s" % file_counter
 
             # Create file name
-            name_parts = na_file.split(".")    
+            name_parts = na_file.split(".")
             new_name = (".".join(name_parts[:-1])) + suffix + "." + name_parts[-1]
             file_names.append(new_name)
             file_counter += 1
-	    
+
         return file_names
 
     def writeNAFiles(self, na_file=None, delimiter=default_delimiter, annotation=False,
@@ -183,9 +183,9 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
             # Override content of NASA Ames if they are permitted
             for key in overriders.keys():
 
-                if key in permitted_overwrite_metadata:    
+                if key in permitted_overwrite_metadata:
                     if key in items_as_lists:
-                        new_item = overriders[key].split()		   
+                        new_item = overriders[key].split()
                         if key in ("DATE", "RDATE"):
                             new_item = [int(list_item) for list_item in new_item]
                     else:
@@ -206,17 +206,17 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
 
                         this_na_dict[key] = comments_list
                         this_na_dict["N%sL" % key] = len(comments_list)
-		    	 
+
                     elif not this_na_dict.has_key(key) or new_item != this_na_dict[key]:
                         this_na_dict[key] = new_item
                         msg = "Metadata overwritten in output file: '%s' is now '%s'" % (key, this_na_dict[key])
                         if DEBUG: log.debug(msg)
                         self.output_message.append(msg)
 
-            # For certain FFIs create final Normal comments as a list of column headers before data section 
+            # For certain FFIs create final Normal comments as a list of column headers before data section
             if add_column_headers == True:
                 self._updateWithColumnHeaders(this_na_dict, delimiter)
-        
+
             # Cope with size limits if specified and FFI is 1001
             # Seems to be writing different chunks of a too long array to different na_dicts to then write to separate files.
             if size_limit is not None and (this_na_dict["FFI"] == 1001 and len(this_na_dict["V"][0]) > size_limit):
@@ -226,7 +226,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
                 file_list.extend(files_written)
 
             # If not having to split file into multiple outputs (normal condition)
-            else:		
+            else:
                 log.info("Output NA file name: %s" % file_name)
                 x = nappy.openNAFile(file_name, 'w', this_na_dict)
                 x.write(delimiter=delimiter, float_format=float_format, annotation=annotation)
@@ -237,12 +237,12 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
             msg = "\nWrote the following variables:" + "\n  " + ("\n  ".join(vars_to_write[0]))
             if DEBUG: log.debug(msg)
             self.output_message.append(msg)
-	
+
             msg = ""
             aux_var_count = vars_to_write[1]
             if len(aux_var_count) > 0:
-                msg = "\nWrote the following auxiliary variables:" + "\n  " + ("\n  ".join(aux_var_count))	
-	    
+                msg = "\nWrote the following auxiliary variables:" + "\n  " + ("\n  ".join(aux_var_count))
+
             singleton_var_count = vars_to_write[2]
             if len(singleton_var_count) > 0:
                 msg = "\nWrote the following Singleton variables:" + "\n  " + ("\n  ".join(singleton_var_count))
@@ -255,25 +255,25 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
 
             if DEBUG: log.debug(msg)
             self.output_message.append(msg)
-	    
+
         full_file_count = full_file_counter - 1
         if full_file_count == 1:
             plural = ""
         else:
-            plural = "s"	      
+            plural = "s"
         msg = "\n%s file%s written." % (full_file_count, plural)
-    
+
         if DEBUG: log.debug(msg)
         self.output_message.append(msg)
         self.output_files_written = file_list
 
         return self.output_message
 
-    def _writeNAFileSubsetsWithinSizeLimit(self, this_na_dict, file_name, delimiter, 
+    def _writeNAFileSubsetsWithinSizeLimit(self, this_na_dict, file_name, delimiter,
                       float_format, size_limit, annotation):
         """
-        If self.size_limit is specified and FFI is 1001 we can chunk the output into 
-        different files in a NASA Ames compliant way. 
+        If self.size_limit is specified and FFI is 1001 we can chunk the output into
+        different files in a NASA Ames compliant way.
         Returns list of file names of outputs written.
         """
         file_names = []
@@ -303,7 +303,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
                 current_block.append(v[start:end])
 
             # Adjust X accordingly in the na dictionary, because independent variable has been reduced in size
-            na_dict_copy = nappy.utils.common_utils.modifyNADictCopy(this_na_dict, current_block, 
+            na_dict_copy = nappy.utils.common_utils.modifyNADictCopy(this_na_dict, current_block,
                                                                       start, end, ivol, nvol)
             # Append a letter to the file name for writing this block to
             file_name_plus_letter = "%s-%.3d.na" % (file_name[:-3], ivol)
@@ -320,15 +320,15 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
             letter_count = letter_count + 1
             start = end
 
-            file_names.append(file_name_plus_letter) 
+            file_names.append(file_name_plus_letter)
 
         return file_names
 
 
     def _updateWithColumnHeaders(self, na_dict, delimiter):
         """
-        Updates the NCOM and NCOML parts of the na_dict so that 
-        the last normal comments line is in fact a set of headers 
+        Updates the NCOM and NCOML parts of the na_dict so that
+        the last normal comments line is in fact a set of headers
         for the data section. E.g.:
 
            UTs     Spd  Direc
@@ -354,9 +354,9 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
 
         col_names.extend(na_dict["VNAME"])
         col_names_line = ",".join(col_names)
-        na_dict["NCOM"].append(col_names_line) 
+        na_dict["NCOM"].append(col_names_line)
         na_dict["NNCOML"] = len(na_dict["NCOM"])
-        return  
+        return
 
 
     def _cleanWrapComments(self, existing_comments, new_comments, key, comment_override_rule):
@@ -378,7 +378,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
         if existing_comments[0] == start_line:
             existing_comments = existing_comments[1:]
             start_used = start_line
-        
+
         # Now check last line
         end_line = hp[c1 + "c_end"]
         end_used = False
@@ -392,18 +392,18 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
             end_line2 = hp["data_next"]
             if existing_comments[-1] == end_line2:
                 existing_comments = existing_comments[:-1]
-                end_used = end_line2 
-       
+                end_used = end_line2
+
         # Now put back together
         ordered_comments = [existing_comments, new_comments]
         if comment_override_rule == "insert":
-            ordered_comments.reverse() 
+            ordered_comments.reverse()
 
         combined_comments = ordered_comments[0] + ordered_comments[1]
         if start_used:
             combined_comments.insert(0, start_used)
         if end_used:
             combined_comments.append(end_used)
-    
+
         return combined_comments
 

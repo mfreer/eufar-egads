@@ -125,6 +125,9 @@ ffi = nappy.chooseFFI(na_dict)
 import logging
 
 # Import third-party software
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+
 try:
     import cdms2 as cdms
 except:
@@ -149,8 +152,6 @@ __version__ = nappy.utils.common_utils.getVersion()
 default_delimiter = nappy.utils.common_utils.getDefault("default_delimiter")
 default_float_format = nappy.utils.common_utils.getDefault("default_float_format")
 
-logging.basicConfig(level=logging.INFO)
-log = logging.getLogger(__name__)
 
 
 def openNAFile(filename, mode="r", na_dict=None):

@@ -70,7 +70,10 @@ class MassConcDmt(egads_core.EgadsAlgorithm):
 
         d_i = d_i * 1.0e-4  # convert from um to cm
 
-        M = egads.units.pi / 6.0 * numpy.sum(s_i * rho_i * c_i * d_i ** 3, axis=1)
+        if c_i.ndim <= 1:
+            M = egads.units.pi / 6.0 * numpy.sum(s_i * rho_i * c_i * d_i ** 3)
+        else:
+            M = egads.units.pi / 6.0 * numpy.sum(s_i * rho_i * c_i * d_i ** 3, axis=1)
 
 
 
