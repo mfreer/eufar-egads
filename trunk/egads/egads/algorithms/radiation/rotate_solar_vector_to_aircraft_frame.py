@@ -92,7 +92,7 @@ class RotateSolarVectorToAircraftFrame(egads_core.EgadsAlgorithm):
               + y * (sin(roll_r) * sin(pitch_r) * sin(yaw_r) + cos(roll_r) * cos(yaw_r))
               + z * (sin(roll_r) * cos(pitch_r)))
         zz = (x * (cos(roll_r) * sin(pitch_r) * cos(yaw_r) + sin(roll_r) * sin(yaw_r))
-              + y * (cos(roll_r) * sin(pitch_r) * cos(yaw_r) - sin(roll_r) * cos(yaw_r))
+              + y * (cos(roll_r) * sin(pitch_r) * sin(yaw_r) - sin(roll_r) * cos(yaw_r))
               + z * (cos(roll_r) * cos(pitch_r)))
 
         theta_new = numpy.arccos(zz / numpy.sqrt(xx ** 2 + yy ** 2 + zz ** 2)) * rad2deg
