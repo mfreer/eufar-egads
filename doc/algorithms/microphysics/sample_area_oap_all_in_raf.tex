@@ -1,7 +1,7 @@
 %% $Date: 2012-07-06 17:42:54#$
 %% $Revision$
 \index{sample\_area\_oap\_all\_in\_raf}
-\algdesc{Sample area for imaging probes}
+\algdesc{Sample area for imaging probes (All in)}
 { %%%%%% Algorithm name %%%%%%
 sample\_area\_oap\_all\_in\_raf
 }
@@ -26,9 +26,9 @@ SA & Vector & Sample area [m$^2$]
 \begin{eqnarray}
 DOF_i = \frac{6 R_i^2}{\lambda} \\ \nonumber
 R_i = i \frac{dD}{2} \\ \nonumber
-X = {1...N} \nonumber
+X = {1...N-1} \nonumber
 \end{eqnarray}
-where $DOF$ must be less than $D_{arms}$. The parameter $i$ ranges from 1 to $N$. 
+where $DOF$ must be less than $D_{arms}$. The parameter $i$ ranges from 1 to $N-1$, since particles touching either edge are rejected as they are not considered 'all-in'. 
 
 
 \begin{displaymath}
