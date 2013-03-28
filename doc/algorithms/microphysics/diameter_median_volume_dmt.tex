@@ -25,7 +25,7 @@ $D_{mvd}$ & Vector[time] & Median volume diameter [$\mu$m]
 Step 1: Compute liquid water content
 %
 \begin{displaymath}
- W = \frac{\pi \rho_w}{6} \sum \limits_{i=1}^m c_i d_i^3
+ W = \frac{\pi}{6} \sum \limits_{i=1}^m{c_i d_i^3 \rho_i s_i}
 \end{displaymath}
 
 Step 2: Beginning at the first size channel, calculate the accumulated mass $S_n = w_1 + w_2 + ... w_n$
@@ -36,7 +36,7 @@ Step 3: Compute the median volume diameter, $D_{mvd}$ by interpolating linearly 
 that bracket where the accumulated mass exceeded the total LWC:
 %
 \begin{displaymath}
- D_{mvd} = D_{n-1} + (0.5 - S_{n-1}/S_n) (D_n - D_{n-1})
+ D_{mvd} = d_{n-1} + (0.5 - S_{n-1}/S_n) (d_n - d_{n-1})
 \end{displaymath}
  
 }
