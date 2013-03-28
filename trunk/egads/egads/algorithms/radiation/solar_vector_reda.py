@@ -526,7 +526,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         # Calcluate Julian Day, Ephemeris Day, Century and Millenium
         JD = numpy.int0(365.25 * (year + 4716)) + numpy.int0(30.6001 * (month + 1)) + day - 1524.5
 
-        JD[JD > 2299160.0] += B
+        JD[JD > 2299160.0] += B[JD > 2299160.0]
         del_T = 67  # TODO: change to real value
 
         JDE = JD + del_T / 86400.0
