@@ -515,7 +515,6 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
             day = numpy.append(day, date_time_sep.day + frac_day)
 
 
-        print year, month, day, frac_day
 
         year[month <= 2] = year - 1
         month[month <= 2] = month + 12
@@ -528,7 +527,6 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         JD = numpy.int0(365.25 * (year + 4716)) + numpy.int0(30.6001 * (month + 1)) + day - 1524.5
 
         JD[JD > 2299160.0] += B
-        print JD
         del_T = 67  # TODO: change to real value
 
         JDE = JD + del_T / 86400.0
@@ -565,10 +563,8 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         L = (L0_sum + L1_sum * JME + L2_sum * JME ** 2 + L3_sum * JME ** 3 +
              L4_sum * JME ** 4 + L5_sum * JME ** 5) / (1.0e8) * RAD_TO_DEG
 
-        L = limit_angle_range(L)
-        print L
-        B0a = numpy.tile(B0, (len(JME), 1, 1))
         B1a = numpy.tile(B1, (len(JME), 1, 1))
+        B0a = numpy.tile(B0, (len(JME), 1, 1))
 
         B0i = B0a[:, :, 0].T * numpy.cos(B0a[:, :, 1].T + numpy.outer(B0[:, 2], JME))
         B1i = B1a[:, :, 0].T * numpy.cos(B1a[:, :, 1].T + numpy.outer(B1[:, 2], JME))
@@ -577,7 +573,6 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         B1_sum = B1i.sum(axis=0)
 
         B = (B0_sum + B1_sum * JME) / (1.0e8) * RAD_TO_DEG
-        print B
         R0a = numpy.tile(R0, (len(JME), 1, 1))
         R1a = numpy.tile(R1, (len(JME), 1, 1))
         R2a = numpy.tile(R2, (len(JME), 1, 1))
@@ -598,7 +593,6 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
         R = (R0_sum + R1_sum * JME + R2_sum * JME ** 2 + R3_sum * JME ** 3 +
              R4_sum * JME ** 4) / (1.0e8)
-        print R
         # Calculate the geocentric longitude and latitude
 
         Theta = limit_angle_range(L + 180)
@@ -627,9 +621,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
 
         delta_psi = delta_psi_i.sum(axis=0) / 36000000.0
-        print delta_psi
         delta_epsilon = delta_epsilon_i.sum(axis=0) / 36000000.0
-        print delta_epsilon
         # Calculate the true obliquity of the ecliptic
 
         U = JME / 10.0
