@@ -23,14 +23,14 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
     CATEGORY    Radiation
 
-    PURPOSE     Calculates the solar vector based on current date/time, elevation, 
+    PURPOSE     Calculates the solar vector based on current date/time, elevation,
                 latitude and longitude.
 
-    DESCRIPTION Calculates the solar vector based on current date/time, elevation, 
+    DESCRIPTION Calculates the solar vector based on current date/time, elevation,
                 latitude and longitude. Takes additional optional arguments of pressure
                 and temperature to correct for atmospheric refraction effects. The zenith
                 and azimuth angle calculated by this algorithm have uncertainties equal
-                to +/- 0.0003 degrees in the period from year -2000 to 6000. 
+                to +/- 0.0003 degrees in the period from year -2000 to 6000.
 
     INPUT       date_time    vector    yyyymmddThhmmss    ISO string of current date time
                                                           in UTC
@@ -39,11 +39,11 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                 elevation    vector    m                  elevation
                 pressure     vector    hPa                local pressure
                 temperature  vector    degC               local temperature
-    
+
     OUTPUT      Theta        vector    degrees            solar zenith angle
                 Phi          vector    degrees            solar azimuth angle
 
-    SOURCE      
+    SOURCE
 
     REFERENCES  Reda and Andreas, "Solar Position Algorithm for Solar Radiation
                 Applications," National Renewable Energy Laboratory, Revised 2008,
@@ -88,17 +88,17 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         DEG_TO_RAD = egads.units.pi / 180.0
 
         # A, B, C terms of L0
-        L0 = numpy.array([[175347046, 0, 0],
-                          [3341656, 4.6692568, 6283.07585],
-                          [34894, 4.6261, 12566.1517],
-                          [3497, 2.7441, 5753.3849],
-                          [3418, 2.8289, 3.5231],
-                          [3136, 3.6277, 77713.7715],
-                          [2676, 4.4181, 7860.4194],
-                          [2343, 6.1352, 3930.2097],
-                          [1324, 0.7425, 11506.7698],
-                          [1273, 2.0371, 529.691],
-                          [1199, 1.1096, 1577.3435],
+        L0 = numpy.array([[175347046.0, 0, 0],
+                          [3341656.0, 4.6692568, 6283.07585],
+                          [34894.0, 4.6261, 12566.1517],
+                          [3497.0, 2.7441, 5753.3849],
+                          [3418.0, 2.8289, 3.5231],
+                          [3136.0, 3.6277, 77713.7715],
+                          [2676.0, 4.4181, 7860.4194],
+                          [2343.0, 6.1352, 3930.2097],
+                          [1324.0, 0.7425, 11506.7698],
+                          [1273.0, 2.0371, 529.691],
+                          [1199.0, 1.1096, 1577.3435],
                           [990, 5.233, 5884.927],
                           [902, 2.045, 26.298],
                           [857, 3.508, 398.149],
@@ -153,12 +153,12 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                           [30, 2.74, 1349.87],
                           [25, 3.16, 4690.48]])
 
-        L1 = numpy.array([[628331966747, 0, 0],
-                          [206059, 2.678235, 6283.07585],
-                          [4303, 2.6351, 12566.1517],
-                          [425, 1.59, 3.523],
-                          [119, 5.796, 26.298],
-                          [109, 2.966, 1577.344],
+        L1 = numpy.array([[628331966747.0, 0, 0],
+                          [206059.0, 2.678235, 6283.07585],
+                          [4303.0, 2.6351, 12566.1517],
+                          [425.0, 1.59, 3.523],
+                          [119.0, 5.796, 26.298],
+                          [109.0, 2.966, 1577.344],
                           [93, 2.59, 18849.23],
                           [72, 1.14, 529.69],
                           [68, 1.87, 398.15],
@@ -188,9 +188,9 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                           [6, 2.65, 9437.76],
                           [6, 4.67, 4690.48]])
 
-        L2 = numpy.array([[52919, 0, 0],
-                          [8720, 1.0721, 6283.0758],
-                          [309, 0.867, 12566.152],
+        L2 = numpy.array([[52919.0, 0, 0],
+                          [8720.0, 1.0721, 6283.0758],
+                          [309.0, 0.867, 12566.152],
                           [27, 0.05, 3.52],
                           [16, 5.19, 26.3],
                           [16, 3.68, 155.42],
@@ -210,7 +210,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                           [2, 3.75, 0.98]
                           ])
 
-        L3 = numpy.array([[289, 5.844, 6283.076],
+        L3 = numpy.array([[289.0, 5.844, 6283.076],
                           [35, 0, 0],
                           [17, 5.49, 12566.15],
                           [3, 5.2, 155.42],
@@ -219,15 +219,15 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                           [1, 5.97, 242.73]
                           ])
 
-        L4 = numpy.array([[114, 3.142, 0],
+        L4 = numpy.array([[114.0, 3.142, 0],
                           [8, 4.13, 6283.08],
                           [1, 3.84, 12566.15]
                           ])
 
         L5 = numpy.array([[1, 3.14, 0]])
 
-        B0 = numpy.array([[280, 3.199, 84334.662],
-                          [102, 5.422, 5507.553],
+        B0 = numpy.array([[280.0, 3.199, 84334.662],
+                          [102.0, 5.422, 5507.553],
                           [80, 3.88, 5223.69],
                           [44, 3.7, 2352.87],
                           [32, 4, 1577.34]
@@ -237,23 +237,23 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                           [6, 1.73, 5223.69]
                           ])
 
-        R0 = numpy.array([[100013989, 0, 0],
-                          [1670700, 3.0984635, 6283.07585],
-                          [13956, 3.05525, 12566.1517],
-                          [3084, 5.1985, 77713.7715],
-                          [1628, 1.1739, 5753.3849],
-                          [1576, 2.8469, 7860.4194],
-                          [925, 5.453, 11506.77],
-                          [542, 4.564, 3930.21],
-                          [472, 3.661, 5884.927],
-                          [346, 0.964, 5507.553],
-                          [329, 5.9, 5223.694],
-                          [307, 0.299, 5573.143],
-                          [243, 4.273, 11790.629],
-                          [212, 5.847, 1577.344],
-                          [186, 5.022, 10977.079],
-                          [175, 3.012, 18849.228],
-                          [110, 5.055, 5486.778],
+        R0 = numpy.array([[100013989.0, 0, 0],
+                          [1670700.0, 3.0984635, 6283.07585],
+                          [13956.0, 3.05525, 12566.1517],
+                          [3084.0, 5.1985, 77713.7715],
+                          [1628.0, 1.1739, 5753.3849],
+                          [1576.0, 2.8469, 7860.4194],
+                          [925.0, 5.453, 11506.77],
+                          [542.0, 4.564, 3930.21],
+                          [472.0, 3.661, 5884.927],
+                          [346.0, 0.964, 5507.553],
+                          [329.0, 5.9, 5223.694],
+                          [307.0, 0.299, 5573.143],
+                          [243.0, 4.273, 11790.629],
+                          [212.0, 5.847, 1577.344],
+                          [186.0, 5.022, 10977.079],
+                          [175.0, 3.012, 18849.228],
+                          [110.0, 5.055, 5486.778],
                           [98, 0.89, 6069.78],
                           [86, 5.69, 15720.84],
                           [86, 1.27, 161000.69],
@@ -279,9 +279,9 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                           [26, 4.59, 10447.39]
                           ])
 
-        R1 = numpy.array([[103019, 1.10749, 6283.07585],
-                          [1721, 1.0644, 12566.1517],
-                          [702, 3.142, 0],
+        R1 = numpy.array([[103019.0, 1.10749, 6283.07585],
+                          [1721.0, 1.0644, 12566.1517],
+                          [702.0, 3.142, 0],
                           [32, 1.02, 18849.23],
                           [31, 2.84, 55073.55],
                           [25, 1.32, 5223.69],
@@ -291,15 +291,15 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                           [9, 0.27, 5486.78]
                           ])
 
-        R2 = numpy.array([[4359, 5.7846, 6283.0758],
-                          [124, 5.579, 12566.152],
+        R2 = numpy.array([[4359.0, 5.7846, 6283.0758],
+                          [124.0, 5.579, 12566.152],
                           [12, 3.14, 0],
                           [9, 3.63, 77713.77],
                           [6, 1.87, 5573.14],
                           [3, 5.47, 18849.23]
                           ])
 
-        R3 = numpy.array([[145, 4.273, 6283.076],
+        R3 = numpy.array([[145.0, 4.273, 6283.076],
                           [7, 3.92, 12566.15]
                           ])
 
@@ -514,6 +514,9 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                         date_time_sep.second / (24 * 60.0 * 60.0))
             day = numpy.append(day, date_time_sep.day + frac_day)
 
+
+        print year, month, day, frac_day
+
         year[month <= 2] = year - 1
         month[month <= 2] = month + 12
 
@@ -522,8 +525,10 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         B = 2 - A + numpy.int0(A / 4)
 
         # Calcluate Julian Day, Ephemeris Day, Century and Millenium
-        JD = numpy.int0(365.25 * (year + 4716)) + numpy.int0(30.6001 * (month + 1)) + day + B - 1524.5
+        JD = numpy.int0(365.25 * (year + 4716)) + numpy.int0(30.6001 * (month + 1)) + day - 1524.5
 
+        JD[JD > 2299160.0] += B
+        print JD
         del_T = 67  # TODO: change to real value
 
         JDE = JD + del_T / 86400.0
@@ -561,7 +566,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
              L4_sum * JME ** 4 + L5_sum * JME ** 5) / (1.0e8) * RAD_TO_DEG
 
         L = limit_angle_range(L)
-
+        print L
         B0a = numpy.tile(B0, (len(JME), 1, 1))
         B1a = numpy.tile(B1, (len(JME), 1, 1))
 
@@ -572,7 +577,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         B1_sum = B1i.sum(axis=0)
 
         B = (B0_sum + B1_sum * JME) / (1.0e8) * RAD_TO_DEG
-
+        print B
         R0a = numpy.tile(R0, (len(JME), 1, 1))
         R1a = numpy.tile(R1, (len(JME), 1, 1))
         R2a = numpy.tile(R2, (len(JME), 1, 1))
@@ -593,7 +598,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
         R = (R0_sum + R1_sum * JME + R2_sum * JME ** 2 + R3_sum * JME ** 3 +
              R4_sum * JME ** 4) / (1.0e8)
-
+        print R
         # Calculate the geocentric longitude and latitude
 
         Theta = limit_angle_range(L + 180)
@@ -622,9 +627,9 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
 
         delta_psi = delta_psi_i.sum(axis=0) / 36000000.0
-
+        print delta_psi
         delta_epsilon = delta_epsilon_i.sum(axis=0) / 36000000.0
-
+        print delta_epsilon
         # Calculate the true obliquity of the ecliptic
 
         U = JME / 10.0
@@ -673,7 +678,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
         # Calculate the observer local hour angle
 
         H = nu + long - alpha
-        print 'H before = ', H
+#        print 'H before = ', H
         H = limit_angle_range(H)
 
 #        print 'H = ', H
@@ -710,7 +715,7 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
                            numpy.cos(H_prime * DEG_TO_RAD)) * RAD_TO_DEG
         if pressure.any() and temperature.any():
             tan_arg = e_0 + 10.3 / (e_0 + 5.11)
-            delta_e = pressure / 1010.0 * 283 / (273 + temperature) * 1.02 / (60 *
+            delta_e = pressure / 1010.0 * 283 / (273.0 + temperature) * 1.02 / (60 *
                                                                               numpy.tan(tan_arg * DEG_TO_RAD))
         else:
             delta_e = 0
@@ -736,10 +741,10 @@ class SolarVectorReda(egads_core.EgadsAlgorithm):
 
 def limit_angle_range(angle):
     """
-    
+
     This function calculates the corresponding angle between 0 and 360 degrees given
     an angle of any size.
-    
+
     """
 
     angle_result = egads.algorithms.mathematics.LimitAngleRange().run(angle)
